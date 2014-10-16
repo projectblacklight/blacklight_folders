@@ -4,4 +4,4 @@ pkg/
 Gemfile.lock
 .rvmrc
 
-./spec/internal
+spec/internal
