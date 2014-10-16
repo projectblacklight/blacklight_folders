@@ -11,6 +11,10 @@ class TestAppGenerator < Rails::Generators::Base
   #   generate 'blacklight_folders:install'
   # end
 
+  def add_routes
+    route 'mount Blacklight::Folders::Engine, at: "blacklight"'
+  end
+
   def add_gems
     gem "blacklight", ">=5.4.0"
     Bundler.with_clean_env { run "bundle install" }

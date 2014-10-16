@@ -3,5 +3,6 @@ log/*.log
 pkg/
 Gemfile.lock
 .rvmrc
-
+jetty
+tmp
 spec/internal
