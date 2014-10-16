@@ -3,3 +3,5 @@ log/*.log
 pkg/
 Gemfile.lock
 .rvmrc
+
+./spec/internal
