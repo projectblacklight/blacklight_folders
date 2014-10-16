@@ -1,4 +1,4 @@
 require "blacklight_folders/engine"
 
-module BlacklightFolders
+module Blacklight::Folders
 end

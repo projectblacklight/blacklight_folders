@@ -6,12 +6,12 @@ require "blacklight_folders/version"
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = "blacklight_folders"
-  s.version     = BlacklightFolders::VERSION
+  s.version     = Blacklight::Folders::VERSION
   s.authors     = ["Data Curation Experts"]
   s.email       = ["TODO: Your email"]
   s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of BlacklightFolders."
-  s.description = "TODO: Description of BlacklightFolders."
+  s.summary     = "TODO: Summary of Blacklight::Folders."
+  s.description = "TODO: Description of Blacklight::Folders."
   s.license     = "See LICENSE file"
 
   s.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.rdoc"]

@@ -9,7 +9,7 @@ require 'engine_cart/rake_task'
 
 RDoc::Task.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'BlacklightFolders'
+  rdoc.title    = 'Blacklight::Folders'
   rdoc.options << '--line-numbers'
   rdoc.rdoc_files.include('README.rdoc')
   rdoc.rdoc_files.include('lib/**/*.rb')

@@ -1,6 +1,6 @@
-require_dependency "blacklight/application_controller"
+require_dependency "blacklight/folders/application_controller"
 
-module Blacklight
+module Blacklight::Folders
   class FoldersController < ApplicationController
     before_action :set_folder, only: [:show, :edit, :update, :destroy]
 

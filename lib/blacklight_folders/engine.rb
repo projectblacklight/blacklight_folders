@@ -1,5 +1,5 @@
-module BlacklightFolders
+module Blacklight::Folders
   class Engine < ::Rails::Engine
-    isolate_namespace BlacklightFolders
+    isolate_namespace Blacklight::Folders
   end
 end
