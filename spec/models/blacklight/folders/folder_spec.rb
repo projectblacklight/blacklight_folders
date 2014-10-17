@@ -1,11 +1,13 @@
 require 'rails_helper'
 
 describe Blacklight::Folders::Folder do
-  let(:user) { User.create }
+  let(:user) { FactoryGirl.create(:user) }
 
-  it 'belongs to a user' do
+  it 'requires a user' do
+    expect(subject.valid?).to eq false
+    expect(subject.errors.messages[:user_id].first).to match /blank/
     subject.user = user
-    expect(subject.user).to eq user
+    expect(subject.valid?).to eq true
   end
 
 end
