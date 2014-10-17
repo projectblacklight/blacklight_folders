@@ -19,7 +19,7 @@ module Blacklight::Folders
       @folder.user = current_user
 
       if @folder.save
-        redirect_to @folder, notice: 'Folder was successfully created.'
+        redirect_to @folder
       else
         render :new
       end
