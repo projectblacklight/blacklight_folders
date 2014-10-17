@@ -14,23 +14,24 @@ module Blacklight::Folders
     def edit
     end
 
-#    def create
-#      @folder = Folder.new(folder_params)
-#
-#      if @folder.save
-#        redirect_to @folder, notice: 'Folder was successfully created.'
-#      else
-#        render :new
-#      end
-#    end
+    def create
+      @folder = Folder.new(folder_params)
+      @folder.user = current_user
 
-#    def update
-#      if @folder.update(folder_params)
-#        redirect_to @folder, notice: 'Folder was successfully updated.'
-#      else
-#        render :edit
-#      end
-#    end
+      if @folder.save
+        redirect_to @folder, notice: 'Folder was successfully created.'
+      else
+        render :new
+      end
+    end
+
+    def update
+      if @folder.update(folder_params)
+        redirect_to @folder
+      else
+        render :edit
+      end
+    end
 
     def destroy
       @folder.destroy
@@ -44,7 +45,7 @@ module Blacklight::Folders
       end
 
       def folder_params
-        params.require(:folder).permit(:name, :user_id)
+        params.require(:folder).permit(:name)
       end
 
   end

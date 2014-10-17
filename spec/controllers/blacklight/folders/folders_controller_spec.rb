@@ -47,6 +47,49 @@ describe Blacklight::Folders::FoldersController do
       end
     end
 
+    describe '#create' do
+      it 'creates a folder with current user as owner' do
+        expect {
+          post :create, folder: { name: 'My Folder' }
+        }.to change{ Blacklight::Folders::Folder.count }.by(1)
+        expect(assigns(:folder)).to_not be_nil
+        expect(assigns(:folder).user).to eq user
+        expect(response).to redirect_to folder_path(assigns(:folder))
+      end
+    end
+
+    describe '#create with bad inputs' do
+      it 'renders the form' do
+        invalid_name = nil
+        expect {
+          post :create, folder: { name: invalid_name }
+        }.to change{ Blacklight::Folders::Folder.count }.by(0)
+        expect(assigns(:folder)).to_not be_nil
+        expect(response).to render_template(:new)
+      end
+    end
+
+    describe '#update' do
+      it 'updates the folder' do
+        my_folder
+        new_name = 'New Name'
+        patch :update, id: my_folder.id, folder: { name: new_name }
+        expect(assigns(:folder)).to eq my_folder
+        expect(response).to redirect_to folder_path(my_folder)
+        expect(my_folder.reload.name).to eq new_name
+      end
+    end
+
+    describe '#update with bad inputs' do
+      it 'renders the form' do
+        my_folder
+        invalid_name = nil
+        patch :update, id: my_folder.id, folder: { name: invalid_name }
+        expect(assigns(:folder)).to eq my_folder
+        expect(response).to render_template(:edit)
+      end
+    end
+
   end  # user is logged in
 
 end
