@@ -2,4 +2,10 @@
 
 <h1> <%= @folder.name %> </h1>
 
+<ol>
+  <% @folder.items.each do |item| %>
+    <li> <%= item.position.to_s %> &nbsp; <%= item.document_id.to_s %> </li>
+  <% end %>
+</ol>
+
 <%= link_to 'Edit Folder', edit_folder_path(@folder) %>

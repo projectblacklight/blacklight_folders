@@ -23,4 +23,13 @@ describe Blacklight::Folders::Folder do
     expect(subject.errors.messages[:name].first).to match /blank/
   end
 
+  it 'contains items, listed in order' do
+    subject.save!
+    attrs = FactoryGirl.attributes_for(:item)
+    item_A = subject.items.create!(attrs.merge(position: 2))
+    item_B = subject.items.create!(attrs.merge(position: 1))
+
+    expect(subject.items).to eq [item_B, item_A]
+  end
+
 end
