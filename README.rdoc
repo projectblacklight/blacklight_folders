@@ -2,20 +2,25 @@
 
 == Developer Notes
 
-=== Install Jetty
+==== Install Jetty
 
   $ rake jetty:unzip
   $ rake jetty:start
 
-=== Generate a test app and run the specs
+==== Generate a test app and run the specs
 
   $ rake engine_cart:clean
   $ rake engine_cart:generate
   $ rake spec
 
-=== Run the test app rails server
+==== Run the test app rails server
 
   $ rake engine_cart:generate
   $ cd spec/internal
   $ rails s
+
+==== Generate data for your test app
+
+  $ cd spec/internal
+  $ rake blacklight:solr:seed
 
