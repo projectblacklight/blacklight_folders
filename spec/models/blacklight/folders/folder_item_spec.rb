@@ -23,5 +23,10 @@ module Blacklight::Folders
       expect(subject.errors.messages[:document_id].first).to match /blank/
     end
 
+    it 'sets the document type automatically' do
+      item = Blacklight::Folders::FolderItem.new(folder_id: 1, document_id: 'id:123', document_type: nil)
+      item.save!
+      expect(item.document_type).to eq 'SolrDocument'
+    end
   end
 end
