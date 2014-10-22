@@ -1,0 +1,24 @@
+<div class="panel panel-default">
+  <div class="panel-heading"> Folders </div>
+
+  <div class="panel-body">
+
+    <% item = Blacklight::Folders::FolderItem.new(document: @document) %>
+    <%= form_for item, url: blacklight_folders.folder_items_path do |f| %>
+
+      <%= f.hidden_field(:document_id) %>
+
+      <!-- TODO: scope folders to current user and not already applied to this document -->
+      <% folders = Blacklight::Folders::Folder.all %>
+      <div class="field">
+        <%= f.select :folder_id, options_from_collection_for_select(folders, :id, :name, item.folder_id), prompt: 'Select a Folder' %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit 'Add to Folder' %>
+      </div>
+    <% end %>
+
+  </div>
+
+</div>
