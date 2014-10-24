@@ -29,4 +29,10 @@ class TestAppGenerator < Rails::Generators::Base
     rake "db:migrate"
   end
 
+  def add_model_mixins
+#    inject_into_class 'app/models/user.rb', User, '  include Blacklight::Folders::User'
+    insert_into_file 'app/models/user.rb', '  include Blacklight::Folders::User', after: "class User < ActiveRecord::Base\n"
+    inject_into_class 'app/models/solr_document.rb', SolrDocument, '  include Blacklight::Folders::SolrDocument'
+  end
+
 end

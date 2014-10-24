@@ -16,7 +16,7 @@ module Blacklight::Folders
     end
 
     def default_document_type
-      SolrDocument
+      ::SolrDocument
     end
 
   end
