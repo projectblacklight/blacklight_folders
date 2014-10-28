@@ -16,6 +16,17 @@
     <%= f.text_field :name %>
   </div>
 
+  <div class="field">
+    <%= f.label :visibility, 'Who can see the contents of this folder?' %><br>
+
+    <%= f.radio_button :visibility, Blacklight::Folders::Folder::PUBLIC %>
+    Anyone
+    <br />
+
+    <%= f.radio_button :visibility, Blacklight::Folders::Folder::PRIVATE, checked: true %>
+    Only me
+  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>

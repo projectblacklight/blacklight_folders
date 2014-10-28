@@ -2,6 +2,9 @@
 
 <h1> <%= @folder.name %> </h1>
 
+<p> Visibility: <%= @folder.visibility %> </p>
+<p> Contents: </p>
+
 <ol>
   <% @folder.items.each do |item| %>
     <li> <%= item.position.to_s %> &nbsp; <%= item.document_id.to_s %> </li>

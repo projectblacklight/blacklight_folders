@@ -6,6 +6,10 @@ module Blacklight::Folders
 
     has_many :items, -> { order('position ASC') }, class_name: 'FolderItem', :dependent => :destroy
 
+    # visibility
+    PUBLIC = 'public'
+    PRIVATE = 'private'
+
     # Find the folders that belong to this user and don't contain this document
     def self.without_doc_for_user(document, user)
       selection = "SELECT blacklight_folders_folders.id AS id, blacklight_folders_folders.name AS name from blacklight_folders_folders"

@@ -45,7 +45,7 @@ module Blacklight::Folders
       end
 
       def folder_params
-        params.require(:folder).permit(:name)
+        params.require(:folder).permit(:name, :visibility)
       end
 
   end
