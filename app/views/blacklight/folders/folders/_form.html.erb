@@ -18,12 +18,13 @@
 
   <div class="field">
     <%= f.label :visibility, 'Who can see the contents of this folder?' %><br>
+    <% @folder.visibility ||= Blacklight::Folders::Folder::PRIVATE %>
 
-    <%= f.radio_button :visibility, Blacklight::Folders::Folder::PUBLIC %>
+    <%= f.radio_button(:visibility, Blacklight::Folders::Folder::PUBLIC) %>
     Anyone
     <br />
 
-    <%= f.radio_button :visibility, Blacklight::Folders::Folder::PRIVATE, checked: true %>
+    <%= f.radio_button(:visibility, Blacklight::Folders::Folder::PRIVATE) %>
     Only me
   </div>
 
