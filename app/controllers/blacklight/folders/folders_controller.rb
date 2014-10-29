@@ -2,22 +2,18 @@ require_dependency "blacklight/folders/application_controller"
 
 module Blacklight::Folders
   class FoldersController < ApplicationController
-    before_action :set_folder, only: [:show, :edit, :update, :destroy]
-
+    load_and_authorize_resource class: Blacklight::Folders::Folder
     def show
     end
 
     def new
-      @folder = Folder.new
     end
 
     def edit
     end
 
     def create
-      @folder = Folder.new(folder_params)
       @folder.user = current_user
-
       if @folder.save
         redirect_to @folder
       else
@@ -26,7 +22,7 @@ module Blacklight::Folders
     end
 
     def update
-      if @folder.update(folder_params)
+      if @folder.update(create_params)
         redirect_to @folder
       else
         render :edit
@@ -40,11 +36,7 @@ module Blacklight::Folders
 
     private
 
-      def set_folder
-        @folder = Folder.find(params[:id])
-      end
-
-      def folder_params
+      def create_params
         params.require(:folder).permit(:name, :visibility)
       end
 

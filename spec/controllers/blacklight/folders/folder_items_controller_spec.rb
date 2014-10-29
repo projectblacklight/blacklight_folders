@@ -7,6 +7,18 @@ describe Blacklight::Folders::FolderItemsController do
   let(:my_folder) { FactoryGirl.create(:folder, user: user) }
   let(:doc_id) { 'id:123' }
 
+
+  describe 'not logged in' do
+    describe '#create' do
+      it 'denies access' do
+        post :create, folder_item: { folder_id: my_folder.id,
+                                     document_id: doc_id }
+        expect(response).to redirect_to(main_app.user_session_path)
+      end
+    end
+  end  # not logged in
+
+
   describe 'user is logged in' do
     before do
       sign_in user
@@ -25,10 +37,13 @@ describe Blacklight::Folders::FolderItemsController do
     end
 
     describe '#create with bad inputs' do
+      before do
+        allow_any_instance_of(Blacklight::Folders::FolderItem).to receive(:save).and_return(false)
+      end
+
       it 'renders the form' do
-        invalid_id = nil
         expect {
-          post :create, folder_item: { folder_id: invalid_id,
+          post :create, folder_item: { folder_id: my_folder.id,
                                        document_id: doc_id }
         }.to change{ Blacklight::Folders::FolderItem.count }.by(0)
         expect(assigns(:folder_item)).to_not be_nil

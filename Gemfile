@@ -12,6 +12,7 @@ gemspec
 
 # To use debugger
 # gem 'debugger'
+gem 'byebug', group: [:development, :test] unless ENV['TRAVIS']
 
   file = File.expand_path("Gemfile", ENV['ENGINE_CART_DESTINATION'] || ENV['RAILS_ROOT'] || File.expand_path("../spec/internal", __FILE__))
   if File.exists?(file)
