@@ -6,6 +6,7 @@ describe Blacklight::Folders::FolderItemsController do
   let(:user) { FactoryGirl.create(:user) }
   let(:my_folder) { FactoryGirl.create(:folder, user: user) }
   let(:doc_id) { 'id:123' }
+  let(:my_item) { FactoryGirl.create(:item, folder: my_folder) }
 
 
   describe 'not logged in' do
@@ -13,6 +14,16 @@ describe Blacklight::Folders::FolderItemsController do
       it 'denies access' do
         post :create, folder_item: { folder_id: my_folder.id,
                                      document_id: doc_id }
+        expect(response).to redirect_to(main_app.user_session_path)
+      end
+    end
+
+    describe '#destroy' do
+      it 'denies access' do
+        my_item
+        expect {
+          delete :destroy, id: my_item.id
+        }.to change { Blacklight::Folders::FolderItem.count }.by(0)
         expect(response).to redirect_to(main_app.user_session_path)
       end
     end
@@ -50,5 +61,16 @@ describe Blacklight::Folders::FolderItemsController do
         expect(response).to render_template(:new)
       end
     end
+
+    describe '#destroy' do
+      it 'destroys the item' do
+        my_item
+        expect {
+          delete :destroy, id: my_item.id
+        }.to change { Blacklight::Folders::FolderItem.count }.by(-1)
+        expect(response).to redirect_to :back
+      end
+    end
+
   end  # user is logged in
 end

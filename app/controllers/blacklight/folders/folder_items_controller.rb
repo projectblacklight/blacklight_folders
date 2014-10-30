@@ -12,6 +12,11 @@ module Blacklight::Folders
       end
     end
 
+    def destroy
+      @folder_item.destroy
+      redirect_to :back
+    end
+
     private
 
       def create_params

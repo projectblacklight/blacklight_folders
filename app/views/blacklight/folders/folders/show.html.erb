@@ -7,7 +7,13 @@
 
 <ol>
   <% @folder.items.each do |item| %>
-    <li> <%= item.position.to_s %> &nbsp; <%= item.document_id.to_s %> </li>
+    <li>
+      <%= item.document_id.to_s %>
+      &nbsp;
+      <span>
+      <%= button_to 'Remove', folder_item_path(item), method: :delete %>
+      </span>
+    </li>
   <% end %>
 </ol>
 
