@@ -18,5 +18,19 @@ module Blacklight::Folders
       find_by_sql(query)
     end
 
+    def documents
+      doc_ids = items.pluck(:document_id)
+      return [] if doc_ids.empty?
+
+      rows = doc_ids.count
+      query_ids = doc_ids.map{|id| RSolr.escape(id) }
+      query_ids = query_ids.join(' OR ')
+
+      docs = Blacklight.solr.select(params: { q: "id:(#{query_ids})", qt: 'document', rows: rows})['response']['docs']
+
+      # Put them into the right order (same order as doc_ids)
+      doc_ids.map{|id| docs.find{|doc| doc['id'] == id }}
+    end
+
   end
 end

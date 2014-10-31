@@ -24,6 +24,12 @@ class TestAppGenerator < Rails::Generators::Base
     generate "blacklight:install", "--devise"
   end
 
+  def config_solr
+    src_dir = File.expand_path('../../../../../spec/test_app_templates', __FILE__)
+    remove_file 'config/solr.yml'
+    copy_file File.join(src_dir, 'solr.yml'), 'config/solr.yml'
+  end
+
   def run_migrations
     rake "blacklight_folders:install:migrations"
     rake "db:migrate"

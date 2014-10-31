@@ -60,4 +60,43 @@ describe Blacklight::Folders::Folder do
     end
   end
 
+  describe '#documents' do
+    let(:subject) { FactoryGirl.create(:folder) }
+
+    describe 'a folder with items in it' do
+      let(:doc_ddh) { SolrDocument.new(id: 'U DDH') }
+      let(:doc_123) { SolrDocument.new(id: 'pid:1.2.3') }
+      let(:not_my_doc) { SolrDocument.new(id: 'xyz') }
+
+      let!(:item_ddh) { FactoryGirl.create(:item, folder: subject, document: doc_ddh, position: 2) }
+      let!(:item_123) { FactoryGirl.create(:item, folder: subject, document: doc_123, position: 1) }
+
+      before do
+        Blacklight.solr.delete_by_query("*:*", params: { commit: true })
+        Blacklight.solr.add(id: doc_ddh.id)
+        Blacklight.solr.add(id: doc_123.id)
+        Blacklight.solr.add(id: not_my_doc.id)
+        Blacklight.solr.commit
+      end
+
+      after do
+        Blacklight.solr.delete_by_id(doc_ddh.id)
+        Blacklight.solr.delete_by_id(doc_123.id)
+        Blacklight.solr.delete_by_id(not_my_doc.id)
+        Blacklight.solr.commit
+      end
+
+      it 'returns the documents for this folder in order' do
+        expect(subject.items.count).to eq 2
+        expect(subject.documents.map{|doc| doc['id']}).to eq [doc_123.id, doc_ddh.id]
+      end
+    end
+
+    describe 'an empty folder' do
+      it 'returns empty array' do
+        expect(subject.documents).to eq []
+      end
+    end
+  end
+
 end

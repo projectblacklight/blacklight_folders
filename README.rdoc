@@ -5,10 +5,12 @@
 ==== Install Jetty
 
   $ rake jetty:unzip
+  $ rake jetty:add_test_core
   $ rake jetty:start
 
 ==== Generate a test app and run the specs
 
+  $ rake jetty:start
   $ rake engine_cart:clean
   $ rake engine_cart:generate
   $ rake spec

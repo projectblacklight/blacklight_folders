@@ -3,6 +3,8 @@ require_dependency "blacklight/folders/application_controller"
 module Blacklight::Folders
   class FoldersController < ApplicationController
     load_and_authorize_resource class: Blacklight::Folders::Folder
+    before_filter :clear_session_search_params, only: [:show]
+
     def show
     end
 
@@ -38,6 +40,11 @@ module Blacklight::Folders
 
       def create_params
         params.require(:folder).permit(:name, :visibility)
+      end
+
+      def clear_session_search_params
+        # TODO: Is there a blacklight method we can use to do this?
+        session['search'] = nil
       end
 
   end

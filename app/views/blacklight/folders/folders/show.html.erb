@@ -5,14 +5,14 @@
 <p> Visibility: <%= @folder.visibility %> </p>
 <p> Contents: </p>
 
+<% docs = @folder.documents %>
 <ol>
-  <% @folder.items.each do |item| %>
+  <% @folder.items.each_with_index do |item, i| %>
     <li>
-      <%= item.document_id.to_s %>
-      &nbsp;
-      <span>
+      <% doc = docs[i] %>
+      <% link_title = doc[document_show_link_field(doc).to_s] %>
+      <%= link_to link_title, main_app.catalog_path(doc['id']) %>
       <%= button_to 'Remove', folder_item_path(item), method: :delete %>
-      </span>
     </li>
   <% end %>
 </ol>
