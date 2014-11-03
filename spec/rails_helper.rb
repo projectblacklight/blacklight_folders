@@ -65,3 +65,8 @@ def main_app
   Rails.application.class.routes.url_helpers
 end
 
+require "support/features/sign_in"
+RSpec.configure do |config|
+  config.include Features::SignIn, type: :feature
+end
+
