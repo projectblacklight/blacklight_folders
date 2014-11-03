@@ -29,7 +29,7 @@
           This item is contained in:
           <ul>
             <% in_folders.each do |folder| %>
-              <li> <%= folder.name %> </li>
+              <li> <%= link_to folder.name, blacklight_folders.folder_path(folder) %> </li>
             <% end %>
           </ul>
         </div>
