@@ -1,0 +1,21 @@
+<% utils_file = File.join(Blacklight::Engine.root, 'app', 'views', '_user_util_links.html.erb') %>
+<%= render file: utils_file %>
+
+<% if current_user %>
+  <div class="navbar-right">
+    <ul class="nav navbar-nav" id="folders-menu">
+      <li>
+        <%= link_to 'Folders', '#' %>
+
+        <ul class="navbar-nav sub-menu">
+          <li> <%= link_to 'Create a New Folder', blacklight_folders.new_folder_path %> </li>
+
+          <% current_user.folders.each do |folder| %>
+            <li> <%= link_to folder.name, blacklight_folders.folder_path(folder) %> </li>
+          <% end %>
+        </ul>
+
+      </li>
+    </ul>
+  </div>
+<% end %>

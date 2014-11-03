@@ -47,6 +47,10 @@ class TestAppGenerator < Rails::Generators::Base
     end
   end
 
+  def add_style
+    inject_into_file 'app/assets/stylesheets/blacklight.css.scss', "@import 'blacklight_folders/blacklight_folders';", after: /@import 'blacklight\/blacklight';\s*\n/
+  end
+
   def add_abilities
     src_dir = File.expand_path('../../../../../spec/test_app_templates', __FILE__)
     copy_file File.join(src_dir, 'ability.rb'), 'app/models/ability.rb'
