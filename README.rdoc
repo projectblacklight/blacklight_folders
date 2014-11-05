@@ -1,6 +1,24 @@
 = Blacklight::Folders
 
+== How to add blacklight_folders to your blacklight application
+
+* Create a new rails application
+
+* Add the <code>blacklight</code> gem and the <code>blacklight_folders</code> gem to your Gemfile, and run <code>bundle install</code>
+
+* Run the blacklight generator, following the instructions on the blacklight wiki to set up your blacklight app
+
+  $ rails g blacklight:install --devise
+
+* Run the blacklight_folders generator
+
+  $ rails g blacklight_folders:install
+
+---
+
 == Developer Notes
+
+For development on the blacklight_folders gem itself.
 
 ==== Install Jetty
 
@@ -15,13 +33,13 @@
   $ rake engine_cart:generate
   $ rake spec
 
-==== Run the test app rails server
+==== Run the rails server for the generated app
 
   $ rake engine_cart:generate
   $ cd spec/internal
   $ rails s
 
-==== Generate data for your test app
+==== Create test data for your generated app
 
   $ cd spec/internal
   $ rake blacklight:solr:seed
