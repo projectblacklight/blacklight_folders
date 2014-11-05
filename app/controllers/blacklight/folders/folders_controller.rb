@@ -33,7 +33,7 @@ module Blacklight::Folders
 
     def destroy
       @folder.destroy
-      redirect_to main_app.root_path, notice: "Folder #{@folder.name} was successfully deleted."
+      redirect_to main_app.root_path, notice: "Folder \"#{@folder.name}\" was successfully deleted."
     end
 
     private

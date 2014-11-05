@@ -18,3 +18,4 @@
 </ol>
 
 <%= link_to 'Edit Folder', edit_folder_path(@folder) %>
+<%= button_to 'Delete this Folder', folder_path(@folder), method: :delete, data: { confirm: "Are you sure you want to delete this folder?" } %>
