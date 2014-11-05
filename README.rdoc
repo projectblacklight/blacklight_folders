@@ -1,5 +1,3 @@
-= Blacklight::Folders
-
 == How to add blacklight_folders to your blacklight application
 
 * Create a new rails application
@@ -8,11 +6,11 @@
 
 * Run the blacklight generator, following the instructions on the blacklight wiki to set up your blacklight app
 
-  $ rails g blacklight:install --devise
+    $ rails g blacklight:install --devise
 
 * Run the blacklight_folders generator
 
-  $ rails g blacklight_folders:install
+    $ rails g blacklight_folders:install
 
 ---
 
