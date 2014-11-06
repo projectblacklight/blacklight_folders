@@ -26,10 +26,16 @@ module Blacklight::Folders
       query_ids = doc_ids.map{|id| RSolr.escape(id) }
       query_ids = query_ids.join(' OR ')
 
-      docs = Blacklight.solr.select(params: { q: "id:(#{query_ids})", qt: 'document', rows: rows})['response']['docs']
+      response = Blacklight.solr.select(params: { q: "id:(#{query_ids})", qt: 'document', rows: rows})['response']['docs']
 
-      # Put them into the right order (same order as doc_ids)
-      doc_ids.map{|id| docs.find{|doc| doc['id'] == id }}
+      # Put them into the right order (same order as doc_ids),
+      # and cast them to the right model.
+      model_names = items.pluck(:document_type)
+      docs = doc_ids.map.with_index {|id, i|
+        doc_hash = response.find{|doc| doc['id'] == id }
+        solr_document_model = model_names[i].safe_constantize
+        solr_document_model.new(doc_hash)
+      }
     end
 
   end

@@ -1,0 +1,11 @@
+<div class="document">
+  <%= "#{item.position}." %>
+
+  <% link_title = doc[document_show_link_field(doc).to_s] %>
+  <%= link_to link_title, main_app.catalog_path(doc['id']) %>
+
+  <%= button_to 'Remove', folder_item_path(item), method: :delete %>
+
+  <% doc_partial = File.join(Blacklight::Engine.root, 'app', 'views', 'catalog', '_index_default.html.erb') %>
+  <%= render file: doc_partial, locals: { document: doc } %>
+</div>

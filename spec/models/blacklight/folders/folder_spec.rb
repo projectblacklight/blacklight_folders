@@ -90,6 +90,10 @@ describe Blacklight::Folders::Folder do
         expect(subject.items.count).to eq 2
         expect(subject.documents.map{|doc| doc['id']}).to eq [doc_123.id, doc_ddh.id]
       end
+
+      it 'returns SolrDocuments' do
+        expect(subject.documents.first.class).to eq ::SolrDocument
+      end
     end
 
     describe 'an empty folder' do
