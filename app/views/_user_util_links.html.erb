@@ -13,6 +13,8 @@
           <% current_user.folders.each do |folder| %>
             <li> <%= link_to folder.name, blacklight_folders.folder_path(folder) %> </li>
           <% end %>
+
+          <li> <%= link_to 'View All Folders', blacklight_folders.folders_path %> </li>
         </ul>
 
       </li>
