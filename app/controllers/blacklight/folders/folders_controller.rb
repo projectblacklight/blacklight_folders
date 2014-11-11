@@ -5,6 +5,9 @@ module Blacklight::Folders
     load_and_authorize_resource class: Blacklight::Folders::Folder
     before_filter :clear_session_search_params, only: [:show]
 
+    def index
+    end
+
     def show
     end
 

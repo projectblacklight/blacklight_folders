@@ -57,6 +57,13 @@ describe Blacklight::Folders::FoldersController do
         expect(response).to redirect_to(main_app.user_session_path)
       end
     end
+
+    describe '#index' do
+      it 'denies access' do
+        get :index
+        expect(response).to redirect_to(main_app.user_session_path)
+      end
+    end
   end  # not logged in
 
 
@@ -140,6 +147,18 @@ describe Blacklight::Folders::FoldersController do
         patch :update, id: my_private_folder.id, folder: { name: invalid_name }
         expect(assigns(:folder)).to eq my_private_folder
         expect(response).to render_template(:edit)
+      end
+    end
+
+    describe '#index' do
+      it 'displays the folders' do
+        my_private_folder
+        my_public_folder
+        get :index
+
+        expect(assigns(:folders).sort).to eq [my_private_folder, my_public_folder].sort
+        expect(response).to render_template(:index)
+        expect(response).to be_successful
       end
     end
   end  # user is logged in

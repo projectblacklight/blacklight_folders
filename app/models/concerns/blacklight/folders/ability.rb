@@ -14,7 +14,7 @@ module Blacklight::Folders
     end
 
     def can_read_public_folders(user)
-      can :read, Blacklight::Folders::Folder, visibility: Blacklight::Folders::Folder::PUBLIC
+      can :show, Blacklight::Folders::Folder, visibility: Blacklight::Folders::Folder::PUBLIC
     end
 
   end

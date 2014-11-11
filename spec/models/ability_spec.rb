@@ -20,10 +20,11 @@ describe Ability do
 
     it {
       should_not be_able_to(:read, your_private_folder)
-      should     be_able_to(:read, your_public_folder)
+      should     be_able_to(:show, your_public_folder)
       should_not be_able_to(:destroy, your_public_folder)
       should_not be_able_to(:update, your_public_folder)
       should_not be_able_to(:create, Blacklight::Folders::Folder)
+      should_not be_able_to(:index, Blacklight::Folders::Folder)
 
       should_not be_able_to(:destroy, your_public_item)
       should_not be_able_to(:create, Blacklight::Folders::FolderItem)
@@ -36,7 +37,7 @@ describe Ability do
 
     it {
       should_not be_able_to(:read, your_private_folder)
-      should     be_able_to(:read, your_public_folder)
+      should     be_able_to(:show, your_public_folder)
       should     be_able_to(:read, my_private_folder)
 
       should_not be_able_to(:destroy, your_public_folder)
@@ -46,6 +47,7 @@ describe Ability do
       should     be_able_to(:update, my_private_folder)
 
       should     be_able_to(:create, Blacklight::Folders::Folder)
+      should     be_able_to(:index, Blacklight::Folders::Folder)
 
       should_not be_able_to(:destroy, your_public_item)
       should     be_able_to(:destroy, my_private_item)
