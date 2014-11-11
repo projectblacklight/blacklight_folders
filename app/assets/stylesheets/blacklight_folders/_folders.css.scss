@@ -1,7 +1,10 @@
+
+$table_border: 1px dotted #dddddd;
+
 .folder-view {
 
   #documents .document {
-    border-bottom: 1px dotted #dddddd;
+    border-bottom: $table_border;
     margin-top: 6px;
     padding-top: 6px;
   }
@@ -11,13 +14,19 @@
 .folder-index {
   table {
     width: 100%;
+    border-top:    $table_border;
+    border-bottom: 2px solid #dddddd;
   }
 
   tr {
-    border-bottom: 1px dotted #dddddd;
+    border-bottom: $table_border;
   }
 
   td {
     padding: 1em;
   }
+}
+
+.index-add-actions {
+  padding: 1em;
 }
