@@ -1,1 +1,13 @@
-<h2> Placeholder for Folders index </h2>
+<h1> <%= "Folders (#{@folders.count} total)" %> </h1>
+
+<div class="folder-index">
+  <table>
+    <tbody>
+      <% @folders.each do |folder| %>
+        <tr>
+          <td> <%= link_to folder.name, blacklight_folders.folder_path(folder) %> </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
