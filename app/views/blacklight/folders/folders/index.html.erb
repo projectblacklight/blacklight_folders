@@ -14,7 +14,7 @@
           <td>
             <%= link_to folder.name, blacklight_folders.folder_path(folder) %>
             &nbsp;
-            <%= "(contains #{folder.items.count} items)" %>
+            <%= "(contains #{pluralize(folder.items.count, 'item')})" %>
             &nbsp; &middot; &nbsp;
             <%= human_friendly_visibility(folder.visibility) %>
           </td>
