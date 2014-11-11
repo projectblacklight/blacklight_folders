@@ -5,7 +5,13 @@
     <tbody>
       <% @folders.each do |folder| %>
         <tr>
+          <td>
+            <%= link_to 'Edit', blacklight_folders.edit_folder_path(folder), method: :get, class: 'btn btn-default' %>
+            &nbsp;
+            <%= link_to 'View', blacklight_folders.folder_path(folder), method: :get, class: 'btn btn-default' %>
+          </td>
           <td> <%= link_to folder.name, blacklight_folders.folder_path(folder) %> </td>
+          <td> <%= link_to 'Delete', blacklight_folders.folder_path(folder), method: :delete, class: 'btn btn-default pull-right' %> </td>
         </tr>
       <% end %>
     </tbody>
