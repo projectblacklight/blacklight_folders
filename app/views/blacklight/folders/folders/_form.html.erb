@@ -21,11 +21,11 @@
     <% @folder.visibility ||= Blacklight::Folders::Folder::PRIVATE %>
 
     <%= f.radio_button(:visibility, Blacklight::Folders::Folder::PUBLIC) %>
-    Anyone
+    <%= human_friendly_visibility(Blacklight::Folders::Folder::PUBLIC) %>
     <br />
 
     <%= f.radio_button(:visibility, Blacklight::Folders::Folder::PRIVATE) %>
-    Only me
+    <%= human_friendly_visibility(Blacklight::Folders::Folder::PRIVATE) %>
   </div>
 
   <div class="actions">

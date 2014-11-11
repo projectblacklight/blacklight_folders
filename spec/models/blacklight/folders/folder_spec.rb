@@ -101,6 +101,18 @@ describe Blacklight::Folders::Folder do
         expect(subject.documents).to eq []
       end
     end
+
+    describe 'Visibility' do
+      it 'default visibility is private' do
+        expect(subject.default_visibility).to eq Blacklight::Folders::Folder::PRIVATE
+      end
+
+      it 'sets visibility to default value if none given' do
+        subject.visibility = nil
+        subject.save!
+        expect(subject.reload.visibility).to eq subject.default_visibility
+      end
+    end
   end
 
 end

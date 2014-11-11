@@ -9,6 +9,7 @@ module Blacklight::Folders
     # visibility
     PUBLIC = 'public'
     PRIVATE = 'private'
+    before_save :apply_visibility
 
     # Find the folders that belong to this user and don't contain this document
     def self.without_doc_for_user(document, user)
@@ -36,6 +37,14 @@ module Blacklight::Folders
         solr_document_model = model_names[i].safe_constantize
         solr_document_model.new(doc_hash)
       }
+    end
+
+    def default_visibility
+      PRIVATE
+    end
+
+    def apply_visibility
+      self.visibility ||= default_visibility
     end
 
   end
