@@ -1,5 +1,3 @@
-require 'acts_as_list'
-
 module Blacklight::Folders
   class FolderItem < ActiveRecord::Base
     belongs_to :folder

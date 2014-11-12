@@ -1,6 +1,9 @@
 module Blacklight::Folders
   module Ability
-    extend ActiveSupport::Concern
+    def initialize(user)
+      super()
+      folder_permissions(user)
+    end
 
     def folder_permissions(user)
       can_manage_my_own_private_folders(user)

@@ -26,11 +26,4 @@ class TestAppGenerator < Rails::Generators::Base
     copy_file File.join(src_dir, 'solr.yml'), 'config/solr.yml'
   end
 
-  # TODO:  Move this to the install generator
-  def add_abilities
-    src_dir = File.expand_path('../../../../../spec/test_app_templates', __FILE__)
-    copy_file File.join(src_dir, 'ability.rb'), 'app/models/ability.rb'
-    append_to_file 'Gemfile', "\ngem 'cancancan', '~> 1.9'"
-  end
-
 end
