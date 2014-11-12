@@ -4,7 +4,9 @@
 
 * Add the <code>blacklight</code> gem and the <code>blacklight_folders</code> gem to your Gemfile, and run <code>bundle install</code>
 
-* Run the blacklight generator with the "devise" switch, following the instructions on the blacklight wiki to set up your blacklight app
+* Run the blacklight generator with the "devise" switch, following the 
+[instructions on the blacklight wiki](https://github.com/projectblacklight/blacklight/wiki/Quickstart#creating-a-new-application-the-hard-way) 
+to set up your blacklight app.  *NOTE"* Depending on your use, you may also want to include the `--marc` and/or `--jettywrapper` switches.
 
     $ rails g blacklight:install --devise
 
