@@ -1,4 +1,4 @@
-<%= form_for @folder, html: { role: 'form' } do |f| %>
+<%= form_for @folder, html: { role: 'form', class: 'col-lg-5' } do |f| %>
   <% if @folder.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@folder.errors.count, "error") %> prohibited this folder from being saved:</h2>
@@ -35,5 +35,9 @@
     </div>
   </div>
 
-  <%= f.submit class: 'btn btn-primary' %>
+  <div class="actions">
+    <div class="primary-actions">
+      <%= f.submit class: 'btn btn-primary' %>
+    </div>
+  </div>
 <% end %>

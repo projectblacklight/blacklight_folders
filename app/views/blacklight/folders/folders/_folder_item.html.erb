@@ -1,11 +1,12 @@
 <div class="document">
-  <%= "#{item.position}." %>
+  <%= folder_item.position %>.
+  <%= folder_item_counter %>
+  <% doc = docs[folder_item_counter] %>
 
   <% link_title = doc[document_show_link_field(doc).to_s] %>
   <%= link_to link_title, main_app.catalog_path(doc['id']) %>
 
-  <%= button_to 'Remove', folder_item_path(item), method: :delete %>
+  <%= button_to 'Remove', folder_item_path(folder_item), method: :delete, class: 'btn btn-danger' %>
 
-  <% doc_partial = File.join(Blacklight::Engine.root, 'app', 'views', 'catalog', '_index_default.html.erb') %>
-  <%= render file: doc_partial, locals: { document: doc } %>
+  <%= render 'index_default', document: doc %>
 </div>

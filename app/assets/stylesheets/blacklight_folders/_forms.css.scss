@@ -1,7 +1,10 @@
-form {
 
-  .actions {
-    margin-top: 1em;
-  }
+.actions {
+  padding: 1px;
+  margin-top: 1em;
+  @extend .clearfix;
+}
 
+.primary-actions {
+  @extend .pull-right;
 }

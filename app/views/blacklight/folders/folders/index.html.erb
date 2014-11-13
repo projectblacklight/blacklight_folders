@@ -1,33 +1,15 @@
-<h1> <%= "Folders (#{@folders.count} total)" %> </h1>
+<h1>Folders (<%=@folders.count %> total)</h1>
 
 <div class="folder-index">
   <table>
     <tbody>
-      <% @folders.each do |folder| %>
-        <tr>
-          <td>
-            <%= link_to 'Edit', blacklight_folders.edit_folder_path(folder), method: :get, class: 'btn btn-default' %>
-            &nbsp;
-            <%= link_to 'View', blacklight_folders.folder_path(folder), method: :get, class: 'btn btn-default' %>
-          </td>
-
-          <td>
-            <%= link_to folder.name, blacklight_folders.folder_path(folder) %>
-            &nbsp;
-            <%= "(contains #{pluralize(folder.items.count, 'item')})" %>
-            &nbsp; &middot; &nbsp;
-            <%= human_friendly_visibility(folder.visibility) %>
-          </td>
-
-          <td> <%= link_to 'Delete', blacklight_folders.folder_path(folder), method: :delete, class: 'btn btn-default pull-right', data: { confirm: "Are you sure you want to delete this folder and all its contents?" } %> </td>
-        </tr>
-      <% end %>
+      <%= render partial: 'folder', collection: @folders %>
     </tbody>
   </table>
 
-  <div class='index-add-actions'>
-    <%= link_to 'Add', blacklight_folders.new_folder_path, class: 'btn btn-default' %>
-    &nbsp;
-    <%= link_to 'Create a New Folder', blacklight_folders.new_folder_path %>
+  <div class='actions'>
+    <div class='primary-actions'>
+      <%= link_to 'Create a New Folder', blacklight_folders.new_folder_path, class: 'btn btn-default' %>
+    </div>
   </div>
 </div>

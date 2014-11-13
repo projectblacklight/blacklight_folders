@@ -41,6 +41,10 @@ module Blacklight::Folders
 
     private
 
+      def _prefixes
+	      @_prefixes ||= super + ['catalog']
+	    end
+
       def create_params
         params.require(:folder).permit(:name, :visibility)
       end

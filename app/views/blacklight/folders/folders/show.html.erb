@@ -4,17 +4,16 @@
   <h1> <%= @folder.name %> </h1>
   <p> Visibility: <%= @folder.visibility %> </p>
 
-  <%= link_to 'Edit Folder', edit_folder_path(@folder) %>
-  <%= button_to 'Delete this Folder', folder_path(@folder), method: :delete, data: { confirm: "Are you sure you want to delete this folder and all its contents?" } %>
-  <br />
+  <div class="form-actions">
+    <div class="primary-actions">
+      <%= link_to 'Edit Folder', edit_folder_path(@folder) %>
+      <%= button_to 'Delete this Folder', folder_path(@folder), method: :delete, class: 'btn btn-danger', data: { confirm: "Are you sure you want to delete this folder and all its contents?" } %>
+     </div>
+  </div>
 
   <h3> Contents: </h3>
 
   <div id="documents">
-    <% docs = @folder.documents %>
-    <% @folder.items.each_with_index do |item, i| %>
-      <% doc = docs[i] %>
-      <%= render partial: 'folder_item', locals: { doc: doc, item: item } %>
-    <% end %>
+    <%= render partial: 'folder_item', collection: @folder.items, locals: { docs: @folder.documents } %>
   </div>
 </div>
