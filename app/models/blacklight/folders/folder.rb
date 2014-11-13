@@ -5,7 +5,10 @@ module Blacklight::Folders
     validates :name, presence: true
 
     after_initialize :default_values
-    has_many :items, -> { order('position ASC') }, class_name: 'FolderItem', :dependent => :destroy
+
+    # 999999999999999
+    has_many :items, -> { order('position ASC') }, class_name: 'BookmarksFolder', :dependent => :destroy
+    has_many :bookmarks, -> { order('blacklight_folders_bookmarks_folders.position ASC') }, through: :items
 
     # visibility
     PUBLIC = 'public'
@@ -14,10 +17,9 @@ module Blacklight::Folders
 
     # Find the folders that belong to this user and don't contain this document
     def self.without_doc_for_user(document, user)
-      selection = "SELECT blacklight_folders_folders.id AS id, blacklight_folders_folders.name AS name, blacklight_folders_folders.number_of_members AS number_of_members FROM blacklight_folders_folders"
-      query_to_match_doc_id = "(SELECT * from blacklight_folders_folder_items WHERE blacklight_folders_folder_items.document_id = '#{document.id}')"
-      query = "#{selection} LEFT OUTER JOIN #{query_to_match_doc_id} AS MATCHES_DOC_ID ON blacklight_folders_folders.id = MATCHES_DOC_ID.folder_id WHERE MATCHES_DOC_ID.document_id IS NULL AND blacklight_folders_folders.user_id = #{user.id}"
-      find_by_sql(query)
+      subquery = Blacklight::Folders::BookmarksFolder.select(:folder_id).joins(:bookmark).where('bookmarks.document_id' => document.id).to_sql
+
+      where(user: user).where("id not in (#{subquery})")
     end
 
     def default_values
@@ -29,7 +31,7 @@ module Blacklight::Folders
     end
 
     def documents
-      doc_ids = items.pluck(:document_id)
+      doc_ids = bookmarks.pluck(:document_id)
       return [] if doc_ids.empty?
 
       rows = doc_ids.count
@@ -38,14 +40,16 @@ module Blacklight::Folders
 
       response = Blacklight.solr.select(params: { q: "id:(#{query_ids})", qt: 'document', rows: rows})['response']['docs']
 
+      docs = response.reduce({}) {|hash, doc|
+        hash.merge(doc['id'] => doc)
+      }
+
       # Put them into the right order (same order as doc_ids),
       # and cast them to the right model.
-      model_names = items.pluck(:document_type)
-      docs = doc_ids.map.with_index {|id, i|
-        doc_hash = response.find{|doc| doc['id'] == id }
-        solr_document_model = model_names[i].safe_constantize
-        solr_document_model.new(doc_hash)
-      }
+      model_names = bookmarks.pluck(:document_type)
+      doc_ids.zip(model_names).map do |doc_id, model_name|
+        model_name.safe_constantize.new(docs[doc_id])
+      end
     end
 
     def default_visibility
@@ -54,6 +58,19 @@ module Blacklight::Folders
 
     def apply_visibility
       self.visibility ||= default_visibility
+    end
+
+    def add_bookmarks(doc_ids=[])
+      doc_ids.each do |doc_id|
+        b = bookmarks.build(document_id: doc_id, user_id: user_id)
+        b.document_type = b.default_document_type.to_s
+      end
+    end
+
+    def remove_bookmarks(items=[])
+      items.each do |item|
+        item.destroy
+      end
     end
 
   end

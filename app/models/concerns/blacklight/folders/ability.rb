@@ -13,7 +13,7 @@ module Blacklight::Folders
     def can_manage_my_own_private_folders(user)
       return unless user
       can :manage, Blacklight::Folders::Folder, user_id: user.id
-      can [:create, :destroy], Blacklight::Folders::FolderItem, folder: { user_id: user.id }
+      can [:create, :destroy], Blacklight::Folders::BookmarksFolder, folder: { user_id: user.id }
     end
 
     def can_read_public_folders(user)

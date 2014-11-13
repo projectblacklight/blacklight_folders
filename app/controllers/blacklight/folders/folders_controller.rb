@@ -2,7 +2,9 @@ require_dependency "blacklight/folders/application_controller"
 
 module Blacklight::Folders
   class FoldersController < ApplicationController
-    load_and_authorize_resource class: Blacklight::Folders::Folder
+    load_and_authorize_resource class: Blacklight::Folders::Folder, except: [:add_bookmarks, :remove_bookmarks]
+    before_filter :load_and_authorize_folder, only: [:add_bookmarks, :remove_bookmarks]
+    before_filter :load_items, only: [:remove_bookmarks]
     before_filter :clear_session_search_params, only: [:show]
 
     def index
@@ -41,6 +43,22 @@ module Blacklight::Folders
       redirect_to main_app.root_path, notice: "Folder \"#{@folder.name}\" was successfully deleted."
     end
 
+    def add_bookmarks
+      doc_ids = Array(params['document_ids'].split(',').map(&:strip))
+      @folder.add_bookmarks(doc_ids)
+
+      if @folder.save
+        redirect_to :back
+      else
+        redirect_to :back, alert: 'Unable to save bookmarks.'
+      end
+    end
+
+    def remove_bookmarks
+      @folder.remove_bookmarks(@items)
+      redirect_to :back
+    end
+
     private
 
       def _prefixes
@@ -54,6 +72,17 @@ module Blacklight::Folders
       def clear_session_search_params
         # TODO: Is there a blacklight method we can use to do this?
         session['search'] = nil
+      end
+
+      def load_and_authorize_folder
+        @folder = Folder.find(params['id']) if params['id']
+        @folder ||= Folder.find(params['folder']['id'])
+        authorize! :edit, @folder
+      end
+
+      def load_items
+        item_ids = Array(params['item_ids'].split(',').map(&:to_i))
+        @items = @folder.items.select {|x| item_ids.include?(x.id) }
       end
 
   end

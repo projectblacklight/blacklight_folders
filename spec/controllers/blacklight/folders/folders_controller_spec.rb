@@ -64,6 +64,20 @@ describe Blacklight::Folders::FoldersController do
         expect(response).to redirect_to(main_app.user_session_path)
       end
     end
+
+    describe '#add_bookmarks' do
+      it 'denies access' do
+        patch :add_bookmarks, folder: { id: my_public_folder.id }, document_ids: '123'
+        expect(response).to redirect_to(main_app.user_session_path)
+      end
+    end
+
+    describe '#remove_bookmarks' do
+      it 'denies access' do
+        patch :remove_bookmarks, folder: { id: my_public_folder.id }, item_ids: '123'
+        expect(response).to redirect_to(main_app.user_session_path)
+      end
+    end
   end  # not logged in
 
 
@@ -174,6 +188,57 @@ describe Blacklight::Folders::FoldersController do
           expect(response).to render_template(:index)
           expect(response).to be_successful
         end
+      end
+    end
+
+    describe '#add_bookmarks' do
+      it 'adds bookmarks to the folder' do
+        @request.env['HTTP_REFERER'] = 'http://test.com'
+        patch :add_bookmarks, folder: { id: my_public_folder.id }, document_ids: '123, 456'
+
+        expect(response).to redirect_to :back
+        expect(assigns(:folder)).to eq my_public_folder
+        expect(my_public_folder.bookmarks.count).to eq 2
+        expect(my_public_folder.bookmarks.map(&:document_id).sort).to eq ['123', '456'].sort
+      end
+    end
+
+    describe '#add_bookmarks failure path' do
+      before do
+        allow_any_instance_of(Blacklight::Folders::Folder).to receive(:save) { false }
+        @request.env['HTTP_REFERER'] = 'http://test.com'
+      end
+
+      it 'prints an error' do
+        patch :add_bookmarks, folder: { id: my_public_folder.id }, document_ids: '123, 456'
+        expect(response).to redirect_to :back
+        expect(flash[:alert]).to eq 'Unable to save bookmarks.'
+      end
+    end
+
+    describe '#remove_bookmarks' do
+      before do
+        my_public_folder.bookmarks.build({document_id: '123', document_type: 'SolrDocument', user_id: my_public_folder.user_id })
+        my_public_folder.save!
+        @item = my_public_folder.items.first
+        @request.env['HTTP_REFERER'] = 'http://test.com'
+      end
+
+      it 'removes the bookmarks' do
+        expect(my_public_folder.bookmarks.count).to eq 1
+        patch :remove_bookmarks, folder: { id: my_public_folder.id }, item_ids: @item.id
+        my_public_folder.reload
+        expect(response).to redirect_to :back
+        expect(assigns(:folder)).to eq my_public_folder
+        expect(assigns(:items).first.class).to eq Blacklight::Folders::BookmarksFolder
+        expect(my_public_folder.bookmarks.count).to eq 0
+      end
+
+      it "doesn't let you delete someone else's bookmark" do
+        not_my_item = FactoryGirl.create(:bookmarks_folder)
+        count = Blacklight::Folders::BookmarksFolder.count
+        patch :remove_bookmarks, folder: { id: my_public_folder.id }, item_ids: not_my_item.id
+        expect(Blacklight::Folders::BookmarksFolder.count).to eq count
       end
     end
   end  # user is logged in

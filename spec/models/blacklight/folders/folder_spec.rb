@@ -29,11 +29,9 @@ describe Blacklight::Folders::Folder do
 
   it 'contains items, listed in order' do
     subject.save!
-    attrs = FactoryGirl.attributes_for(:item)
-    item_A = subject.items.create!(attrs.merge(position: 2))
-    item_B = subject.items.create!(attrs.merge(position: 1))
-
-    expect(subject.items).to eq [item_B, item_A]
+    item_A = FactoryGirl.create(:item, folder: subject, position: 1)
+    item_B = FactoryGirl.create(:item, folder: subject, position: 2)
+    expect(subject.items.map(&:id)).to eq [item_A.id, item_B.id]
   end
 
   describe '.without_doc_for_user' do
@@ -55,7 +53,8 @@ describe Blacklight::Folders::Folder do
 
     it "finds only the folders that don't contain the doc" do
       my_folder_with_doc = FactoryGirl.create(:folder, user: me)
-      my_item_with_doc = FactoryGirl.create(:item, folder: my_folder_with_doc, document: doc)
+      my_bookmark_with_doc = my_folder_with_doc.bookmarks.create(document: doc, user: me)
+
       my_folders = Blacklight::Folders::Folder.where(user_id: me.id)
       expect(my_folders.map(&:id).sort).to eq [my_folder.id, my_folder_with_doc.id].sort
 
@@ -72,10 +71,13 @@ describe Blacklight::Folders::Folder do
       let(:doc_123) { SolrDocument.new(id: 'pid:1.2.3') }
       let(:not_my_doc) { SolrDocument.new(id: 'xyz') }
 
-      let!(:item_ddh) { FactoryGirl.create(:item, folder: subject, document: doc_ddh, position: 2) }
-      let!(:item_123) { FactoryGirl.create(:item, folder: subject, document: doc_123, position: 1) }
-
       before do
+        b1 = FactoryGirl.create(:bookmark, document_id: doc_ddh.id, user_id: subject.user_id, document_type: 'SolrDocument')
+        b2 = FactoryGirl.create(:bookmark, document_id: doc_123.id, user_id: subject.user_id, document_type: 'SolrDocument')
+        subject.items.build([{ bookmark: b1, position: 2 }, { bookmark: b2, position: 1 }])
+        subject.save!
+
+
         Blacklight.solr.delete_by_query("*:*", params: { commit: true })
         Blacklight.solr.add(id: doc_ddh.id)
         Blacklight.solr.add(id: doc_123.id)
@@ -116,6 +118,60 @@ describe Blacklight::Folders::Folder do
         subject.save!
         expect(subject.reload.visibility).to eq subject.default_visibility
       end
+    end
+  end
+
+  describe '#add_bookmarks' do
+    before do
+      subject.bookmarks.build([document_id: 'first', document_type: 'SolrDocument', user_id: subject.user_id])
+      subject.save!
+    end
+
+    it 'appends bookmarks to the exising list' do
+      bookmarks_count = Bookmark.count
+      subject.add_bookmarks(['1', '2', '3'])
+      subject.save!
+      expect(Bookmark.count). to eq bookmarks_count + 3
+      expect(subject.bookmarks.map(&:document_id)[-3..-1]).to eq ['1', '2', '3']
+    end
+
+    it 'sets the correct user_id' do
+      expect(subject.bookmarks.count).to eq 1
+      expect(subject.bookmarks.first.user_id).to eq subject.user_id
+    end
+
+    it 'sets document_type' do
+      subject.add_bookmarks(['1'])
+      subject.save!
+      expect(subject.bookmarks.count).to eq 2
+      expect(subject.bookmarks.map(&:document_type)).to eq [SolrDocument, SolrDocument]
+    end
+  end
+
+  describe '#remove_bookmarks' do
+    let(:subject) { FactoryGirl.create(:folder) }
+
+    before do
+      b123 = FactoryGirl.create(:bookmark, document_id: '123', user_id: subject.user_id)
+      b456 = FactoryGirl.create(:bookmark, document_id: '456', user_id: subject.user_id)
+      b789 = FactoryGirl.create(:bookmark, document_id: '789', user_id: subject.user_id)
+
+      @item_123 = FactoryGirl.create(:item, bookmark: b123, folder: subject)
+      @item_456 = FactoryGirl.create(:item, bookmark: b456, folder: subject)
+      @item_789 = FactoryGirl.create(:item, bookmark: b789, folder: subject)
+    end
+
+    it 'removes the bookmarks' do
+      expect(Bookmark.count).to eq 3
+      expect(Blacklight::Folders::BookmarksFolder.count).to eq 3
+
+      list_to_remove = [@item_789, @item_123]
+
+      subject.remove_bookmarks(list_to_remove)
+
+      expect(Bookmark.count).to eq 1
+      expect(subject.bookmarks.map(&:document_id)).to eq ['456']
+      expect(Blacklight::Folders::BookmarksFolder.count).to eq 1
     end
   end
 
