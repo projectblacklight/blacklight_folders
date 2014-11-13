@@ -1,6 +1,11 @@
-<h1>Folders (<%=@folders.count %> total)</h1>
-
 <div class="folder-index">
+  <div class="row">
+    <h1 class="col-lg-8">Folders <small>(<%= @folders.count %> total)</small></h1>
+
+    <%= form_tag blacklight_folders.folders_path, method: :get, class:"col-lg-4", id: "sort-tool" do %>
+      <%= select_tag 'order_by', options_for_select({ 'Name' => 'name', 'Size' => 'size', 'Created' => 'created_at', 'Updated' => 'updated_at' }, params[:order_by]), prompt: "Sort by..." %>
+    <% end %>
+  </div>
   <table>
     <tbody>
       <%= render partial: 'folder', collection: @folders %>
@@ -9,7 +14,7 @@
 
   <div class='actions'>
     <div class='primary-actions'>
-      <%= link_to 'Create a New Folder', blacklight_folders.new_folder_path, class: 'btn btn-default' %>
+      <%= link_to 'Create a New Folder', blacklight_folders.new_folder_path, class: 'btn btn-primary' %>
     </div>
   </div>
 </div>

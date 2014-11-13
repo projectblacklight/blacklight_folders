@@ -27,5 +27,17 @@ module BlacklightFolders
       inject_into_file 'app/assets/stylesheets/blacklight.css.scss', "@import 'blacklight_folders/blacklight_folders';", after: /@import 'blacklight\/blacklight';\s*\n/
     end
 
+    def add_javascript
+      unless IO.read("app/assets/javascripts/application.js").include?('blacklight_folders')
+        marker = IO.read("app/assets/javascripts/application.js").include?('blacklight/blacklight') ?
+          '//= require blacklight/blacklight' : "//= require jquery_ujs"
+        insert_into_file "app/assets/javascripts/application.js", after: marker do
+  %q{
+//
+//= require blacklight_folders}
+        end
+      end
+    end
+
   end
 end

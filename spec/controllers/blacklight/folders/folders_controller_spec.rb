@@ -151,14 +151,29 @@ describe Blacklight::Folders::FoldersController do
     end
 
     describe '#index' do
-      it 'displays the folders' do
+      before do
         my_private_folder
         my_public_folder
+      end
+
+      it 'displays the folders' do
         get :index
 
-        expect(assigns(:folders).sort).to eq [my_private_folder, my_public_folder].sort
+        expect(assigns(:folders)).to match_array [my_private_folder, my_public_folder]
         expect(response).to render_template(:index)
         expect(response).to be_successful
+      end
+
+      context "with sorting" do
+        let!(:aaa_folder)  { FactoryGirl.create(:public_folder, user: user, name: 'AAA') }
+
+        it 'displays the folders in order' do
+          get :index, order_by: 'name'
+
+          expect(assigns(:folders)).to eq [aaa_folder, my_private_folder, my_public_folder]
+          expect(response).to render_template(:index)
+          expect(response).to be_successful
+        end
       end
     end
   end  # user is logged in

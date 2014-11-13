@@ -6,6 +6,8 @@ module Blacklight::Folders
     before_filter :clear_session_search_params, only: [:show]
 
     def index
+      @folders = Blacklight::Folders::Folder.accessible_by(current_ability)
+      @folders = @folders.order(params[:order_by]) if params[:order_by]
     end
 
     def show
