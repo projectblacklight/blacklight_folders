@@ -23,6 +23,10 @@ describe Blacklight::Folders::Folder do
     expect(subject.errors.messages[:name].first).to match /blank/
   end
 
+  it 'has number_of_members which defaults to 0' do
+    expect(subject.number_of_members).to eq 0
+  end
+
   it 'contains items, listed in order' do
     subject.save!
     attrs = FactoryGirl.attributes_for(:item)

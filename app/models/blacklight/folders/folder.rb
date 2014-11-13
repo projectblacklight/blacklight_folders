@@ -4,6 +4,7 @@ module Blacklight::Folders
     validates :user_id, presence: true
     validates :name, presence: true
 
+    after_initialize :default_values
     has_many :items, -> { order('position ASC') }, class_name: 'FolderItem', :dependent => :destroy
 
     # visibility
@@ -13,10 +14,18 @@ module Blacklight::Folders
 
     # Find the folders that belong to this user and don't contain this document
     def self.without_doc_for_user(document, user)
-      selection = "SELECT blacklight_folders_folders.id AS id, blacklight_folders_folders.name AS name from blacklight_folders_folders"
+      selection = "SELECT blacklight_folders_folders.id AS id, blacklight_folders_folders.name AS name, blacklight_folders_folders.number_of_members AS number_of_members FROM blacklight_folders_folders"
       query_to_match_doc_id = "(SELECT * from blacklight_folders_folder_items WHERE blacklight_folders_folder_items.document_id = '#{document.id}')"
       query = "#{selection} LEFT OUTER JOIN #{query_to_match_doc_id} AS MATCHES_DOC_ID ON blacklight_folders_folders.id = MATCHES_DOC_ID.folder_id WHERE MATCHES_DOC_ID.document_id IS NULL AND blacklight_folders_folders.user_id = #{user.id}"
       find_by_sql(query)
+    end
+
+    def default_values
+      self.number_of_members ||= 0
+    end
+
+    def recalculate_size
+      self.number_of_members = items.count
     end
 
     def documents

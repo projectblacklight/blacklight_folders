@@ -3,7 +3,7 @@
     <h1 class="col-lg-8">Folders <small>(<%= @folders.count %> total)</small></h1>
 
     <%= form_tag blacklight_folders.folders_path, method: :get, class:"col-lg-4", id: "sort-tool" do %>
-      <%= select_tag 'order_by', options_for_select({ 'Name' => 'name', 'Size' => 'size', 'Created' => 'created_at', 'Updated' => 'updated_at' }, params[:order_by]), prompt: "Sort by..." %>
+      <%= select_tag 'order_by', options_for_select({ 'Name' => 'name', 'Size' => 'number_of_members', 'Created' => 'created_at', 'Updated' => 'updated_at' }, params[:order_by]), prompt: "Sort by..." %>
     <% end %>
   </div>
   <table>
