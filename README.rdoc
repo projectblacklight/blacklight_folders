@@ -18,6 +18,10 @@
 
 For development on the blacklight_folders gem itself.
 
+==== Grab dependencies
+  $ export RAILS_VERSION=4.1.7
+  $ bundle install
+
 ==== Install Jetty
 
   $ rake jetty:unzip
