@@ -1,4 +1,4 @@
-<%= form_for(@folder) do |f| %>
+<%= form_for @folder, html: { role: 'form' } do |f| %>
   <% if @folder.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@folder.errors.count, "error") %> prohibited this folder from being saved:</h2>
@@ -11,24 +11,29 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label :name %><br>
-    <%= f.text_field :name %>
+    <%= f.text_field :name, class: 'form-control' %>
   </div>
 
-  <div class="field">
-    <%= f.label :visibility, 'Who can see the contents of this folder?' %><br>
+  <div class="form-group">
+    <p><strong>Who can see the contents of this folder?</strong></p>
     <% @folder.visibility ||= Blacklight::Folders::Folder::PRIVATE %>
 
-    <%= f.radio_button(:visibility, Blacklight::Folders::Folder::PUBLIC) %>
-    <%= human_friendly_visibility(Blacklight::Folders::Folder::PUBLIC) %>
-    <br />
+    <div class="radio">
+      <label>
+        <%= f.radio_button(:visibility, Blacklight::Folders::Folder::PUBLIC) %>
+        <%= human_friendly_visibility(Blacklight::Folders::Folder::PUBLIC) %>
+      </label>
+    </div>
 
-    <%= f.radio_button(:visibility, Blacklight::Folders::Folder::PRIVATE) %>
-    <%= human_friendly_visibility(Blacklight::Folders::Folder::PRIVATE) %>
+    <div class="radio">
+      <label>
+        <%= f.radio_button(:visibility, Blacklight::Folders::Folder::PRIVATE) %>
+        <%= human_friendly_visibility(Blacklight::Folders::Folder::PRIVATE) %>
+      </label>
+    </div>
   </div>
 
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+  <%= f.submit class: 'btn btn-primary' %>
 <% end %>
