@@ -6,7 +6,6 @@
   <li class="email">
     <%= link_to t('blacklight.tools.email'), main_app.email_catalog_path(:sort=>params[:sort], :per_page=>params[:per_page], :id => @folder.documents.map {|doc| doc.id}), :class=>"btn btn-default", :id => "emailLink", :data => {:ajax_modal => "trigger"} %>
   </li>
-  
-  <% @document_list = @folder.documents # For the blacklight-marc views %>
+
   <%= render_marc_tools %>
 </ul>
