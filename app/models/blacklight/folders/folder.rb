@@ -8,6 +8,7 @@ module Blacklight::Folders
 
     has_many :items, -> { order('position ASC') }, class_name: 'BookmarksFolder', :dependent => :destroy
     has_many :bookmarks, -> { order('blacklight_folders_bookmarks_folders.position ASC') }, through: :items
+    accepts_nested_attributes_for :items
 
     # visibility
     PUBLIC = 'public'

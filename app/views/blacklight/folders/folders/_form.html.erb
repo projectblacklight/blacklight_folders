@@ -40,4 +40,19 @@
       <%= f.submit class: 'btn btn-primary' %>
     </div>
   </div>
+
+  <div id="documents">
+    <ol>
+    <%= f.fields_for :items do |i| %>
+      <li class="row">
+      <span class="form-group">
+        <div class="col-lg-2">
+          <%= i.text_field :position, class: 'form-control col-lg-2' %>
+        </div>
+      </span>
+      <%= i.object.bookmark.document_id%>
+      </li>
+    <% end %>
+    </ol>
+  </div>
 <% end %>
