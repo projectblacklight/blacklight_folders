@@ -1,17 +1,17 @@
 <div class="folder-view">
   <p id="notice"><%= notice %></p>
 
-  <h1> <%= @folder.name %> </h1>
-  <p> Visibility: <%= @folder.visibility %> </p>
-
-  <div class="form-actions">
+  <% if can? :edit, @folder %>
     <div class="primary-actions">
-      <%= link_to 'Edit Folder', edit_folder_path(@folder) %>
-      <%= button_to 'Delete this Folder', folder_path(@folder), method: :delete, class: 'btn btn-danger', data: { confirm: "Are you sure you want to delete this folder and all its contents?" } %>
+      <%= link_to edit_folder_path(@folder), class: 'btn btn-default' do %>
+        <span class="glyphicon glyphicon-pencil"></span> Edit folder
+      <% end %>
      </div>
-  </div>
+  <% end %>
+  <h1><%= @folder.name %></h1>
+  <span class="owner-label">Owner:</span> <span class="owner"><%= @folder.user %></span>
 
-  <h3> Contents: </h3>
+  <%= render 'tools' %>
 
   <div id="documents">
     <%= render partial: 'folder_item', collection: @folder.items, locals: { docs: @folder.documents } %>

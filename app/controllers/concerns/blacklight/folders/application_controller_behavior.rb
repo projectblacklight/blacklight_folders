@@ -3,6 +3,8 @@ module Blacklight::Folders
     extend ActiveSupport::Concern
 
     included do
+      layout 'blacklight/folders/application'
+
       rescue_from ::CanCan::AccessDenied do |exception|
         if current_user
           redirect_to main_app.root_url, alert: exception.message

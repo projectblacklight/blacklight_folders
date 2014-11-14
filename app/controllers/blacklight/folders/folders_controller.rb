@@ -2,6 +2,7 @@ require_dependency "blacklight/folders/application_controller"
 
 module Blacklight::Folders
   class FoldersController < ApplicationController
+    include EncryptedUser
     load_and_authorize_resource class: Blacklight::Folders::Folder, except: [:add_bookmarks, :remove_bookmarks]
     before_filter :load_and_authorize_folder, only: [:add_bookmarks, :remove_bookmarks]
     before_filter :clear_session_search_params, only: [:show]
@@ -42,6 +43,7 @@ module Blacklight::Folders
       redirect_to main_app.root_path, notice: "Folder \"#{@folder.name}\" was successfully deleted."
     end
 
+<<<<<<< HEAD
     def add_bookmarks
       doc_ids = Array(params['document_ids'].split(',').map(&:strip))
       @folder.add_bookmarks(doc_ids)
@@ -58,6 +60,12 @@ module Blacklight::Folders
       items = @folder.items.select {|x| item_ids.include?(x.id)}
       @folder.remove_bookmarks(items)
       redirect_to :back
+=======
+    # Used for #export action with encrypted user_id, available
+    # as a helper method for views.
+    def encrypt_user_id(user_id)
+      message_encryptor.encrypt_and_sign([user_id, Time.now])
+>>>>>>> Folder show page. Fixes #40
     end
 
     private

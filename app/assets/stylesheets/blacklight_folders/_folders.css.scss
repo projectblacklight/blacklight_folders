@@ -1,16 +1,4 @@
-
 $table_border: 1px dotted #dddddd;
-
-.folder-view {
-
-  #documents .document {
-    border-bottom: $table_border;
-    margin-top: 6px;
-    padding-top: 6px;
-  }
-
-}
-
 
 .folder-index {
   table {
@@ -32,3 +20,8 @@ $table_border: 1px dotted #dddddd;
   }
 }
 
+.folder-view {
+  .bookmarkTools {
+    margin-top: 20px;
+  }
+}

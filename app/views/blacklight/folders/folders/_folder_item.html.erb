@@ -1,15 +1,2 @@
-<div class="document">
-  <%= folder_item.position %>.
-  <%= folder_item_counter %>
-  <% doc = docs[folder_item_counter] %>
-
-  <% link_title = doc[document_show_link_field(doc).to_s] %>
-  <%= link_to link_title, main_app.catalog_path(doc['id']) %>
-
-  <%= form_for @folder, url: blacklight_folders.remove_bookmarks_from_folder_path(id: @folder.id), method: :patch do |f| %>
-    <%= hidden_field_tag(:item_ids, folder_item.id) %>
-    <%= f.submit 'Remove', class: 'btn btn-danger' %>
-  <% end %>
-
-  <%= render 'index_default', document: doc %>
-</div>
+<% doc = docs[folder_item_counter] %>
+<%= render 'document', document: docs[folder_item_counter], document_counter: folder_item_counter %>

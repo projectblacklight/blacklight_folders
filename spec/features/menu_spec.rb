@@ -13,7 +13,7 @@ describe 'Navbar menu' do
     expect(page).to have_link('Saved Searches', href: saved_searches_path)
 
     # Menu items from blacklight_folders
-    expect(page).to have_link('Folders', href: '#')
+    expect(page).to have_link('Folders', href: blacklight_folders.folders_path)
     expect(page).to have_link('Create a New Folder', href: blacklight_folders.new_folder_path)
   end
 end
