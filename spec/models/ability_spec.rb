@@ -54,6 +54,21 @@ describe Ability do
 
       should     be_able_to(:create, Blacklight::Folders::BookmarksFolder)
     }
+
+    # This should never happen, but...
+    # If the user_id of the bookmark doesn't match the user_id of
+    # the folder, assume the folder's user_id is the correct one.
+    describe 'special case where user_id of folder is out-of-sync with user_id of bookmark' do
+      before do
+        my_private_item.bookmark.user = you
+        my_private_item.bookmark.save!
+      end
+
+      it {
+        should_not be_able_to(:read, my_private_item)
+        should_not be_able_to(:read, my_private_item.bookmark)
+      }
+    end
   end
 
 end
