@@ -6,7 +6,7 @@ class CreateBlacklightFoldersBookmarksFolders < ActiveRecord::Migration
       t.references :bookmark, null: false, index: true
       t.integer :position
 
-     t.timestamps
+      t.timestamps
     end
   end
 

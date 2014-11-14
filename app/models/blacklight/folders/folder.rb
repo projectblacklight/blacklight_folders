@@ -6,7 +6,6 @@ module Blacklight::Folders
 
     after_initialize :default_values
 
-    # 999999999999999
     has_many :items, -> { order('position ASC') }, class_name: 'BookmarksFolder', :dependent => :destroy
     has_many :bookmarks, -> { order('blacklight_folders_bookmarks_folders.position ASC') }, through: :items
 
@@ -31,25 +30,7 @@ module Blacklight::Folders
     end
 
     def documents
-      doc_ids = bookmarks.pluck(:document_id)
-      return [] if doc_ids.empty?
-
-      rows = doc_ids.count
-      query_ids = doc_ids.map{|id| RSolr.escape(id) }
-      query_ids = query_ids.join(' OR ')
-
-      response = Blacklight.solr.select(params: { q: "id:(#{query_ids})", qt: 'document', rows: rows})['response']['docs']
-
-      docs = response.reduce({}) {|hash, doc|
-        hash.merge(doc['id'] => doc)
-      }
-
-      # Put them into the right order (same order as doc_ids),
-      # and cast them to the right model.
-      model_names = bookmarks.pluck(:document_type)
-      doc_ids.zip(model_names).map do |doc_id, model_name|
-        model_name.safe_constantize.new(docs[doc_id])
-      end
+      bookmarks.map(&:document)
     end
 
     def default_visibility
@@ -60,17 +41,19 @@ module Blacklight::Folders
       self.visibility ||= default_visibility
     end
 
+    def blacklight_config
+      ::CatalogController.blacklight_config
+    end
+
     def add_bookmarks(doc_ids=[])
       doc_ids.each do |doc_id|
         b = bookmarks.build(document_id: doc_id, user_id: user_id)
-        b.document_type = b.default_document_type.to_s
+        b.document_type = blacklight_config.solr_document_model.to_s
       end
     end
 
     def remove_bookmarks(items=[])
-      items.each do |item|
-        item.destroy
-      end
+      self.items.delete(items)
     end
 
   end
