@@ -230,7 +230,6 @@ describe Blacklight::Folders::FoldersController do
         my_public_folder.reload
         expect(response).to redirect_to :back
         expect(assigns(:folder)).to eq my_public_folder
-        expect(assigns(:items).first.class).to eq Blacklight::Folders::BookmarksFolder
         expect(my_public_folder.bookmarks.count).to eq 0
       end
 

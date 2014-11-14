@@ -4,7 +4,6 @@ module Blacklight::Folders
   class FoldersController < ApplicationController
     load_and_authorize_resource class: Blacklight::Folders::Folder, except: [:add_bookmarks, :remove_bookmarks]
     before_filter :load_and_authorize_folder, only: [:add_bookmarks, :remove_bookmarks]
-    before_filter :load_items, only: [:remove_bookmarks]
     before_filter :clear_session_search_params, only: [:show]
 
     def index
@@ -55,7 +54,9 @@ module Blacklight::Folders
     end
 
     def remove_bookmarks
-      @folder.remove_bookmarks(@items)
+      item_ids = Array(params['item_ids'].split(',').map(&:to_i))
+      items = @folder.items.select {|x| item_ids.include?(x.id)}
+      @folder.remove_bookmarks(items)
       redirect_to :back
     end
 
@@ -78,11 +79,6 @@ module Blacklight::Folders
         @folder = Folder.find(params['id']) if params['id']
         @folder ||= Folder.find(params['folder']['id'])
         authorize! :edit, @folder
-      end
-
-      def load_items
-        item_ids = Array(params['item_ids'].split(',').map(&:to_i))
-        @items = @folder.items.select {|x| item_ids.include?(x.id) }
       end
 
   end
