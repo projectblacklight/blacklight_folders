@@ -30,7 +30,23 @@ module Blacklight::Folders
     end
 
     def documents
-      bookmarks.map(&:document)
+      doc_ids = bookmarks.pluck(:document_id)
+      return [] if doc_ids.empty?
+
+      rows = doc_ids.count
+      query_ids = doc_ids.map{|id| RSolr.escape(id) }
+      query_ids = query_ids.join(' OR ')
+
+      response = Blacklight.solr.select(params: { q: "id:(#{query_ids})", qt: 'document', rows: rows})['response']['docs']
+
+      # Put them into the right order (same order as doc_ids),
+      # and cast them to the right model.
+      model_names = bookmarks.pluck(:document_type)
+      docs = doc_ids.map.with_index {|id, i|
+        doc_hash = response.find{|doc| doc['id'] == id }
+        solr_document_model = model_names[i].safe_constantize
+        solr_document_model.new(doc_hash)
+      }
     end
 
     def default_visibility

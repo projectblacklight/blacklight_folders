@@ -67,8 +67,8 @@ describe Blacklight::Folders::Folder do
     let(:subject) { FactoryGirl.create(:folder) }
 
     describe 'a folder with items in it' do
-      let(:doc_ddh) { SolrDocument.new(id: 'U DDH') }
-      let(:doc_123) { SolrDocument.new(id: 'pid:1.2.3') }
+      let(:doc_ddh) { SolrDocument.new(id: 'U DDH', title_t: ['A title']) }
+      let(:doc_123) { SolrDocument.new(id: 'pid:1.2.3', title_t: ['Another title']) }
       let(:not_my_doc) { SolrDocument.new(id: 'xyz') }
 
       before do
@@ -79,8 +79,8 @@ describe Blacklight::Folders::Folder do
 
 
         Blacklight.solr.delete_by_query("*:*", params: { commit: true })
-        Blacklight.solr.add(id: doc_ddh.id)
-        Blacklight.solr.add(id: doc_123.id)
+        Blacklight.solr.add(doc_ddh.to_h)
+        Blacklight.solr.add(doc_123.to_h)
         Blacklight.solr.add(id: not_my_doc.id)
         Blacklight.solr.commit
       end
@@ -95,6 +95,7 @@ describe Blacklight::Folders::Folder do
       it 'returns the documents for this folder in order' do
         expect(subject.items.count).to eq 2
         expect(subject.documents.map{|doc| doc['id']}).to eq [doc_123.id, doc_ddh.id]
+        expect(subject.documents.map{|doc| doc['title_t']}).to eq [doc_123['title_t'], doc_ddh['title_t']]
       end
 
       it 'returns SolrDocuments' do
