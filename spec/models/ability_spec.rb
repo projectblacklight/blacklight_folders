@@ -27,7 +27,7 @@ describe Ability do
       should_not be_able_to(:index, Blacklight::Folders::Folder)
 
       should_not be_able_to(:destroy, your_public_item)
-      should_not be_able_to(:create, Blacklight::Folders::FolderItem)
+      should_not be_able_to(:create, Blacklight::Folders::BookmarksFolder)
     }
   end
 
@@ -52,7 +52,7 @@ describe Ability do
       should_not be_able_to(:destroy, your_public_item)
       should     be_able_to(:destroy, my_private_item)
 
-      should     be_able_to(:create, Blacklight::Folders::FolderItem)
+      should     be_able_to(:create, Blacklight::Folders::BookmarksFolder)
     }
   end
 

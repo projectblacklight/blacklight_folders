@@ -8,13 +8,12 @@
 
       <% unless folders_for_selection.empty? %>
         <div class="panel-body">
-          <% item = Blacklight::Folders::FolderItem.new(document: @document) %>
-          <%= form_for item, url: blacklight_folders.folder_items_path do |f| %>
+          <%= form_for :folder, url: blacklight_folders.add_bookmarks_to_folder_path, method: :patch do |f| %>
 
-            <%= f.hidden_field(:document_id) %>
+            <%= hidden_field_tag(:document_ids, @document.id) %>
 
             <div class="field">
-              <%= f.select :folder_id, options_from_collection_for_select(folders_for_selection, :id, :name, item.folder_id), prompt: 'Select a Folder' %>
+              <%= f.select :id, options_from_collection_for_select(folders_for_selection, :id, :name), prompt: 'Select a Folder' %>
             </div>
 
             <div class="actions">

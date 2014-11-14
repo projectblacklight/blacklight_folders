@@ -3,6 +3,7 @@ class CreateBlacklightFoldersFolders < ActiveRecord::Migration
     create_table :blacklight_folders_folders do |t|
       t.string :name
       t.references :user, null: false, polymorphic: true, index: true
+      t.string :visibility
 
       t.timestamps
     end
