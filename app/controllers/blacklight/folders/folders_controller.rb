@@ -32,7 +32,7 @@ module Blacklight::Folders
     end
 
     def update
-      if @folder.update(create_params)
+      if @folder.update(reorder_items(create_params))
         redirect_to @folder, notice: t(:'helpers.submit.folder.updated')
       else
         render :edit
@@ -64,6 +64,28 @@ module Blacklight::Folders
 
 
     private
+
+      def reorder_items(in_params)
+        return in_params unless in_params.key?(:items_attributes)
+        attributes_collection = in_params[:items_attributes]
+        if attributes_collection.is_a? Hash
+          keys = attributes_collection.keys
+          attributes_collection = if keys.include?('id') || keys.include?(:id)
+            [attributes_collection]
+          else
+            attributes_collection.values
+          end
+        end
+
+        # This mutates the hashes inside the list
+        attributes_collection.sort { |a, b| a[:position].to_i <=> b[:position].to_i }.
+          each_with_index do |record_attributes, i|
+            record_attributes[:position] = i + 1
+          end
+
+
+        in_params.merge(items_attributes: attributes_collection)
+      end
 
       def _prefixes
 	      @_prefixes ||= super + ['catalog']
