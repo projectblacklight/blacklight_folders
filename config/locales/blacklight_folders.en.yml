@@ -1,0 +1,28 @@
+en:
+  helpers:
+    action:
+      edit_long: "Edit %{model}"
+      blacklight_folders/folder:
+        create:    "Create a New Folder"
+        edit_long: "Create a New Folder"
+    submit:
+      blacklight_folders_default: &blacklight_folders_default
+        create: "Save"
+        submit: "Save changes"
+        update: "Save changes"
+        created: "The %{model} was created."
+        updated: "The %{model} was successfully updated."
+        destroyed: "The %{model} was deleted."
+      appearance: *blacklight_folders_default
+  activerecord:
+    models:
+      blacklight_folders:
+        page: Page
+    attributes:
+      "spotlight/resource/csv":
+            url: "File"
+  blacklight_folders:
+    application_name: "Folder - %{application_name}"
+    html_title: "Folder | %{application_name}"
+    main_navigation:
+      folders: "Folders"

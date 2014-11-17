@@ -1,6 +1,8 @@
 module Blacklight::Folders
   module ApplicationHelper
 
+    include CrudLinksHelper
+
     # The layout file from the main app might invoke
     # some of the named routes from blacklight, which
     # causes errors on the blacklight_folders views

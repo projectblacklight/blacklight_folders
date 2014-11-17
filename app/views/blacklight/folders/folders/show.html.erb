@@ -4,7 +4,7 @@
   <% if can? :edit, @folder %>
     <div class="primary-actions">
       <%= link_to edit_folder_path(@folder), class: 'btn btn-default' do %>
-        <span class="glyphicon glyphicon-pencil"></span> Edit folder
+        <span class="glyphicon glyphicon-pencil"></span> <%= action_label(@folder, :edit_long) %>
       <% end %>
      </div>
   <% end %>

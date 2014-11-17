@@ -5,10 +5,10 @@
   <div class="navbar-right">
     <ul class="nav navbar-nav" id="folders-menu">
       <li>
-        <%= link_to 'Folders', blacklight_folders.folders_path %>
+        <%= link_to t(:'blacklight_folders.main_navigation.folders'), blacklight_folders.folders_path %>
 
         <ul class="navbar-nav sub-menu">
-          <li> <%= link_to 'Create a New Folder', blacklight_folders.new_folder_path %> </li>
+          <li><%= link_to t(:'helpers.action.blacklight_folders/folder.create'), blacklight_folders.new_folder_path %></li>
 
           <% current_user.folders.each do |folder| %>
             <li> <%= link_to folder.name, blacklight_folders.folder_path(folder) %> </li>
