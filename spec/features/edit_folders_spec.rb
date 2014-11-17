@@ -37,5 +37,16 @@ describe 'Editing a folder' do
     # check that the second item is now the first.
     expect(page).to have_selector "#documents .document:first-of-type h5", text: 'Another title'
   end
+
+  it "should allow me to remove folder items" do
+    within "#documents li:first-of-type" do
+      check 'Delete'
+    end
+    click_button "Update Folder"
+
+    expect(page).to have_content "The folder was successfully updated"
+    expect(page).not_to have_content "A title"
+    expect(page).to have_selector "#documents .document", count: 1
+  end
 end
 

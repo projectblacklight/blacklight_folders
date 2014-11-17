@@ -157,6 +157,7 @@ describe Blacklight::Folders::FoldersController do
         let!(:bookmarks_folder1) { create(:bookmarks_folder, position: '1', folder: my_private_folder) }
         let!(:bookmarks_folder2) { create(:bookmarks_folder, position: '2', folder: my_private_folder) }
         let!(:bookmarks_folder3) { create(:bookmarks_folder, position: '3', folder: my_private_folder) }
+        let!(:bookmarks_folder4) { create(:bookmarks_folder, position: '4', folder: my_private_folder) }
 
         it 'updates the folder items' do
           patch :update, id: my_private_folder.id,
@@ -165,6 +166,7 @@ describe Blacklight::Folders::FoldersController do
                 { id: bookmarks_folder1, position: '3' },
                 { id: bookmarks_folder2, position: '1' },
                 { id: bookmarks_folder3, position: '2' },
+                { id: bookmarks_folder4, position: '4', _destroy: 'true' }
               ]
             }
 
