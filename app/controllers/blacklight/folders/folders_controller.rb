@@ -32,7 +32,7 @@ module Blacklight::Folders
     end
 
     def update
-      if @folder.update(reorder_items(create_params))
+      if @folder.update(preprocess_nested_attributes(create_params))
         redirect_to @folder, notice: t(:'helpers.submit.folder.updated')
       else
         render :edit
@@ -65,9 +65,12 @@ module Blacklight::Folders
 
     private
 
-      def reorder_items(in_params)
+      def preprocess_nested_attributes(in_params)
         return in_params unless in_params.key?(:items_attributes)
-        attributes_collection = in_params[:items_attributes]
+        in_params.merge(items_attributes: reorder_items(strip_blank_folders(nested_params_to_array(in_params[:items_attributes]))))
+      end
+
+      def nested_params_to_array(attributes_collection)
         if attributes_collection.is_a? Hash
           keys = attributes_collection.keys
           attributes_collection = if keys.include?('id') || keys.include?(:id)
@@ -76,15 +79,23 @@ module Blacklight::Folders
             attributes_collection.values
           end
         end
+        attributes_collection
+      end
 
+      def strip_blank_folders(attributes_collection)
+        attributes_collection.each do |record_attributes|
+          record_attributes.delete(:folder_id) if record_attributes[:folder_id].blank?
+        end
+        attributes_collection
+      end
+
+      def reorder_items(attributes_collection)
         # This mutates the hashes inside the list
         attributes_collection.sort { |a, b| a[:position].to_i <=> b[:position].to_i }.
           each_with_index do |record_attributes, i|
             record_attributes[:position] = i + 1
           end
-
-
-        in_params.merge(items_attributes: attributes_collection)
+        attributes_collection
       end
 
       def _prefixes
@@ -92,7 +103,7 @@ module Blacklight::Folders
 	    end
 
       def create_params
-        params.require(:folder).permit(:name, :visibility, items_attributes: [:id, :position, :_destroy])
+        params.require(:folder).permit(:name, :visibility, items_attributes: [:id, :position, :_destroy, :folder_id])
       end
 
       def clear_session_search_params

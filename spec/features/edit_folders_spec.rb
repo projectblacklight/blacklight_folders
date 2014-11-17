@@ -6,6 +6,7 @@ describe 'Editing a folder' do
   let(:document2) { SolrDocument.new(id: 'doc2', title_display: ['Another title']) }
 
   let(:folder) { create(:folder, user: user) }
+  let!(:destination_folder) { create(:folder, user: user, name: 'Destination Folder') }
   let(:bookmark1) { create(:bookmark, document: document1, user: user) }
   let(:bookmark2) { create(:bookmark, document: document2, user: user) }
   let!(:bookmarks_folder1) { create(:bookmarks_folder, bookmark: bookmark1, folder: folder) }
@@ -47,6 +48,22 @@ describe 'Editing a folder' do
     expect(page).to have_content "The folder was successfully updated"
     expect(page).not_to have_content "A title"
     expect(page).to have_selector "#documents .document", count: 1
+  end
+
+  it "should allow me to move items from one folder to another" do
+    within "#documents li:first-of-type" do
+      select 'Destination Folder', from: 'folder[items_attributes][0][folder_id]'
+    end
+    click_button "Update Folder"
+
+    expect(page).to have_content "The folder was successfully updated"
+    expect(page).not_to have_content "A title"
+    expect(page).to have_selector "#documents .document", count: 1
+
+    click_link 'Destination Folder'
+    within '#documents' do
+      expect(page).to have_content "A title"
+    end
   end
 end
 

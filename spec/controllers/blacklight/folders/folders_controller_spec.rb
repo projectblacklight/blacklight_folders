@@ -210,6 +210,24 @@ describe Blacklight::Folders::FoldersController do
             expect(my_private_folder.item_ids).to eq [bookmarks_folder2.id, bookmarks_folder1.id]
           end
         end
+
+        describe "moving the item to another folder" do
+          let!(:bookmarks_folder1) { create(:bookmarks_folder, position: '1', folder: my_private_folder) }
+          let!(:bookmarks_folder2) { create(:bookmarks_folder, position: '2', folder: my_private_folder) }
+
+          it 'renumbers the folder items and sorts by integer (not string)' do
+            patch :update, id: my_private_folder.id,
+              folder: { items_attributes:
+                [
+                  { id: bookmarks_folder1, position: '1', folder_id: ''},
+                  { id: bookmarks_folder2, position: '2', folder_id: my_public_folder.id }
+                ]
+              }
+
+            expect(my_private_folder.reload.item_ids).to eq [bookmarks_folder1.id]
+            expect(my_public_folder.item_ids).to eq [bookmarks_folder2.id]
+          end
+        end
       end
 
       context 'with bad inputs' do

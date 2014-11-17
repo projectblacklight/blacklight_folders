@@ -47,14 +47,20 @@
   <ol id="documents">
     <%= f.fields_for :items do |i| %>
       <li class="row">
-        <div class="col-lg-1">
+        <div class="col-sm-1">
           <%= i.text_field :position, class: 'form-control col-lg-2' %>
         </div>
-        <div class="col-lg-9 title">
+        <div class="col-sm-7 title">
           <% document =  @folder.documents[i.options[:child_index]] %>
           <%= link_to_document document, label: document_show_link_field(document) %>
         </div>
-        <div class="col-lg-2 checkbox">
+        <div class="col-sm-2 title">
+          <% destinations = Blacklight::Folders::Folder.without_doc_for_user(document, current_user) %>
+          <% unless destinations.empty? %>
+            <%= i.select(:folder_id, options_from_collection_for_select(destinations, :id, :name), {include_blank: "Move to..." } ) %>
+          <% end %>
+        </div>
+        <div class="col-sm-2 checkbox">
           <label>
             <%= i.check_box :_destroy %>
             Delete
