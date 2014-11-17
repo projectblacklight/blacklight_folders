@@ -4,7 +4,3 @@ default:
     - "-XX:MaxPermSize=256m"
     - "-Xmx256m"
   startup_wait: 60
-test:
-  startup_wait: 60
-  jetty_port: <%= ENV['TEST_JETTY_PORT'] || 8888 %> 
-  <%= ENV['TEST_JETTY_PATH'] ? "jetty_home: " + ENV['TEST_JETTY_PATH'] : '' %>

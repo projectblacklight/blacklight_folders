@@ -32,7 +32,7 @@ end
 
 
 desc "Run test suite"
-task :ci => 'clean' do
+task :ci => ['clean', 'jetty:add_test_core'] do
   jetty_params = Jettywrapper.load_config('test')
   error = Jettywrapper.wrap(jetty_params) do
     Rake::Task['engine_cart:generate'].invoke
