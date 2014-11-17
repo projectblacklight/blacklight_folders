@@ -15,11 +15,18 @@ module Blacklight::Folders
     PRIVATE = 'private'
     before_save :apply_visibility
 
+    # How many folders will appear in the drop-down menu
+    MENU_LIMIT = 5
+
     # Find the folders that belong to this user and don't contain this document
     def self.without_doc_for_user(document, user)
       subquery = Blacklight::Folders::BookmarksFolder.select(:folder_id).joins(:bookmark).where('bookmarks.document_id' => document.id).to_sql
 
       where(user: user).where("id not in (#{subquery})")
+    end
+
+    def self.most_recent
+      order('updated_at DESC')
     end
 
     def default_values

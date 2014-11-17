@@ -34,6 +34,19 @@ describe Blacklight::Folders::Folder do
     expect(subject.items.map(&:id)).to eq [item_A.id, item_B.id]
   end
 
+  describe '.most_recent' do
+    before do
+      @user = FactoryGirl.create(:user)
+      @newest_folder = FactoryGirl.create(:folder, user: @user)
+      @oldest_folder = FactoryGirl.create(:folder, updated_at: 5.days.ago, user: @user)
+      @middle_folder = FactoryGirl.create(:folder, updated_at: 3.days.ago, user: @user)
+    end
+
+    it 'orders folders by update date' do
+      expect(@user.folders.most_recent).to eq [@newest_folder, @middle_folder, @oldest_folder]
+    end
+  end
+
   describe '.without_doc_for_user' do
     let!(:my_folder)   { FactoryGirl.create(:folder) }
     let!(:your_folder) { FactoryGirl.create(:folder) }
