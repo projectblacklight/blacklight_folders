@@ -177,7 +177,7 @@ describe Blacklight::Folders::Folder do
 
     it 'removes the bookmarks' do
       expect(Bookmark.count).to eq 3
-      expect(Blacklight::Folders::BookmarksFolder.count).to eq 3
+      expect(Blacklight::Folders::FolderItem.count).to eq 3
 
       list_to_remove = [@item_789, @item_123]
 
@@ -185,7 +185,7 @@ describe Blacklight::Folders::Folder do
 
       expect(Bookmark.count).to eq 1
       expect(subject.bookmarks.map(&:document_id)).to eq ['456']
-      expect(Blacklight::Folders::BookmarksFolder.count).to eq 1
+      expect(Blacklight::Folders::FolderItem.count).to eq 1
     end
   end
 

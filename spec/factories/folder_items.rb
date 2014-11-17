@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :bookmarks_folder, aliases: [:item], class: Blacklight::Folders::BookmarksFolder do
+  factory :bookmarks_folder, aliases: [:item], class: Blacklight::Folders::FolderItem do
     association :folder
     association :bookmark
   end

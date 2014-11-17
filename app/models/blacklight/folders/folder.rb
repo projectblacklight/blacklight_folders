@@ -6,7 +6,7 @@ module Blacklight::Folders
 
     after_initialize :default_values
 
-    has_many :items, -> { order('position ASC') }, class_name: 'BookmarksFolder', :dependent => :destroy
+    has_many :items, -> { order('position ASC') }, class_name: 'FolderItem', :dependent => :destroy
     has_many :bookmarks, -> { order('blacklight_folders_bookmarks_folders.position ASC') }, through: :items
     accepts_nested_attributes_for :items, allow_destroy: true
 
@@ -20,7 +20,7 @@ module Blacklight::Folders
 
     # Find the folders that belong to this user and don't contain this document
     def self.without_doc_for_user(document, user)
-      subquery = Blacklight::Folders::BookmarksFolder.select(:folder_id).joins(:bookmark).where('bookmarks.document_id' => document.id).to_sql
+      subquery = Blacklight::Folders::FolderItem.select(:folder_id).joins(:bookmark).where('bookmarks.document_id' => document.id).to_sql
 
       where(user: user).where("id not in (#{subquery})")
     end

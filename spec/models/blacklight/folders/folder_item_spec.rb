@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 module Blacklight::Folders
-  RSpec.describe BookmarksFolder, :type => :model do
+  RSpec.describe FolderItem, :type => :model do
 
     it 'belongs to a folder' do
       subject.folder = nil

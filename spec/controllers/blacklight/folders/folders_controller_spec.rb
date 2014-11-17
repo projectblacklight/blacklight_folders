@@ -312,9 +312,9 @@ describe Blacklight::Folders::FoldersController do
 
       it "doesn't let you delete someone else's bookmark" do
         not_my_item = create(:bookmarks_folder)
-        count = Blacklight::Folders::BookmarksFolder.count
+        count = Blacklight::Folders::FolderItem.count
         patch :remove_bookmarks, folder: { id: my_public_folder.id }, item_ids: not_my_item.id
-        expect(Blacklight::Folders::BookmarksFolder.count).to eq count
+        expect(Blacklight::Folders::FolderItem.count).to eq count
       end
     end
   end  # user is logged in
