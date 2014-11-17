@@ -46,6 +46,7 @@ module Blacklight::Folders
       docs = doc_ids.map.with_index {|id, i|
         doc_hash = response.find{|doc| doc['id'] == id }
         solr_document_model = model_names[i].safe_constantize
+        raise "Couldn't find Solr document for id: `#{id}'" unless doc_hash
         solr_document_model.new(doc_hash)
       }
     end

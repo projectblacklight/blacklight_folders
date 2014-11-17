@@ -50,7 +50,8 @@
           <%= i.text_field :position, class: 'form-control col-lg-2' %>
         </div>
       </span>
-      <%= i.object.bookmark.document_id%>
+      <% document =  @folder.documents[i.options[:child_index]] %>
+      <%= link_to_document document, label: document_show_link_field(document) %>
       </li>
     <% end %>
     </ol>

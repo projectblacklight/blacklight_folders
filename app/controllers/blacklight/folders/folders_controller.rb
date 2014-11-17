@@ -3,6 +3,7 @@ require_dependency "blacklight/folders/application_controller"
 module Blacklight::Folders
   class FoldersController < ApplicationController
     include EncryptedUser
+    include Blacklight::Catalog::SearchContext
     load_and_authorize_resource class: Blacklight::Folders::Folder, except: [:add_bookmarks, :remove_bookmarks]
     before_filter :load_and_authorize_folder, only: [:add_bookmarks, :remove_bookmarks]
     before_filter :clear_session_search_params, only: [:show]
@@ -32,7 +33,7 @@ module Blacklight::Folders
 
     def update
       if @folder.update(create_params)
-        redirect_to @folder
+        redirect_to @folder, notice: t(:'helpers.submit.folder.updated')
       else
         render :edit
       end

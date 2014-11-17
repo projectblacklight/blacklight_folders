@@ -13,7 +13,11 @@ en:
         created: "The %{model} was created."
         updated: "The %{model} was successfully updated."
         destroyed: "The %{model} was deleted."
-      appearance: *blacklight_folders_default
+      folder:
+        submit: "Create Folder"
+        update: "Update Folder"
+        created: "The folder was created."
+        updated: "The folder was successfully updated."
   activerecord:
     models:
       blacklight_folders:
