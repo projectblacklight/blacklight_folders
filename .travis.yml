@@ -1,0 +1,10 @@
+notifications:
+  email: false
+
+rvm:
+  - 2.1
+
+env:
+  global:
+    - JRUBY_OPTS="-J-Xms512m -J-Xmx1024m"
+    - NOKOGIRI_USE_SYSTEM_LIBRARIES=true

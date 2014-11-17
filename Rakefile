@@ -23,6 +23,23 @@ RSpec::Core::RakeTask.new(:spec)
 ZIP_URL = "https://github.com/projectblacklight/blacklight-jetty/archive/v4.6.0.zip"
 require 'jettywrapper'
 
+task :default => [:ci]
+
+
+desc "Clean out the test rails app"
+task :clean => ['engine_cart:clean', 'jetty:clean'] do
+end
+
+
+desc "Run test suite"
+task :ci => 'clean' do
+  jetty_params = Jettywrapper.load_config('test')
+  error = Jettywrapper.wrap(jetty_params) do
+    Rake::Task['engine_cart:generate'].invoke
+    Rake::Task['spec'].invoke
+  end
+  raise "test failures: #{error}" if error
+end
 
 namespace :jetty do
 
