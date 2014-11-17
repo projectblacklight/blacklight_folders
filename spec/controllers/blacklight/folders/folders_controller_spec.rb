@@ -3,9 +3,9 @@ require 'rails_helper'
 describe Blacklight::Folders::FoldersController do
   routes { Blacklight::Folders::Engine.routes }
 
-  let(:user) { FactoryGirl.create(:user) }
-  let(:my_private_folder) { FactoryGirl.create(:private_folder, user: user) }
-  let(:my_public_folder)  { FactoryGirl.create(:public_folder, user: user) }
+  let(:user) { create(:user) }
+  let(:my_private_folder) { create(:private_folder, user: user) }
+  let(:my_public_folder)  { create(:public_folder, user: user) }
 
 
   describe 'not logged in' do
@@ -152,15 +152,34 @@ describe Blacklight::Folders::FoldersController do
         expect(response).to redirect_to folder_path(my_private_folder)
         expect(my_private_folder.reload.name).to eq new_name
       end
-    end
 
-    describe '#update with bad inputs' do
-      it 'renders the form' do
-        my_private_folder
-        invalid_name = nil
-        patch :update, id: my_private_folder.id, folder: { name: invalid_name }
-        expect(assigns(:folder)).to eq my_private_folder
-        expect(response).to render_template(:edit)
+      context "when the folder has items" do
+        let!(:bookmarks_folder1) { create(:bookmarks_folder, position: '1', folder: my_private_folder) }
+        let!(:bookmarks_folder2) { create(:bookmarks_folder, position: '2', folder: my_private_folder) }
+        let!(:bookmarks_folder3) { create(:bookmarks_folder, position: '3', folder: my_private_folder) }
+
+        it 'updates the folder items' do
+          patch :update, id: my_private_folder.id,
+            folder: { items_attributes:
+              [
+                { id: bookmarks_folder1, position: '3' },
+                { id: bookmarks_folder2, position: '1' },
+                { id: bookmarks_folder3, position: '2' },
+              ]
+            }
+
+          expect(my_private_folder.reload.item_ids).to eq [bookmarks_folder2.id, bookmarks_folder3.id, bookmarks_folder1.id]
+        end
+      end
+
+      context 'with bad inputs' do
+        it 'renders the form' do
+          my_private_folder
+          invalid_name = nil
+          patch :update, id: my_private_folder.id, folder: { name: invalid_name }
+          expect(assigns(:folder)).to eq my_private_folder
+          expect(response).to render_template(:edit)
+        end
       end
     end
 
@@ -179,7 +198,7 @@ describe Blacklight::Folders::FoldersController do
       end
 
       context "with sorting" do
-        let!(:aaa_folder)  { FactoryGirl.create(:public_folder, user: user, name: 'AAA') }
+        let!(:aaa_folder)  { create(:public_folder, user: user, name: 'AAA') }
 
         it 'displays the folders in order' do
           get :index, order_by: 'name'
@@ -234,7 +253,7 @@ describe Blacklight::Folders::FoldersController do
       end
 
       it "doesn't let you delete someone else's bookmark" do
-        not_my_item = FactoryGirl.create(:bookmarks_folder)
+        not_my_item = create(:bookmarks_folder)
         count = Blacklight::Folders::BookmarksFolder.count
         patch :remove_bookmarks, folder: { id: my_public_folder.id }, item_ids: not_my_item.id
         expect(Blacklight::Folders::BookmarksFolder.count).to eq count

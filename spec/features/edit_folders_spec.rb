@@ -1,15 +1,15 @@
 require 'rails_helper'
 
 describe 'Editing a folder' do
-  let(:user) { FactoryGirl.create :user }
+  let(:user) { create :user }
   let(:document1) { SolrDocument.new(id: 'doc1', title_display: ['A title']) }
   let(:document2) { SolrDocument.new(id: 'doc2', title_display: ['Another title']) }
 
-  let(:folder) { FactoryGirl.create(:folder, user: user) }
-  let(:bookmark1) { FactoryGirl.create(:bookmark, document: document1, user: user) }
-  let(:bookmark2) { FactoryGirl.create(:bookmark, document: document2, user: user) }
-  let!(:bookmarks_folder1) { FactoryGirl.create(:bookmarks_folder, bookmark: bookmark1, folder: folder) }
-  let!(:bookmarks_folder2) { FactoryGirl.create(:bookmarks_folder, bookmark: bookmark2, folder: folder) }
+  let(:folder) { create(:folder, user: user) }
+  let(:bookmark1) { create(:bookmark, document: document1, user: user) }
+  let(:bookmark2) { create(:bookmark, document: document2, user: user) }
+  let!(:bookmarks_folder1) { create(:bookmarks_folder, bookmark: bookmark1, folder: folder) }
+  let!(:bookmarks_folder2) { create(:bookmarks_folder, bookmark: bookmark2, folder: folder) }
 
   # routes { Blacklight::Folders::Engine.routes }
 
@@ -35,7 +35,7 @@ describe 'Editing a folder' do
     expect(page).to have_content "The folder was successfully updated"
 
     # check that the second item is now the first.
-    expect(page).to have_selector "h5:first-of-type", text: 'Another title'
+    expect(page).to have_selector "#documents .document:first-of-type h5", text: 'Another title'
   end
 end
 
