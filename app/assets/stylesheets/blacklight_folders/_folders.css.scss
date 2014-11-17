@@ -1,4 +1,4 @@
-$table_border: 1px dotted #dddddd;
+$table_border: 1px dotted $table-border-color;
 
 .folder-index {
   table {
@@ -23,5 +23,27 @@ $table_border: 1px dotted #dddddd;
 .folder-view {
   .bookmarkTools {
     margin-top: 20px;
+  }
+}
+
+.blacklight-folders-edit {
+  ol {
+    list-style-type: none;
+    border: 1px solid $table-border-color;
+    padding: 0;
+
+    li {
+      padding: 5px;
+      margin: 0;
+      border-top:    $table_border;
+
+      .title {
+        padding-top: 6px;
+      }
+    }
+
+    li:first-child {
+      border-top: none;
+    }
   }
 }

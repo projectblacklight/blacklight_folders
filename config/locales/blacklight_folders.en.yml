@@ -2,9 +2,10 @@ en:
   helpers:
     action:
       edit_long: "Edit %{model}"
-      blacklight_folders/folder:
+      blacklight/folders/folder:
+        delete:    "Delete Folder"
         create:    "Create a New Folder"
-        edit_long: "Create a New Folder"
+        edit_long: "Edit Folder"
     submit:
       blacklight_folders_default: &blacklight_folders_default
         create: "Save"
@@ -18,15 +19,23 @@ en:
         update: "Update Folder"
         created: "The folder was created."
         updated: "The folder was successfully updated."
+    label:
+      blacklight/folders/folder:
+        visibility: "Visibility"
   activerecord:
     models:
       blacklight_folders:
-        page: Page
+        folder: Folder
     attributes:
-      "spotlight/resource/csv":
-            url: "File"
+      blacklight/folders/folder:
+        visibility:
+          public: "Anyone"
+          private: "Only me"
   blacklight_folders:
     application_name: "Folder - %{application_name}"
     html_title: "Folder | %{application_name}"
     main_navigation:
       folders: "Folders"
+    folders:
+      edit:
+        header: "Manage Folder"

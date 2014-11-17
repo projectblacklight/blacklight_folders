@@ -1,67 +1,66 @@
-<%= form_for @folder, html: { role: 'form', class: 'col-lg-5' } do |f| %>
-  <% if @folder.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@folder.errors.count, "error") %> prohibited this folder from being saved:</h2>
+<%= form_for @folder, html: { role: 'form', class: 'form-horizontal row' } do |f| %>
+  <div class="col-sm-6">
+    <% if @folder.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@folder.errors.count, "error") %> prohibited this folder from being saved:</h2>
 
-      <ul>
-      <% @folder.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+        <ul>
+        <% @folder.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
 
-  <div class="form-group">
-    <%= f.label :name %><br>
-    <%= f.text_field :name, class: 'form-control' %>
-  </div>
-
-  <div class="form-group">
-    <p><strong>Who can see the contents of this folder?</strong></p>
-    <% @folder.visibility ||= Blacklight::Folders::Folder::PRIVATE %>
-
-    <div class="radio">
-      <label>
-        <%= f.radio_button(:visibility, Blacklight::Folders::Folder::PUBLIC) %>
-        <%= human_friendly_visibility(Blacklight::Folders::Folder::PUBLIC) %>
-      </label>
+    <div class="form-group">
+      <%= f.label :name, class: 'col-sm-2 control-label' %>
+      <div class="col-sm-10">
+        <%= f.text_field :name, class: 'form-control' %>
+      </div>
     </div>
 
-    <div class="radio">
-      <label>
-        <%= f.radio_button(:visibility, Blacklight::Folders::Folder::PRIVATE) %>
-        <%= human_friendly_visibility(Blacklight::Folders::Folder::PRIVATE) %>
-      </label>
-    </div>
-  </div>
+    <div class="form-group">
+      <%= label_tag nil, t("blacklight/folders/folder.visibility", scope: "helpers.label"), class: 'col-sm-2 control-label' %>
+      <div class="col-sm-10">
 
-  <div class="actions">
-    <div class="primary-actions">
-      <%= f.submit class: 'btn btn-primary' %>
-    </div>
-  </div>
+        <label class="radio-inline">
+          <%= f.radio_button(:visibility, Blacklight::Folders::Folder::PUBLIC) %>
+          <span class="icon-unlock"></span> <%= human_friendly_visibility(Blacklight::Folders::Folder::PUBLIC) %>
+        </label>
 
-  <div id="documents">
-    <ol>
-    <%= f.fields_for :items do |i| %>
-      <li class="row">
-        <span class="form-group">
+        <label class="radio-inline">
+          <%= f.radio_button(:visibility, Blacklight::Folders::Folder::PRIVATE) %>
+          <span class="glyphicon glyphicon-lock"></span> <%= human_friendly_visibility(Blacklight::Folders::Folder::PRIVATE) %>
+        </label>
+      </div>
+    </div>
+
+    <ol id="documents">
+      <%= f.fields_for :items do |i| %>
+        <li class="row">
           <div class="col-lg-2">
             <%= i.text_field :position, class: 'form-control col-lg-2' %>
           </div>
-        </span>
-        <div class="col-lg-8">
-          <% document =  @folder.documents[i.options[:child_index]] %>
-          <%= link_to_document document, label: document_show_link_field(document) %>
-        </div>
-        <div class="col-lg-2 checkbox">
-          <label>
-            <%= i.check_box :_destroy %>
-            Delete
-          </label>
-        </div>
-      </li>
-    <% end %>
+          <div class="col-lg-8 title">
+            <% document =  @folder.documents[i.options[:child_index]] %>
+            <%= link_to_document document, label: document_show_link_field(document) %>
+          </div>
+          <div class="col-lg-2 checkbox">
+            <label>
+              <%= i.check_box :_destroy %>
+              Delete
+            </label>
+          </div>
+        </li>
+      <% end %>
     </ol>
   </div>
+
+  <div class="col-sm-6 pull-right">
+    <div><%= f.submit class: 'btn btn-primary' %></div>
+    <% if @folder.persisted? %>
+      <%= link_to action_label(@folder, :delete), folder_path(@folder), method: :delete, class: 'btn btn-danger', data: { confirm: "Are you sure you want to delete this folder and all its contents?" } %>
+    <% end %>
+  </div>
+
 <% end %>

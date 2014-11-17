@@ -6,7 +6,7 @@
       <%= select_tag 'order_by', options_for_select({ 'Name' => 'name', 'Size' => 'number_of_members', 'Created' => 'created_at', 'Updated' => 'updated_at' }, params[:order_by]), prompt: "Sort by..." %>
     <% end %>
   </div>
-  <table>
+  <table id="folders">
     <tbody>
       <%= render partial: 'folder', collection: @folders %>
     </tbody>

@@ -24,6 +24,7 @@ module Blacklight::Folders
 
     def default_values
       self.number_of_members ||= 0
+      self.visibility ||= Blacklight::Folders::Folder::PRIVATE
     end
 
     def recalculate_size

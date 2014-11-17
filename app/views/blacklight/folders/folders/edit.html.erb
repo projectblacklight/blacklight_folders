@@ -1,8 +1,2 @@
-<div class="actions pull-right">
-  <div class="primary-actions">
-    <%= button_to 'Delete Folder', folder_path(@folder), method: :delete, class: 'btn btn-danger btn-sm', data: { confirm: "Are you sure you want to delete this folder and all its contents?" } %>
-  </div>
-</div>
-
-<h1>Editing folder</h1>
+<h1><%= t(:'blacklight_folders.folders.edit.header') %></h1>
 <%= render 'form' %>

@@ -8,7 +8,7 @@
         <%= link_to t(:'blacklight_folders.main_navigation.folders'), blacklight_folders.folders_path %>
 
         <ul class="navbar-nav sub-menu">
-          <li><%= link_to t(:'helpers.action.blacklight_folders/folder.create'), blacklight_folders.new_folder_path %></li>
+          <li><%= link_to t(:'helpers.action.blacklight/folders/folder.create'), blacklight_folders.new_folder_path %></li>
 
           <% current_user.folders.each do |folder| %>
             <li> <%= link_to folder.name, blacklight_folders.folder_path(folder) %> </li>
