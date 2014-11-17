@@ -1,3 +1,5 @@
+{<img src="https://travis-ci.org/curationexperts/blacklight_folders.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/curationexperts/blacklight_folders]
+
 == How to add blacklight_folders to your blacklight application
 
 * Create a new rails application
