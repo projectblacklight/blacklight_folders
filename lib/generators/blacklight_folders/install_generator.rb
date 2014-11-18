@@ -1,7 +1,12 @@
 module BlacklightFolders
   class InstallGenerator < Rails::Generators::Base
+    source_root File.expand_path("../templates", __FILE__)
 
     desc "It will set up your rails app to use the blacklight_folders engine.\n\n"
+
+    def copy_initializer
+      template "blacklight_folders.rb", "config/initializers/blacklight_folders.rb"
+    end
 
     def add_routes
       route 'mount Blacklight::Folders::Engine, at: "blacklight"'

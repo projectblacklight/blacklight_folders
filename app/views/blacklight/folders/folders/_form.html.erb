@@ -52,7 +52,7 @@
         </div>
         <div class="col-sm-7 title">
           <% document =  @folder.documents[i.options[:child_index]] %>
-          <%= link_to_document document, label: document_show_link_field(document) %>
+          <%= link_to_document document, document_show_link_field(document) %>
         </div>
         <div class="col-sm-2 title">
           <% destinations = Blacklight::Folders::Folder.without_doc_for_user(document, current_user) %>

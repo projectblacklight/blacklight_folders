@@ -11,7 +11,7 @@
          <span class="document-counter">
          <%= t('blacklight.search.documents.counter', :counter => counter) if counter %>
          </span>
-         <%= link_to presenter(document).render_document_index_label(label: document_show_link_field(document)), main_app.solr_document_path(document) %>
+         <%= link_to presenter(document).render_document_index_label(document_show_link_field(document)), main_app.solr_document_path(document) %>
         </h5>
 
         <% # bookmark functions for items/docs -%>
