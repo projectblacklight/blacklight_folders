@@ -45,10 +45,10 @@
   </div>
 
   <div class="dd" data-folder_id="<%= f.object.id %>">
-  <ol id="documents" class="dd-list">
-    <%= f.fields_for :items do |i| %>
+    <ol id="documents" class="dd-list">
+      <%= f.fields_for :items do |i| %>
 
-      <li class="row dd-item" data-id="<%= i.object.id %>">
+        <li class="row dd-item" data-id="<%= i.object.id %>">
 
         <div class="col-sm-1 dd-handle glyphicon glyphicon-resize-vertical"></div>
         <div class="col-sm-1">
@@ -70,9 +70,9 @@
             Delete
           </label>
         </div>
-      </li>
-    <% end %>
-  </ol>
+        </li>
+      <% end %>
+    </ol>
   </div>
 
 <% end %>
