@@ -44,13 +44,17 @@
     </div>
   </div>
 
-  <ol id="documents">
+  <div class="dd" data-folder_id="<%= f.object.id %>">
+  <ol id="documents" class="dd-list">
     <%= f.fields_for :items do |i| %>
-      <li class="row">
+
+      <li class="row dd-item" data-id="<%= i.object.id %>">
+
+        <div class="col-sm-1 dd-handle glyphicon glyphicon-resize-vertical"></div>
         <div class="col-sm-1">
           <%= i.text_field :position, class: 'form-control col-lg-2' %>
         </div>
-        <div class="col-sm-7 title">
+        <div class="col-sm-6 title">
           <% document =  @folder.documents[i.options[:child_index]] %>
           <%= link_to_document document, document_show_link_field(document) %>
         </div>
@@ -69,5 +73,6 @@
       </li>
     <% end %>
   </ol>
+  </div>
 
 <% end %>

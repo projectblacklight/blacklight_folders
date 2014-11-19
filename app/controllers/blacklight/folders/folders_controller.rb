@@ -35,7 +35,14 @@ module Blacklight::Folders
 
     def update
       if @folder.update(preprocess_nested_attributes(create_params))
-        redirect_to @folder, notice: t(:'helpers.submit.folder.updated')
+        respond_to do |format|
+          format.html do
+            redirect_to @folder, notice: t(:'helpers.submit.folder.updated')
+          end
+          format.json do
+            render json: @folder
+          end
+        end
       else
         render :edit
       end
