@@ -49,3 +49,10 @@ $table_border: 1px dotted $table-border-color;
     }
   }
 }
+
+.glyphicon-unlock:before {
+  // The Bootstrap halflings doesn't have the unlock icon, so we'll use the globe
+  // You should be able to override this if you meet the license terms for
+  // glyphicons. See: http://glyphicons.com/license/
+  content: "\e135"
+}

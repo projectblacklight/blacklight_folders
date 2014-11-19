@@ -21,6 +21,7 @@ en:
         updated: "The folder was successfully updated."
     label:
       blacklight/folders/folder:
+        user: "Owner"
         visibility: "Visibility"
   activerecord:
     models:

@@ -9,7 +9,12 @@
      </div>
   <% end %>
   <h1><%= @folder.name %></h1>
-  <span class="owner-label">Owner:</span> <span class="owner"><%= @folder.user %></span>
+  <div>
+    <span class="owner-label"><%= t("blacklight/folders/folder.user", scope: "helpers.label") %>:</span> <span class="owner"><%= @folder.user %></span>
+  </div>
+  <div>
+    <span class="visibility-label"><%= t("blacklight/folders/folder.visibility", scope: "helpers.label") %>:</span> <span class="visibility"><%= human_friendly_visibility(@folder.visibility) %></span>
+  </div>
 
   <%= render 'tools' %>
 

@@ -26,12 +26,12 @@
 
           <label class="radio-inline">
             <%= f.radio_button(:visibility, Blacklight::Folders::Folder::PUBLIC) %>
-            <span class="icon-unlock"></span> <%= human_friendly_visibility(Blacklight::Folders::Folder::PUBLIC) %>
+            <%= human_friendly_visibility(Blacklight::Folders::Folder::PUBLIC) %>
           </label>
 
           <label class="radio-inline">
             <%= f.radio_button(:visibility, Blacklight::Folders::Folder::PRIVATE) %>
-            <span class="glyphicon glyphicon-lock"></span> <%= human_friendly_visibility(Blacklight::Folders::Folder::PRIVATE) %>
+            <%= human_friendly_visibility(Blacklight::Folders::Folder::PRIVATE) %>
           </label>
         </div>
       </div>
