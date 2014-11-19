@@ -4,17 +4,7 @@
 <% if current_user %>
   <div class="navbar-right">
     <ul class="nav navbar-nav" id="folders-menu">
-      <li>
-        <%= link_to "#{t(:'blacklight_folders.main_navigation.folders')} (#{current_user.folders.count})", blacklight_folders.folders_path %>
-
-        <ul class="navbar-nav sub-menu">
-          <li><%= link_to t(:'helpers.action.blacklight/folders/folder.create'), blacklight_folders.new_folder_path %></li>
-
-          <% current_user.folders.most_recent.limit(Blacklight::Folders::Folder::MENU_LIMIT).each do |folder| %>
-            <li> <%= link_to truncate(folder.name, length: 20), blacklight_folders.folder_path(folder) %> </li>
-          <% end %>
-        </ul>
-      </li>
+      <li><%= render 'blacklight/nav/folders' %></li>
     </ul>
   </div>
 <% end %>

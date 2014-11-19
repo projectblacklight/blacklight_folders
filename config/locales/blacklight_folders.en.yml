@@ -38,6 +38,7 @@ en:
     html_title: "Folder | %{application_name}"
     main_navigation:
       folders: "Folders"
+      all_folders: "Show All"
     folders:
       edit:
         header: "Manage Folder"
