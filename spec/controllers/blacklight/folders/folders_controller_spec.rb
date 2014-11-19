@@ -214,8 +214,10 @@ describe Blacklight::Folders::FoldersController do
         describe "moving the item to another folder" do
           let!(:bookmarks_folder1) { create(:bookmarks_folder, position: '1', folder: my_private_folder) }
           let!(:bookmarks_folder2) { create(:bookmarks_folder, position: '2', folder: my_private_folder) }
+          let!(:bookmarks_folder3) { create(:bookmarks_folder, position: '1', folder: my_public_folder) }
+          let!(:bookmarks_folder4) { create(:bookmarks_folder, position: '2', folder: my_public_folder) }
 
-          it 'renumbers the folder items and sorts by integer (not string)' do
+          it 'puts the moved item at the end of the destination list' do
             patch :update, id: my_private_folder.id,
               folder: { items_attributes:
                 [
@@ -225,7 +227,7 @@ describe Blacklight::Folders::FoldersController do
               }
 
             expect(my_private_folder.reload.item_ids).to eq [bookmarks_folder1.id]
-            expect(my_public_folder.item_ids).to eq [bookmarks_folder2.id]
+            expect(my_public_folder.item_ids).to eq [bookmarks_folder3.id, bookmarks_folder4.id, bookmarks_folder2.id]
           end
         end
       end

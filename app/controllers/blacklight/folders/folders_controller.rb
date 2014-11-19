@@ -93,7 +93,13 @@ module Blacklight::Folders
         # This mutates the hashes inside the list
         attributes_collection.sort { |a, b| a[:position].to_i <=> b[:position].to_i }.
           each_with_index do |record_attributes, i|
-            record_attributes[:position] = i + 1
+            if record_attributes[:folder_id]
+              # when moving an item to a different folder acts_as_list will
+              # send it to the end if we don't try to set the position..
+              record_attributes.delete(:position)
+            else
+              record_attributes[:position] = i + 1
+            end
           end
         attributes_collection
       end
