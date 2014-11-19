@@ -9,8 +9,8 @@ describe 'Editing a folder' do
   let!(:destination_folder) { create(:folder, user: user, name: 'Destination Folder') }
   let(:bookmark1) { create(:bookmark, document: document1, user: user) }
   let(:bookmark2) { create(:bookmark, document: document2, user: user) }
-  let!(:bookmarks_folder1) { create(:bookmarks_folder, bookmark: bookmark1, folder: folder) }
-  let!(:bookmarks_folder2) { create(:bookmarks_folder, bookmark: bookmark2, folder: folder) }
+  let!(:folder_item1) { create(:folder_item, bookmark: bookmark1, folder: folder) }
+  let!(:folder_item2) { create(:folder_item, bookmark: bookmark2, folder: folder) }
 
   # routes { Blacklight::Folders::Engine.routes }
 

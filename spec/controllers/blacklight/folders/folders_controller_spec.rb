@@ -155,79 +155,79 @@ describe Blacklight::Folders::FoldersController do
 
       context "when the folder has items" do
         context "in order" do
-          let!(:bookmarks_folder1) { create(:bookmarks_folder, position: '1', folder: my_private_folder) }
-          let!(:bookmarks_folder2) { create(:bookmarks_folder, position: '2', folder: my_private_folder) }
-          let!(:bookmarks_folder3) { create(:bookmarks_folder, position: '3', folder: my_private_folder) }
-          let!(:bookmarks_folder4) { create(:bookmarks_folder, position: '4', folder: my_private_folder) }
+          let!(:folder_item1) { create(:folder_item, position: '1', folder: my_private_folder) }
+          let!(:folder_item2) { create(:folder_item, position: '2', folder: my_private_folder) }
+          let!(:folder_item3) { create(:folder_item, position: '3', folder: my_private_folder) }
+          let!(:folder_item4) { create(:folder_item, position: '4', folder: my_private_folder) }
 
           it 'updates the folder items' do
             patch :update, id: my_private_folder.id,
               folder: { items_attributes:
                 [
-                  { id: bookmarks_folder1, position: '3' },
-                  { id: bookmarks_folder2, position: '1' },
-                  { id: bookmarks_folder3, position: '2' },
-                  { id: bookmarks_folder4, position: '4', _destroy: 'true' }
+                  { id: folder_item1, position: '3' },
+                  { id: folder_item2, position: '1' },
+                  { id: folder_item3, position: '2' },
+                  { id: folder_item4, position: '4', _destroy: 'true' }
                 ]
               }
 
-            expect(my_private_folder.item_ids).to eq [bookmarks_folder2.id, bookmarks_folder3.id, bookmarks_folder1.id]
+            expect(my_private_folder.item_ids).to eq [folder_item2.id, folder_item3.id, folder_item1.id]
           end
         end
 
         context "with gaps" do
-          let!(:bookmarks_folder1) { create(:bookmarks_folder, position: '1', folder: my_private_folder) }
-          let!(:bookmarks_folder2) { create(:bookmarks_folder, position: '2', folder: my_private_folder) }
+          let!(:folder_item1) { create(:folder_item, position: '1', folder: my_private_folder) }
+          let!(:folder_item2) { create(:folder_item, position: '2', folder: my_private_folder) }
 
           it 'renumbers the folder items and sorts by integer (not string)' do
             patch :update, id: my_private_folder.id,
               folder: { items_attributes:
                 [
-                  { id: bookmarks_folder1, position: '30' },
-                  { id: bookmarks_folder2, position: '200' }
+                  { id: folder_item1, position: '30' },
+                  { id: folder_item2, position: '200' }
                 ]
               }
 
             expect(my_private_folder.items.pluck(:position)).to eq [1, 2]
-            expect(my_private_folder.item_ids).to eq [bookmarks_folder1.id, bookmarks_folder2.id]
+            expect(my_private_folder.item_ids).to eq [folder_item1.id, folder_item2.id]
           end
         end
 
         context "with non-integers" do
-          let!(:bookmarks_folder1) { create(:bookmarks_folder, position: '1', folder: my_private_folder) }
-          let!(:bookmarks_folder2) { create(:bookmarks_folder, position: '2', folder: my_private_folder) }
+          let!(:folder_item1) { create(:folder_item, position: '1', folder: my_private_folder) }
+          let!(:folder_item2) { create(:folder_item, position: '2', folder: my_private_folder) }
 
           it 'renumbers the folder items and sorts by integer (not string)' do
             patch :update, id: my_private_folder.id,
               folder: { items_attributes:
                 [
-                  { id: bookmarks_folder1, position: '7' },
-                  { id: bookmarks_folder2, position: 'first' }
+                  { id: folder_item1, position: '7' },
+                  { id: folder_item2, position: 'first' }
                 ]
               }
 
             expect(my_private_folder.items.pluck(:position)).to eq [1, 2]
-            expect(my_private_folder.item_ids).to eq [bookmarks_folder2.id, bookmarks_folder1.id]
+            expect(my_private_folder.item_ids).to eq [folder_item2.id, folder_item1.id]
           end
         end
 
         describe "moving the item to another folder" do
-          let!(:bookmarks_folder1) { create(:bookmarks_folder, position: '1', folder: my_private_folder) }
-          let!(:bookmarks_folder2) { create(:bookmarks_folder, position: '2', folder: my_private_folder) }
-          let!(:bookmarks_folder3) { create(:bookmarks_folder, position: '1', folder: my_public_folder) }
-          let!(:bookmarks_folder4) { create(:bookmarks_folder, position: '2', folder: my_public_folder) }
+          let!(:folder_item1) { create(:folder_item, position: '1', folder: my_private_folder) }
+          let!(:folder_item2) { create(:folder_item, position: '2', folder: my_private_folder) }
+          let!(:folder_item3) { create(:folder_item, position: '1', folder: my_public_folder) }
+          let!(:folder_item4) { create(:folder_item, position: '2', folder: my_public_folder) }
 
           it 'puts the moved item at the end of the destination list' do
             patch :update, id: my_private_folder.id,
               folder: { items_attributes:
                 [
-                  { id: bookmarks_folder1, position: '1', folder_id: ''},
-                  { id: bookmarks_folder2, position: '2', folder_id: my_public_folder.id }
+                  { id: folder_item1, position: '1', folder_id: ''},
+                  { id: folder_item2, position: '2', folder_id: my_public_folder.id }
                 ]
               }
 
-            expect(my_private_folder.reload.item_ids).to eq [bookmarks_folder1.id]
-            expect(my_public_folder.item_ids).to eq [bookmarks_folder3.id, bookmarks_folder4.id, bookmarks_folder2.id]
+            expect(my_private_folder.reload.item_ids).to eq [folder_item1.id]
+            expect(my_public_folder.item_ids).to eq [folder_item3.id, folder_item4.id, folder_item2.id]
           end
         end
       end
@@ -313,7 +313,7 @@ describe Blacklight::Folders::FoldersController do
       end
 
       it "doesn't let you delete someone else's bookmark" do
-        not_my_item = create(:bookmarks_folder)
+        not_my_item = create(:folder_item)
         count = Blacklight::Folders::FolderItem.count
         patch :remove_bookmarks, folder: { id: my_public_folder.id }, item_ids: not_my_item.id
         expect(Blacklight::Folders::FolderItem.count).to eq count
