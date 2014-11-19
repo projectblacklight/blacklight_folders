@@ -42,6 +42,7 @@ en:
     folders:
       edit:
         header: "Manage Folder"
+    default_folder_name: "Default folder"
   catalog:
     search:
       folder:

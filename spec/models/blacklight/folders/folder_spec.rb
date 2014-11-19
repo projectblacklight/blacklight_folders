@@ -35,27 +35,26 @@ describe Blacklight::Folders::Folder do
   end
 
   describe '.most_recent' do
-    before do
-      @user = FactoryGirl.create(:user)
-      @newest_folder = FactoryGirl.create(:folder, user: @user)
-      @oldest_folder = FactoryGirl.create(:folder, updated_at: 5.days.ago, user: @user)
-      @middle_folder = FactoryGirl.create(:folder, updated_at: 3.days.ago, user: @user)
-    end
+    let(:user) { create(:user) }
+    let!(:my_default_folder) { user.folders.first }
+    let!(:newest_folder) { create(:folder, user: user) }
+    let!(:oldest_folder) { create(:folder, updated_at: 5.days.ago, user: user) }
+    let!(:middle_folder) { create(:folder, updated_at: 3.days.ago, user: user) }
 
     it 'orders folders by update date' do
-      expect(@user.folders.most_recent).to eq [@newest_folder, @middle_folder, @oldest_folder]
+      expect(user.folders.most_recent).to eq [newest_folder, my_default_folder, middle_folder, oldest_folder]
     end
   end
 
   describe '.without_doc_for_user' do
-    let!(:my_folder)   { FactoryGirl.create(:folder) }
-    let!(:your_folder) { FactoryGirl.create(:folder) }
-    let!(:me)  { my_folder.user }
-    let!(:you) { your_folder.user }
+    let(:me) { create(:user) }
+    let!(:my_folder) { me.folders.first }
+    let(:you) { create(:user) }
+    let!(:your_folder) { you.folders.first }
 
     let(:doc) { SolrDocument.new(id: '12345') }
-    let!(:my_item) { FactoryGirl.create(:item, folder: my_folder) }
-    let!(:your_item) { FactoryGirl.create(:item, folder: your_folder) }
+    let!(:my_item) { create(:item, folder: my_folder) }
+    let!(:your_item) { create(:item, folder: your_folder) }
 
     it 'finds only my folders' do
       mine = Blacklight::Folders::Folder.without_doc_for_user(doc, me)
@@ -65,7 +64,7 @@ describe Blacklight::Folders::Folder do
     end
 
     it "finds only the folders that don't contain the doc" do
-      my_folder_with_doc = FactoryGirl.create(:folder, user: me)
+      my_folder_with_doc = create(:folder, user: me)
       my_bookmark_with_doc = my_folder_with_doc.bookmarks.create(document: doc, user: me)
 
       my_folders = Blacklight::Folders::Folder.where(user_id: me.id)

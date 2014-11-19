@@ -244,6 +244,7 @@ describe Blacklight::Folders::FoldersController do
     end
 
     describe '#index' do
+      let!(:my_default_folder) { user.folders.first }
       before do
         my_private_folder
         my_public_folder
@@ -252,7 +253,7 @@ describe Blacklight::Folders::FoldersController do
       it 'displays the folders' do
         get :index
 
-        expect(assigns(:folders)).to match_array [my_private_folder, my_public_folder]
+        expect(assigns(:folders)).to eq [my_default_folder, my_private_folder, my_public_folder]
         expect(response).to render_template(:index)
         expect(response).to be_successful
       end
@@ -263,7 +264,7 @@ describe Blacklight::Folders::FoldersController do
         it 'displays the folders in order' do
           get :index, order_by: 'name'
 
-          expect(assigns(:folders)).to eq [aaa_folder, my_private_folder, my_public_folder]
+          expect(assigns(:folders)).to eq [aaa_folder, my_default_folder,  my_private_folder, my_public_folder]
           expect(response).to render_template(:index)
           expect(response).to be_successful
         end
