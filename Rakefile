@@ -23,7 +23,7 @@ RSpec::Core::RakeTask.new(:spec)
 ZIP_URL = "https://github.com/projectblacklight/blacklight-jetty/archive/v4.6.0.zip"
 require 'jettywrapper'
 
-task :default => [:ci]
+task :default => [:spec]
 
 
 desc "Clean out the test rails app"
