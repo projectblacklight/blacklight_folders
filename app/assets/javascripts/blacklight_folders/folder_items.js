@@ -1,11 +1,11 @@
 Blacklight.onLoad(function(){
 
   // Initialize drag-and-drop behavior
-  $('.dd').nestable({ maxDepth: 1 });
-  $('.dd').on('change', function(event) {
-    reorderItems($(this).nestable('serialize'), $(event.currentTarget));
-  });
-
+  $('.dd').nestable({ maxDepth: 1, dropCallback: function(data){
+    allItemsData = $('.dd').nestable('serialize');
+    itemsContainer = $('.dd');
+    reorderItems(allItemsData, itemsContainer);
+  } });
 
   var reorderItems = function(data, container) {
     var folderId = container.data('folder_id');
