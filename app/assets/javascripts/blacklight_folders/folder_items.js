@@ -1,5 +1,8 @@
 Blacklight.onLoad(function(){
 
+  // Display the drag handle
+  $('.dd-handle').removeClass('hidden');
+
   // Initialize drag-and-drop behavior
   $('.dd').nestable({ maxDepth: 1, dropCallback: function(data){
     allItemsData = $('.dd').nestable('serialize');
