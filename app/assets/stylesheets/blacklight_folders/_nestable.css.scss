@@ -1,0 +1,14 @@
+// Drag and drop elements for 'nestable' gem
+
+.dd-handle {
+  height: 100%;
+  padding-right: 0;
+  padding-top: 8px;
+}
+
+.dd-dragel {
+  position: absolute;
+  pointer-events: none;
+  z-index: 9999;
+}
+
