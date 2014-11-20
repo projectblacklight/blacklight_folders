@@ -1,0 +1,18 @@
+<% _, folders_for_selection = @document.folders_for_user(current_user) %>
+
+<% unless folders_for_selection.empty? %>
+  <div>
+    <%= form_for :folder, url: blacklight_folders.add_bookmarks_to_folder_path, method: :patch do |f| %>
+
+      <%= hidden_field_tag(:document_ids, @document.id) %>
+
+      <div class="field">
+        <%= f.select :id, options_from_collection_for_select(folders_for_selection, :id, :name), prompt: 'Select a Folder' %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit 'Add to Folder', class: 'btn btn-primary btn-sm' %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

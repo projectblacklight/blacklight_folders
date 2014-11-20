@@ -12,8 +12,6 @@ describe 'Editing a folder' do
   let!(:folder_item1) { create(:folder_item, bookmark: bookmark1, folder: folder) }
   let!(:folder_item2) { create(:folder_item, bookmark: bookmark2, folder: folder) }
 
-  # routes { Blacklight::Folders::Engine.routes }
-
   before do
     Blacklight.solr.tap do |solr|
       solr.delete_by_query("*:*", params: { commit: true })
