@@ -50,9 +50,9 @@
 
         <li class="row dd-item" data-id="<%= i.object.id %>">
 
-        <div class="col-sm-1 dd-handle glyphicon glyphicon-resize-vertical"></div>
-        <div class="col-sm-1">
-          <%= i.text_field :position, class: 'form-control col-lg-2' %>
+        <div class="col-sm-2">
+          <span class="pull-left dd-handle glyphicon glyphicon-resize-vertical"></span>
+          <%= i.text_field :position, class: 'form-control position-input' %>
         </div>
         <div class="col-sm-6 title">
           <% document =  @folder.documents[i.options[:child_index]] %>

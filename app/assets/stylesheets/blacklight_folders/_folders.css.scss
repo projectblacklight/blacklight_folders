@@ -41,6 +41,7 @@ $table_border: 1px dotted $table-border-color;
 
       .title {
         padding-top: 6px;
+        padding-left: 0;
       }
     }
 
@@ -60,5 +61,10 @@ $table_border: 1px dotted $table-border-color;
 #folder-tools {
   margin-top: 5px;
   height: 25px;
+}
+
+.position-input {
+  width: 40%;
+  text-align: center;
 }
 
