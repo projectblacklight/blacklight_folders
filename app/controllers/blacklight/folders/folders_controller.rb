@@ -60,7 +60,8 @@ module Blacklight::Folders
       @folder.add_bookmarks(doc_ids)
 
       if @folder.save
-        redirect_to :back
+        message = doc_ids.size == 1 ? t(:'helpers.submit.folder.added_one', folder_name: @folder.name) : t(:'helpers.submit.folder.added_many', folder_name: @folder.name)
+        redirect_to :back, notice: message
       else
         redirect_to :back, alert: 'Unable to save bookmarks.'
       end

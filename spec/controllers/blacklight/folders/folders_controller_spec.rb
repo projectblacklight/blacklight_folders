@@ -5,7 +5,7 @@ describe Blacklight::Folders::FoldersController do
 
   let(:user) { create(:user) }
   let(:my_private_folder) { create(:private_folder, user: user) }
-  let(:my_public_folder)  { create(:public_folder, user: user) }
+  let(:my_public_folder)  { create(:public_folder, user: user, name: "My First Folder") }
 
 
   describe 'not logged in' do
@@ -301,29 +301,33 @@ describe Blacklight::Folders::FoldersController do
     end
 
     describe '#add_bookmarks' do
-      it 'adds bookmarks to the folder' do
-        @request.env['HTTP_REFERER'] = 'http://test.com'
-        patch :add_bookmarks, folder: { id: my_public_folder.id }, document_ids: '123, 456'
+      context "when it's successful" do
+        it 'adds bookmarks to the folder' do
+          @request.env['HTTP_REFERER'] = 'http://test.com'
+          patch :add_bookmarks, folder: { id: my_public_folder.id }, document_ids: '123, 456'
 
-        expect(response).to redirect_to :back
-        expect(assigns(:folder)).to eq my_public_folder
-        expect(my_public_folder.bookmarks.count).to eq 2
-        expect(my_public_folder.bookmarks.map(&:document_id).sort).to eq ['123', '456'].sort
+          expect(response).to redirect_to :back
+          expect(assigns(:folder)).to eq my_public_folder
+          expect(flash[:notice]).to eq "Added documents to My First Folder"
+          expect(my_public_folder.bookmarks.count).to eq 2
+          expect(my_public_folder.bookmarks.map(&:document_id).sort).to eq ['123', '456'].sort
+        end
+      end
+
+      context 'failure path' do
+        before do
+          allow_any_instance_of(Blacklight::Folders::Folder).to receive(:save) { false }
+          @request.env['HTTP_REFERER'] = 'http://test.com'
+        end
+
+        it 'prints an error' do
+          patch :add_bookmarks, folder: { id: my_public_folder.id }, document_ids: '123, 456'
+          expect(response).to redirect_to :back
+          expect(flash[:alert]).to eq 'Unable to save bookmarks.'
+        end
       end
     end
 
-    describe '#add_bookmarks failure path' do
-      before do
-        allow_any_instance_of(Blacklight::Folders::Folder).to receive(:save) { false }
-        @request.env['HTTP_REFERER'] = 'http://test.com'
-      end
-
-      it 'prints an error' do
-        patch :add_bookmarks, folder: { id: my_public_folder.id }, document_ids: '123, 456'
-        expect(response).to redirect_to :back
-        expect(flash[:alert]).to eq 'Unable to save bookmarks.'
-      end
-    end
 
     describe '#remove_bookmarks' do
       before do

@@ -19,6 +19,8 @@ en:
         update: "Update Folder"
         created: "The folder was created."
         updated: "The folder was successfully updated."
+        added_one: "Added document to %{folder_name}"
+        added_many: "Added documents to %{folder_name}"
     label:
       blacklight/folders/folder:
         user: "Owner"
