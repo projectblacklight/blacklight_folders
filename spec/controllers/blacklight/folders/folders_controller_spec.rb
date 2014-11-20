@@ -230,6 +230,35 @@ describe Blacklight::Folders::FoldersController do
             expect(my_public_folder.item_ids).to eq [folder_item3.id, folder_item4.id, folder_item2.id]
           end
         end
+
+        describe "change order with position collisions" do
+          let!(:folder_item1) { create(:folder_item, position: '1', folder: my_public_folder) }
+          let!(:folder_item2) { create(:folder_item, position: '2', folder: my_public_folder) }
+          let!(:folder_item3) { create(:folder_item, position: '3', folder: my_public_folder) }
+          let!(:folder_item4) { create(:folder_item, position: '4', folder: my_public_folder) }
+          let!(:folder_item5) { create(:folder_item, position: '5', folder: my_public_folder) }
+
+          it "gives priority to items that were changed but keeps the order of unchanged items" do
+            patch :update, id: my_public_folder.id,
+              folder: { items_attributes:
+                [
+                  { id: folder_item1, position: '1', folder_id: my_public_folder.id },
+                  { id: folder_item2, position: '2', folder_id: my_public_folder.id },
+                  { id: folder_item3, position: '2', folder_id: my_public_folder.id },
+                  { id: folder_item4, position: '1', folder_id: my_public_folder.id },
+                  { id: folder_item5, position: '3', folder_id: my_public_folder.id }
+                ]
+              }
+
+            expect(my_public_folder.reload.item_ids).to eq [
+              folder_item4.id,
+              folder_item3.id,
+              folder_item5.id,
+              folder_item1.id,
+              folder_item2.id
+            ]
+          end
+        end
       end
 
       context 'with bad inputs' do

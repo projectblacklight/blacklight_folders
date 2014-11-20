@@ -34,7 +34,9 @@ module Blacklight::Folders
     end
 
     def update
-      if @folder.update(preprocess_nested_attributes(create_params))
+      @folder.assign_attributes(preprocess_nested_attributes(create_params))
+      reorder_items(@folder)
+      if @folder.save
         respond_to do |format|
           format.html do
             redirect_to @folder, notice: t(:'helpers.submit.folder.updated')
@@ -76,7 +78,7 @@ module Blacklight::Folders
 
       def preprocess_nested_attributes(in_params)
         return in_params unless in_params.key?(:items_attributes)
-        in_params.merge(items_attributes: reorder_items(strip_blank_folders(nested_params_to_array(in_params[:items_attributes]))))
+        in_params.merge(items_attributes: strip_blank_folders(nested_params_to_array(in_params[:items_attributes])))
       end
 
       def nested_params_to_array(attributes_collection)
@@ -98,19 +100,40 @@ module Blacklight::Folders
         attributes_collection
       end
 
-      def reorder_items(attributes_collection)
-        # This mutates the hashes inside the list
-        attributes_collection.sort { |a, b| a[:position].to_i <=> b[:position].to_i }.
-          each_with_index do |record_attributes, i|
-            if record_attributes[:folder_id]
-              # when moving an item to a different folder acts_as_list will
-              # send it to the end if we don't try to set the position..
-              record_attributes.delete(:position)
+      def reorder_items(folder)
+        # This udpates the folder's items
+        changed_folder, new, changed_position, unchanged = folder.items.
+          sort_by(&:position).
+          group_by do |item|
+            if item.folder_id_was != item.folder_id
+              :changed_folder
+            elsif item.position_was.nil?
+              :new
+            elsif item.position_was != item.position
+              :changed_position
             else
-              record_attributes[:position] = i + 1
+              :unchanged
             end
+        end.values_at(:changed_folder, :new, :changed_position, :unchanged).map(&:to_a)
+
+        # items that will be in this folder
+        unmoved_items = unchanged
+        # place items whose positions were specified
+        changed_position.map {|item| unmoved_items.insert(item.position - 1, item)}
+        # add new items at the end
+        unmoved_items = unmoved_items + new
+        # calculate positions
+        unmoved_items.
+          reject(&:nil?).
+          select {|item| item.folder_id_was == item.folder_id}.
+          each_with_index do |item, position|
+            item.position = position + 1
           end
-        attributes_collection
+
+        # items that have moved to another folder
+        changed_folder.select {|item| item.folder_id_was != item.folder_id}.each do |item|
+          item.position = nil
+        end
       end
 
       def _prefixes

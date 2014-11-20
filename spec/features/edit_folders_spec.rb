@@ -27,7 +27,7 @@ describe 'Editing a folder' do
     expect(page).to have_field 'folder[items_attributes][0][position]', with: '1'
     expect(page).to have_field 'folder[items_attributes][1][position]', with: '2'
 
-    fill_in 'folder[items_attributes][1][position]', with: '0'
+    fill_in 'folder[items_attributes][1][position]', with: '1'
 
     click_button "Update Folder"
 
