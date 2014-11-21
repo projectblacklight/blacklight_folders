@@ -9,14 +9,26 @@ var FolderController = function(elem) {
   this.$select = $('select', this.$form);
   this.$hidden = $('input[name="document_ids"]', this.$form);
 
-  this.addControls(elem);
+  this.addControls();
+  this.addAutocomplete();
   this.attachEvents();
 }
 
 FolderController.prototype = {
-  addControls: function(elem) {
+  addControls: function() {
     this.$checkboxes.show();
   },
+
+  addAutocomplete: function() {
+    // Remove the bootstrap class so that select2 can apply its own styles
+    this.$select.removeClass('form-control');
+    // The first element has a prompt. We remove it from the list.
+    var element = $('option:first-child', this.$select);
+    var label = element.text();
+    element.empty();
+    this.$select.select2({placeholder: label});
+  },
+
 
   showForm: function() {
     this.$form.show();
