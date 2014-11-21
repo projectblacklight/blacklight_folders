@@ -8,5 +8,4 @@ CatalogController.document_actions.delete(:bookmark)
 
 CatalogController.add_index_tools_partial(:folder, partial: 'blacklight/folders/folder_control')
 CatalogController.add_document_action(:folder, partial: 'blacklight/folders/show/add_to_folder', if: Proc.new { |ctx| ctx.current_user } )
-
-
+CatalogController.add_nav_action(:folder, partial: 'blacklight/nav/folders', if: Proc.new { |ctx| ctx.current_user } )
