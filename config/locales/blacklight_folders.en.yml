@@ -27,24 +27,38 @@ en:
         visibility: "Visibility"
   activerecord:
     models:
-      blacklight/folders:
-        folder: Folder
-        folder_item: Item
+      blacklight/folders/folder_item: Item
+      blacklight/folders/folder: Folder
     attributes:
       blacklight/folders/folder:
         visibility:
           public: "Anyone"
           private: "Only me"
   blacklight_folders:
-    application_name: "Folder - %{application_name}"
-    html_title: "Folder | %{application_name}"
     main_navigation:
       folders: "Folders"
       all_folders: "Show All"
+  blacklight:
     folders:
-      edit:
-        header: "Manage Folder"
-    default_folder_name: "Default folder"
+      add_to_folder:
+        select:
+          prompt: "Add to folder"
+      folders:
+        edit:
+          header: "Manage Folder"
+        index:
+          table:
+            headers:
+              name:       "Name"
+              size:       "Size"
+              visibility: "Visibility"
+              created:    "Created"
+              updated:    "Updated"
+              actions:    "Actions"
+        folder:
+          ago: "ago"
+
+      default_folder_name: "Default folder"
   catalog:
     search:
       folder:

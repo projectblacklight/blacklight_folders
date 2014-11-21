@@ -1,6 +1,6 @@
 module Blacklight::Folders
   module CrudLinksHelper
-    def action_label model, action
+    def action_label model, action=nil
       action_default_value model, action
     end
 

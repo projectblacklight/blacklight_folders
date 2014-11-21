@@ -7,7 +7,7 @@ module Blacklight::Folders::User
   end
 
   def create_default_folder
-    folders.create(name: I18n.translate(:'blacklight_folders.default_folder_name'))
+    folders.create(name: I18n.translate(:'blacklight.folders.default_folder_name'))
   end
 
 end

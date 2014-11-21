@@ -2,8 +2,8 @@
   <% # This displays the folder dropdown on the search page %>
   <%= form_tag blacklight_folders.add_bookmarks_to_folder_path, method: :patch, data: { behavior: 'move-to-folder' }, style: 'display: none', role: 'form', class: 'form-inline' do %>
     <div class="form-group">
-      <%= label_tag :folder_id, t('catalog.search.folder.label', doctype: t('activerecord.models.blacklight/folders.folder_item'), model: t('activerecord.models.blacklight/folders.folder')), class: 'sr-only' %>
-      <%= select_tag :id, options_from_collection_for_select(Blacklight::Folders::Folder.accessible_by(current_ability, :update), :id, :name), prompt: "Move checked to folder", class: "form-control"%>
+      <%= label_tag :folder_id, t('catalog.search.folder.label', doctype: Blacklight::Folders::FolderItem.model_name.human, model: Blacklight::Folders::Folder.model_name.human), class: 'sr-only' %>
+      <%= select_tag :id, options_from_collection_for_select(Blacklight::Folders::Folder.accessible_by(current_ability, :update), :id, :name), prompt: t(:'.select.prompt'), class: "form-control"%>
       <%= hidden_field_tag(:document_ids, '') %>
     </div>
   <% end %>

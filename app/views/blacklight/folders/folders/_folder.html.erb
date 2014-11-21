@@ -1,10 +1,18 @@
         <tr>
           <td>
             <%= link_to folder.name, blacklight_folders.folder_path(folder) %>
-            &nbsp;
-            (<%= pluralize(folder.items.count, 'item') %>)
-            &nbsp; &middot; &nbsp;
+          </td>
+          <td>
+            <%= pluralize(folder.items.count, Blacklight::Folders::FolderItem.model_name.human.downcase) %>
+          </td>
+          <td>
             <%= human_friendly_visibility(folder.visibility) %>
+          </td>
+          <td>
+            <span title="<%= folder.created_at %>"><%= time_ago_in_words folder.created_at %> <%= t('.ago') %></span>
+          </td>
+          <td>
+            <span title="<%= folder.updated_at %>"><%= time_ago_in_words folder.updated_at %> <%= t('.ago') %></span>
           </td>
 
           <td>

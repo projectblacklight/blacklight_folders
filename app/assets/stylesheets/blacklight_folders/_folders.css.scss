@@ -2,20 +2,6 @@ $table-border-color: #dddddd;
 $table_border: 1px dotted $table-border-color;
 
 .folder-index {
-  table {
-    width: 100%;
-    border-top:    $table_border;
-    border-bottom: 2px solid #dddddd;
-  }
-
-  tr {
-    border-bottom: $table_border;
-  }
-
-  td {
-    padding: 0.5em 1em;
-  }
-
   #sort-tool {
     margin-top: 30px
   }

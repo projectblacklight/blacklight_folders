@@ -6,7 +6,18 @@
       <%= select_tag 'order_by', options_for_select({ 'Name' => 'name', 'Size' => 'number_of_members', 'Created' => 'created_at', 'Updated' => 'updated_at' }, params[:order_by]), prompt: "Sort by..." %>
     <% end %>
   </div>
-  <table id="folders">
+  <table id="folders" class="table">
+    <thead>
+      <tr>
+        <th><%= t('.table.headers.name') %></th>
+        <th><%= t('.table.headers.size') %></th>
+        <th><%= t('.table.headers.visibility') %></th>
+        <th><%= t('.table.headers.created') %></th>
+        <th><%= t('.table.headers.updated') %></th>
+        <th><%= t('.table.headers.actions') %></th>
+      </tr>
+    </thead>
+
     <tbody>
       <%= render partial: 'folder', collection: @folders %>
     </tbody>
@@ -14,7 +25,7 @@
 
   <div class='actions'>
     <div class='primary-actions'>
-      <%= link_to 'Create a New Folder', blacklight_folders.new_folder_path, class: 'btn btn-primary' %>
+      <%= link_to action_label(Blacklight::Folders::Folder.new), blacklight_folders.new_folder_path, class: 'btn btn-primary' %>
     </div>
   </div>
 </div>
