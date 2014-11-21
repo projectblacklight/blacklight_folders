@@ -9,10 +9,10 @@
             <%= human_friendly_visibility(folder.visibility) %>
           </td>
           <td>
-            <span title="<%= folder.created_at %>"><%= time_ago_in_words folder.created_at %> <%= t('.ago') %></span>
+            <span title="<%= folder.created_at %>"><%= t('.ago', time: time_ago_in_words(folder.created_at)) %></span>
           </td>
           <td>
-            <span title="<%= folder.updated_at %>"><%= time_ago_in_words folder.updated_at %> <%= t('.ago') %></span>
+            <span title="<%= folder.updated_at %>"><%= t('.ago', time: time_ago_in_words(folder.updated_at)) %></span>
           </td>
 
           <td>

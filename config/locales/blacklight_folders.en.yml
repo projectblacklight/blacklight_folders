@@ -25,6 +25,8 @@ en:
       blacklight/folders/folder:
         user: "Owner"
         visibility: "Visibility"
+        created: "Created"
+        updated: "Updated"
   activerecord:
     models:
       blacklight/folders/folder_item: Item
@@ -56,7 +58,7 @@ en:
               updated:    "Updated"
               actions:    "Actions"
         folder:
-          ago: "ago"
+          ago: "%{time} ago"
 
       default_folder_name: "Default folder"
   catalog:
