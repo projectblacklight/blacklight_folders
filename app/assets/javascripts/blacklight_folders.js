@@ -2,3 +2,4 @@
 //= require blacklight_folders/folders
 //= require blacklight_folders/folder_items
 //= require jquery.nestable
+//= require select2
