@@ -4,7 +4,6 @@ module Blacklight::Folders
   class FoldersController < ApplicationController
     include Blacklight::TokenBasedUser
     include Blacklight::Catalog::SearchContext
-    include Blacklight::Catalog::IndexTools
 
     load_and_authorize_resource class: Blacklight::Folders::Folder, except: [:add_bookmarks, :remove_bookmarks]
     before_filter :load_and_authorize_folder, only: [:add_bookmarks, :remove_bookmarks]
