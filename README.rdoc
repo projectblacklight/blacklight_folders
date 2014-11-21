@@ -14,6 +14,14 @@
 
     $ rails g blacklight_folders:install
 
+==== Configuration
+
+* By default, the user's 5 most recently updated folders will appear in the drop-down menu in the navigation bar.  If you want to change the number of folders that appear in the list, you can set the MENU_LIMIT constant in an initializer.
+
+  ```
+  Blacklight::Folders::Folder::MENU_LIMIT = 5
+  ```
+
 ---
 
 == Developer Notes
