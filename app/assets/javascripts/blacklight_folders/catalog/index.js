@@ -1,4 +1,5 @@
-var FolderController = function(elem) {
+// This is for the catalog index page
+BlacklightFolders.CatalogIndexController = function(elem) {
   if (elem.length == 0) {
     return null;
   }
@@ -14,7 +15,7 @@ var FolderController = function(elem) {
   this.attachEvents();
 }
 
-FolderController.prototype = {
+BlacklightFolders.CatalogIndexController.prototype = {
   addControls: function() {
     this.$checkboxes.show();
   },
@@ -61,4 +62,4 @@ FolderController.prototype = {
 
 }
 
-Blacklight.onLoad(function() { new FolderController($('.blacklight-catalog-index')) });
+Blacklight.onLoad(function() { new BlacklightFolders.CatalogIndexController($('.blacklight-catalog-index')) });

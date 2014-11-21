@@ -1,3 +1,4 @@
+// This is for the folders edit page
 Blacklight.onLoad(function(){
 
   // Display the drag handle
