@@ -34,6 +34,42 @@ describe Blacklight::Folders::Folder do
     expect(subject.items.map(&:id)).to eq [item_A.id, item_B.id]
   end
 
+  describe '#updated_at' do
+    let(:updated_at) { 1.day.ago }
+    let(:subject) { FactoryGirl.create(:folder, updated_at: updated_at) }
+    let(:doc_ddh) { SolrDocument.new(id: 'U DDH', title_t: ['A title']) }
+    let(:doc_123) { SolrDocument.new(id: 'pid:1.2.3', title_t: ['Another title']) }
+    let(:doc_456) { SolrDocument.new(id: 'pid:4.5.6', title_t: ['Yet another title']) }
+    before do
+      subject.add_bookmarks([doc_ddh.id, doc_123.id])
+      subject.updated_at = updated_at
+      subject.save!
+    end
+
+    it 'changes when adding a bookmark' do
+      subject.add_bookmarks([doc_456.id])
+      subject.save!
+      subject.reload
+      expect(subject.updated_at).to be > updated_at
+    end
+
+    it 'changes when removing a bookmark' do
+      subject.remove_bookmarks([subject.items.first])
+      subject.save!
+      subject.reload
+      expect(subject.updated_at).to be > updated_at
+    end
+
+    it 'changes when reordering bookmarks' do
+      subject.items.sort_by(&:position).reverse.each_with_index do |item, pos|
+        item.position = pos + 1
+      end
+      subject.save!
+      subject.reload
+      expect(subject.updated_at).to be > updated_at
+    end
+  end
+
   describe '.most_recent' do
     let(:user) { create(:user) }
     let!(:my_default_folder) { user.folders.first }

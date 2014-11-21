@@ -4,7 +4,7 @@ module Blacklight::Folders
   class FolderItem < ActiveRecord::Base
     self.table_name = 'blacklight_folders_bookmarks_folders'
     after_save :recount_folders
-    belongs_to :folder
+    belongs_to :folder, touch: true
     validates :folder_id, presence: true
     acts_as_list scope: :folder
 
