@@ -1,6 +1,6 @@
         <tr>
           <td>
-            <%= link_to folder.name, blacklight_folders.folder_path(folder) %>
+            <%= can?(:show, folder) ? link_to(folder.name, blacklight_folders.folder_path(folder)) : folder.name %>
           </td>
           <td>
             <%= pluralize(folder.items.count, Blacklight::Folders::FolderItem.model_name.human.downcase) %>
@@ -16,7 +16,7 @@
           </td>
 
           <td>
-            <%= link_to 'Edit', blacklight_folders.edit_folder_path(folder), method: :get, class: 'btn btn-default' %>
-            <%= link_to 'Delete', blacklight_folders.folder_path(folder), method: :delete, class: 'btn btn-danger', data: { confirm: "Are you sure you want to delete this folder and all its contents?" } %> </td>
+            <%= link_to 'Edit', blacklight_folders.edit_folder_path(folder), method: :get, class: 'btn btn-default' if can? :edit, folder %>
+            <%= link_to 'Delete', blacklight_folders.folder_path(folder), method: :delete, class: 'btn btn-danger', data: { confirm: "Are you sure you want to delete this folder and all its contents?" } if can? :destroy, folder %> </td>
         </tr>
 

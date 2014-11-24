@@ -24,7 +24,7 @@ describe Ability do
       should_not be_able_to(:destroy, your_public_folder)
       should_not be_able_to(:update, your_public_folder)
       should_not be_able_to(:create, Blacklight::Folders::Folder)
-      should_not be_able_to(:index, Blacklight::Folders::Folder)
+      should     be_able_to(:index, Blacklight::Folders::Folder)
 
       should_not be_able_to(:destroy, your_public_item)
       should_not be_able_to(:create, Blacklight::Folders::FolderItem)

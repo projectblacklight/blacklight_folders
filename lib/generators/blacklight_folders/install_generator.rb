@@ -28,6 +28,11 @@ module BlacklightFolders
       end
     end
 
+    def add_helper
+      copy_file "blacklight_folders_helper.rb", "app/helpers/blacklight_folders_helper.rb"
+      inject_into_class 'app/helpers/application_helper.rb', ApplicationHelper, "  include BlacklightFoldersHelper"
+    end
+
     def add_style
       inject_into_file 'app/assets/stylesheets/blacklight.css.scss', "@import 'blacklight_folders/blacklight_folders';", after: /@import 'blacklight\/blacklight';\s*\n/
     end

@@ -10,7 +10,12 @@ module Blacklight::Folders
     before_filter :clear_session_search_params, only: [:show]
 
     def index
-      @folders = Blacklight::Folders::Folder.accessible_by(current_ability)
+      @folders = if current_or_guest_user.new_record?
+        # Just show the temporary folder
+        current_or_guest_user.folders
+      else
+        Blacklight::Folders::Folder.accessible_by(current_ability)
+      end
       @folders = @folders.order(params[:order_by]) if params[:order_by]
     end
 
@@ -150,8 +155,19 @@ module Blacklight::Folders
       end
 
       def load_and_authorize_folder
-        @folder = Folder.find(params['id']) if params['id']
-        @folder ||= Folder.find(params['folder']['id'])
+        id = params['id'] || params['folder']['id']
+        if id == '0' && current_or_guest_user.new_record?
+          # Clear out the temporary folder
+          current_or_guest_user.folders = []
+          # This should be the only place a real folder is created for a guest user
+          @folder = current_or_guest_user.folders.first_or_initialize(name: Folder.default_folder_name)
+          # Now that the guest user needs a folder, persist the user.
+          current_or_guest_user.save!
+          # Reset the cached cancan ability
+          @current_ability = nil
+        else
+          @folder = Folder.find(id)
+        end
         authorize! :edit, @folder
       end
 

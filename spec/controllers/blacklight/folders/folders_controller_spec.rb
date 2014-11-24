@@ -59,16 +59,36 @@ describe Blacklight::Folders::FoldersController do
     end
 
     describe '#index' do
-      it 'denies access' do
+      it 'shows just the default (unsaved) folder' do
         get :index
-        expect(response).to redirect_to(main_app.user_session_path)
+        expect(response).to be_successful
+        expect(assigns(:folders).size).to eq 1
+        expect(assigns(:folders).first).to be_kind_of Blacklight::Folders::Folder
+        expect(assigns(:folders).first).not_to be_persisted
+        expect(response).to render_template(:index)
       end
     end
 
     describe '#add_bookmarks' do
-      it 'denies access' do
-        patch :add_bookmarks, folder: { id: my_public_folder.id }, document_ids: '123'
-        expect(response).to redirect_to(main_app.user_session_path)
+      context "to someone elses folder" do
+        it 'denies access' do
+          patch :add_bookmarks, folder: { id: my_public_folder.id }, document_ids: '123'
+          expect(response).to redirect_to(main_app.user_session_path)
+        end
+      end
+
+      context "to a default folder" do
+        it 'adds bookmarks to the folder and persists the user' do
+          @request.env['HTTP_REFERER'] = 'http://test.com'
+          # the '0' folder is the default folder
+          patch :add_bookmarks, folder: { id: 0 }, document_ids: '123, 456'
+
+          expect(response).to redirect_to :back
+          expect(assigns(:folder).user).to be_persisted
+          expect(assigns(:folder).user).to be_guest
+          expect(flash[:notice]).to eq "Added documents to Default folder"
+          expect(assigns(:folder).bookmarks.map(&:document_id)).to match_array ['123', '456']
+        end
       end
     end
 
@@ -81,7 +101,7 @@ describe Blacklight::Folders::FoldersController do
   end  # not logged in
 
 
-  describe 'user is logged in' do
+  describe 'when the user is logged in' do
     before { sign_in user }
 
     describe '#new' do

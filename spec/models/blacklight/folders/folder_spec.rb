@@ -13,7 +13,7 @@ describe Blacklight::Folders::Folder do
     expect(subject.valid?).to eq true
     subject.user = nil
     expect(subject.valid?).to eq false
-    expect(subject.errors.messages[:user_id].first).to match /blank/
+    expect(subject.errors.messages[:user].first).to match /blank/
   end
 
   it 'requires a name' do

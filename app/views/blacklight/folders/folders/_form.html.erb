@@ -38,7 +38,7 @@
     </div>
     <div class="col-sm-6 pull-right">
       <div><%= f.submit class: 'btn btn-primary' %></div>
-      <% if @folder.persisted? %>
+      <% if @folder.persisted? && can?(:destroy, @folder) %>
         <%= link_to action_label(@folder, :delete), folder_path(@folder), method: :delete, class: 'btn btn-danger', data: { confirm: "Are you sure you want to delete this folder and all its contents?" } %>
       <% end %>
     </div>
@@ -59,7 +59,7 @@
           <%= link_to_document document, document_show_link_field(document) %>
         </div>
         <div class="col-sm-2 title">
-          <% destinations = Blacklight::Folders::Folder.without_doc_for_user(document, current_user) %>
+          <% destinations = Blacklight::Folders::Folder.without_doc_for_user(document, current_or_guest_user) %>
           <% unless destinations.empty? %>
             <%= i.select(:folder_id, options_from_collection_for_select(destinations, :id, :name), {include_blank: "Move to..." } ) %>
           <% end %>

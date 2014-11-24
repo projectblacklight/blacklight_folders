@@ -23,9 +23,11 @@
     </tbody>
   </table>
 
-  <div class='actions'>
-    <div class='primary-actions'>
-      <%= link_to action_label(Blacklight::Folders::Folder.new), blacklight_folders.new_folder_path, class: 'btn btn-primary' %>
+  <% if can? :create, Blacklight::Folders::Folder %>
+    <div class='actions'>
+      <div class='primary-actions'>
+        <%= link_to action_label(Blacklight::Folders::Folder.new), blacklight_folders.new_folder_path, class: 'btn btn-primary' %>
+      </div>
     </div>
-  </div>
+  <% end %>
 </div>

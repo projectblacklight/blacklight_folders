@@ -6,6 +6,5 @@ module Blacklight::Folders
       safe_join([content_tag(:span, '', class:"glyphicon glyphicon-#{icon}"),
         t("activerecord.attributes.blacklight/folders/folder.visibility.#{visibility}")], ' ')
     end
-
   end
 end

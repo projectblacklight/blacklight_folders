@@ -1,7 +1,7 @@
 module Blacklight::Folders
   class Folder < ActiveRecord::Base
     belongs_to :user, polymorphic: true
-    validates :user_id, presence: true
+    validates :user, presence: true
     validates :name, presence: true
 
     after_initialize :default_values
@@ -17,17 +17,6 @@ module Blacklight::Folders
 
     # How many folders will appear in the drop-down menu
     MENU_LIMIT = 5
-
-    # Find the folders that belong to this user and don't contain this document
-    def self.without_doc_for_user(document, user)
-      subquery = Blacklight::Folders::FolderItem.select(:folder_id).joins(:bookmark).where('bookmarks.document_id' => document.id).to_sql
-
-      where(user: user).where("id not in (#{subquery})")
-    end
-
-    def self.most_recent
-      order('updated_at DESC')
-    end
 
     def default_values
       self.number_of_members ||= 0
@@ -82,5 +71,25 @@ module Blacklight::Folders
       self.items.delete(items)
     end
 
+    class << self
+      # Find the folders that belong to this user and don't contain this document
+      def without_doc_for_user(document, user)
+        if user.new_record?
+          user.folder
+        else
+          subquery = Blacklight::Folders::FolderItem.select(:folder_id).joins(:bookmark).where('bookmarks.document_id' => document.id).to_sql
+
+          where(user: user).where("id not in (#{subquery})")
+        end
+      end
+
+      def most_recent
+        order('updated_at DESC')
+      end
+
+      def default_folder_name
+        I18n.translate(:'blacklight.folders.default_folder_name')
+      end
+    end
   end
 end

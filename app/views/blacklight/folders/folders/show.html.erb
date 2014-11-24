@@ -10,7 +10,7 @@
   <% end %>
   <h1><%= @folder.name %></h1>
   <div>
-    <span class="owner-label"><%= t("blacklight/folders/folder.user", scope: "helpers.label") %>:</span> <span class="owner"><%= @folder.user %></span>
+    <span class="owner-label"><%= t("blacklight/folders/folder.user", scope: "helpers.label") %>:</span> <span class="owner"><%= @folder.user.guest? ? 'Guest' : @folder.user %></span>
   </div>
 
   <div>
