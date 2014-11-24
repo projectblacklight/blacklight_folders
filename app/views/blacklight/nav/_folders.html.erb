@@ -6,7 +6,6 @@
   <% current_user.folders.most_recent.limit(Blacklight::Folders::Folder::MENU_LIMIT).each do |folder| %>
     <li><%= link_to truncate(folder.name, length: 20), blacklight_folders.folder_path(folder) %></li>
   <% end %>
-  <% if current_user.folders.count > Blacklight::Folders::Folder::MENU_LIMIT %>
-    <li><%= link_to t(:'blacklight_folders.main_navigation.all_folders'), blacklight_folders.folders_path %></li>
-  <% end %>
+
+  <li><%= link_to t(:'blacklight_folders.main_navigation.all_folders'), blacklight_folders.folders_path %></li>
 </ul>
