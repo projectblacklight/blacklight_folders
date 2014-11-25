@@ -1,7 +1,10 @@
-  <% @document_list = @folder.documents # For the refworks views %>
-  <% if @document_list.any? {|d| d.exports_as? :endnote } %>
+  <% if @folder.documents.any? {|d| d.exports_as? :endnote } %>
     <li class="endnote">
     <%= link_to t('blacklight.tools.endnote'), { format: :endnote }, class: "btn btn-default", id: "endnoteLink" %>
     </li>
   <% end %>
-  <%= render 'bookmarks/refworks' %>
+  <% if @folder.documents.any? {|d| d.exports_as? :refworks_marc_txt } %>
+    <li class="refworks">
+    <%= link_to t('blacklight.tools.refworks'), refworks_export_url(url: url_for(format: :endnote, only_path: false)), class: "btn btn-default", id: "refworksLink" %>
+    </li>
+  <% end %>
