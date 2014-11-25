@@ -20,6 +20,14 @@
 
         Blacklight::Folders::Folder::MENU_LIMIT = 5
 
+* If you wish to change the name of each user's default folder, override the entry for ```default_folder_name``` in the localization files, using the ```config/locales/blacklight_folders.en.yml``` file as an example.
+
+==== Migrate Existing Data
+
+* If your blacklight app has existing users that already have bookmarks saved, run the migration task to add each user's existing bookmarks to their default folder.
+
+    $ rake blacklight_folders:db:migrate_data
+
 ---
 
 == Developer Notes
