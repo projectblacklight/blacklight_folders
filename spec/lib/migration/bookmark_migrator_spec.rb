@@ -52,6 +52,15 @@ describe BookmarkMigrator do
         expect(bilbo.folders.first.number_of_members).to eq 3
       end
 
+      it 'ignores bookmarks for guest accounts' do
+        frodo.guest = true
+        frodo.save!
+
+        BookmarkMigrator.new.migrate
+        expect(frodo.folders.count).to eq 0
+        expect(Blacklight::Folders::Folder.count).to eq User.count - 1
+      end
+
       it 'logs errors if it fails to save the items' do
         allow_any_instance_of(Blacklight::Folders::Folder).to receive(:save) { false }
         migrator = BookmarkMigrator.new

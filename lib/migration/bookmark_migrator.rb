@@ -14,7 +14,7 @@ class BookmarkMigrator
     @errors = []
     log_message 'Begin migration of existing bookmarks.'
 
-    User.find_each do |user|
+    User.where(guest: false).find_each do |user|
       folder = default_folder(user)
       bookmarks_to_add = user.bookmarks - folder.bookmarks
       bookmarks_to_add.map do |b|
