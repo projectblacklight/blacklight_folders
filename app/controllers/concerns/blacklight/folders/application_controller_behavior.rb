@@ -5,6 +5,10 @@ module Blacklight::Folders
     included do
       rescue_from ::CanCan::AccessDenied, with: :unauthorized_access
       before_action :give_guest_a_folder, if: :build_a_folder_for_guests?
+
+      define_callbacks :logging_in_user
+      set_callback :logging_in_user, :before, :transfer_guest_user_folders_to_current_user
+
     end
 
     # Override cancan to be aware of guest users
@@ -35,5 +39,16 @@ module Blacklight::Folders
     def build_a_folder_for_guests?
       current_or_guest_user.new_record? && current_or_guest_user.folders.empty?
     end
+
+    private
+
+      def transfer_guest_user_folders_to_current_user
+        return unless respond_to? :current_user and respond_to? :guest_user and current_user and guest_user
+        current_user_folders = current_user.folders
+        guest_user.folders.each do |f|
+          f.update(user: current_user)
+        end
+      end
+
   end
 end

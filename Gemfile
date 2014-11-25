@@ -24,7 +24,9 @@ gem 'sprockets', '2.11.0'
 # Gemfile.lock but since sass-rails gets generated (rails new) into the test app
 # it'll want sass 3.2.0 and we'll have a conflict
 gem 'sass', '~> 3.2.0'
-gem "blacklight", github: 'projectblacklight/blacklight'
+gem 'blacklight', github: 'projectblacklight/blacklight'
+gem 'poltergeist'
+gem 'database_cleaner'
 
 file = File.expand_path("Gemfile", ENV['ENGINE_CART_DESTINATION'] || ENV['RAILS_ROOT'] || File.expand_path("../spec/internal", __FILE__))
 if File.exists?(file)
