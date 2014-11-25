@@ -7,5 +7,5 @@ CatalogController.blacklight_config.show.document_actions.delete(:bookmark)
 
 
 CatalogController.add_index_tools_partial(:folder, partial: 'blacklight/folders/folder_control')
-CatalogController.add_show_tools_partial(:folder, partial: 'blacklight/folders/show/add_to_folder', if: Proc.new { |ctx| ctx.current_ability.can?(:create, Blacklight::Folders::Folder) } )
+CatalogController.add_show_tools_partial(:folder, partial: 'blacklight/folders/show/add_to_folder')
 CatalogController.add_nav_action(:folder, partial: 'blacklight/nav/folders', if: Proc.new { |ctx| ctx.current_ability.can?(:index, Blacklight::Folders::Folder)  } )

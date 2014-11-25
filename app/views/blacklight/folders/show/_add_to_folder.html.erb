@@ -1,4 +1,4 @@
-<% _, folders_for_selection = @document.folders_for_user(current_user) %>
+<% _, folders_for_selection = @document.folders_for_user(current_or_guest_user) %>
 
 <% unless folders_for_selection.empty? %>
   <div>

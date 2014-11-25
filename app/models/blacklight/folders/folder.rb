@@ -75,7 +75,7 @@ module Blacklight::Folders
       # Find the folders that belong to this user and don't contain this document
       def without_doc_for_user(document, user)
         if user.new_record?
-          user.folder
+          user.folders
         else
           subquery = Blacklight::Folders::FolderItem.select(:folder_id).joins(:bookmark).where('bookmarks.document_id' => document.id).to_sql
 

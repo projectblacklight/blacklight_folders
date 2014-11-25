@@ -1,17 +1,15 @@
-<% if current_user %>
-  <% in_folders, _ = @document.folders_for_user(current_user) %>
+<% in_folders, _ = @document.folders_for_user(current_or_guest_user) %>
 
-  <% unless in_folders.empty? %>
-    <div class="panel panel-default folders">
-      <div class="panel-heading">Folders</div>
-      <div class="panel-body">
-        This item is contained in:
-        <ul>
-          <% in_folders.each do |folder| %>
-            <li> <%= link_to folder.name, blacklight_folders.folder_path(folder) %> </li>
-          <% end %>
-        </ul>
-      </div>
+<% unless in_folders.empty? %>
+  <div class="panel panel-default folders">
+    <div class="panel-heading">Folders</div>
+    <div class="panel-body">
+      This item is contained in:
+      <ul>
+        <% in_folders.each do |folder| %>
+          <li> <%= link_to folder.name, blacklight_folders.folder_path(folder) %> </li>
+        <% end %>
+      </ul>
     </div>
-  <% end %>
+  </div>
 <% end %>
