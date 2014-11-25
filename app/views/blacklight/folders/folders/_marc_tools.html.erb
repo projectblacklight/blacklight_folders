@@ -1,3 +1,7 @@
-  <% @document_list = @folder.documents # For the blacklight-marc views %>
-  <%= render 'bookmarks/endnote' %>
+  <% @document_list = @folder.documents # For the refworks views %>
+  <% if @document_list.any? {|d| d.exports_as? :endnote } %>
+    <li class="endnote">
+    <%= link_to t('blacklight.tools.endnote'), { format: :endnote }, class: "btn btn-default", id: "endnoteLink" %>
+    </li>
+  <% end %>
   <%= render 'bookmarks/refworks' %>
