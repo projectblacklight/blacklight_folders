@@ -1,6 +1,6 @@
 <div class="folder-index">
   <div class="row">
-    <h1 class="col-lg-8">Folders <small>(<%= @folders.count %> total)</small></h1>
+    <h1 class="col-lg-8">Folders <small>(<%= @folders.size %> total)</small></h1>
 
     <%= form_tag blacklight_folders.folders_path, method: :get, class:"col-lg-4", id: "sort-tool" do %>
       <%= select_tag 'order_by', options_for_select({ 'Name' => 'name', 'Size' => 'number_of_members', 'Created' => 'created_at', 'Updated' => 'updated_at' }, params[:order_by]), prompt: "Sort by..." %>
