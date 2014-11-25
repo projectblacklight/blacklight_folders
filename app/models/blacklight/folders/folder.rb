@@ -61,6 +61,7 @@ module Blacklight::Folders
     end
 
     def add_bookmarks(doc_ids=[])
+      doc_ids = Array(doc_ids)
       doc_ids.each do |doc_id|
         b = bookmarks.build(document_id: doc_id, user_id: user_id)
         b.document_type = blacklight_config.solr_document_model.to_s

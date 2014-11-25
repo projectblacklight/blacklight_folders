@@ -7,7 +7,7 @@ module Blacklight::Folders
       before_action :give_guest_a_folder, if: :build_a_folder_for_guests?
 
       define_callbacks :logging_in_user
-      set_callback :logging_in_user, :before, :transfer_guest_user_folders_to_current_user
+      set_callback :logging_in_user, :before, :transfer_guest_user_bookmarks_to_current_user
 
     end
 
@@ -42,11 +42,20 @@ module Blacklight::Folders
 
     private
 
-      def transfer_guest_user_folders_to_current_user
+      def transfer_guest_user_bookmarks_to_current_user
         return unless respond_to? :current_user and respond_to? :guest_user and current_user and guest_user
-        current_user_folders = current_user.folders
-        guest_user.folders.each do |f|
-          f.update(user: current_user)
+
+        if current_user.default_folder
+          guest_user.folders.each do |f|
+            f.items.each do |i|
+              i.update(folder: current_user.default_folder)
+            end
+            f.delete
+          end
+        else
+          guest_user.folders.each do |f|
+            f.update(user: current_user)
+          end
         end
       end
 

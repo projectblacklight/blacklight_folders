@@ -9,4 +9,8 @@ module Blacklight::Folders::User
   def create_default_folder
     folders.create(name: Blacklight::Folders::Folder.default_folder_name) unless guest?
   end
+
+  def default_folder
+    folders.where(name: Blacklight::Folders::Folder.default_folder_name).first
+  end
 end
