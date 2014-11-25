@@ -168,7 +168,7 @@ module Blacklight::Folders
         else
           @folder = Folder.find(id)
         end
-        authorize! :edit, @folder
+        authorize! :update_bookmarks, @folder
       end
 
   end

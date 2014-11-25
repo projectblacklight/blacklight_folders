@@ -67,6 +67,20 @@ describe Blacklight::Folders::FoldersController do
         expect(assigns(:folders).first).not_to be_persisted
         expect(response).to render_template(:index)
       end
+
+      context "when the user is a persisted guest with a persisted folder" do
+        let(:current_user) { create(:guest_user) }
+        let!(:folder) { current_user.folders.create(name: 'Default') }
+        before do
+          sign_in current_user
+        end
+
+        it "should show the persisted folder" do
+          get :index
+          expect(response).to be_successful
+          expect(assigns(:folders)).to eq [folder]
+        end
+      end
     end
 
     describe '#add_bookmarks' do

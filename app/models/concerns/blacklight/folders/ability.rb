@@ -13,9 +13,11 @@ module Blacklight::Folders
 
     def can_manage_my_own_folders(user)
       return unless user
-      can [:read, :update], Blacklight::Folders::Folder, user_id: user.id
-      unless user.guest?
-        can [:create, :destroy], Blacklight::Folders::Folder, user_id: user.id
+      can [:update_bookmarks], Blacklight::Folders::Folder, user_id: user.id
+      if user.guest?
+        guest_permissions(user)
+      else
+        can [:read, :update, :create, :destroy], Blacklight::Folders::Folder, user_id: user.id
       end
 
       can [:create, :destroy], Blacklight::Folders::FolderItem, folder: { user_id: user.id }
@@ -25,5 +27,13 @@ module Blacklight::Folders
       can :show, Blacklight::Folders::Folder, visibility: Blacklight::Folders::Folder::PUBLIC
     end
 
+
+    def guest_permissions(user)
+      if user.persisted?
+        can [:read, :update], Blacklight::Folders::Folder, ['user_id = ? AND id IS NOT NULL', user.id] do |f|
+          f.user_id == user.id && f.persisted?
+        end
+      end
+    end
   end
 end
