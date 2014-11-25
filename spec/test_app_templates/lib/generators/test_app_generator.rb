@@ -9,11 +9,16 @@ class TestAppGenerator < Rails::Generators::Base
 
   def add_gems
     gem "blacklight", github: 'projectblacklight/blacklight'
+    gem "blacklight-marc"
     Bundler.with_clean_env { run "bundle install" }
   end
 
   def run_blacklight_generator
     generate "blacklight:install", "--devise"
+  end
+
+  def run_blacklight_marc_generator
+    generate "blacklight_marc:marc"
   end
 
   def run_blacklight_folders_generator

@@ -128,11 +128,31 @@ describe Blacklight::Folders::FoldersController do
     end
 
     describe '#show' do
-      it 'displays the folder' do
-        get :show, id: my_private_folder.id
-        expect(response).to be_successful
-        expect(response).to render_template(:show)
-        expect(assigns(:folder)).to eq my_private_folder
+      context "as html" do
+        it 'displays the folder' do
+          get :show, id: my_private_folder.id
+          expect(response).to be_successful
+          expect(response).to render_template(:show)
+          expect(assigns(:folder)).to eq my_private_folder
+        end
+      end
+
+      context "as endnote" do
+        render_views
+        let(:document1) { SolrDocument.new(id: 'doc1', marc_display: ['First title']) }
+        let(:document2) { SolrDocument.new(id: 'doc2', marc_display: ['Second title']) }
+
+        before do
+          allow_any_instance_of(Blacklight::Folders::Folder).to receive(:documents).and_return([document1, document2])
+          allow(document1).to receive(:export_as_endnote).and_return('one')
+          allow(document2).to receive(:export_as_endnote).and_return('two')
+        end
+
+        it 'displays the folder' do
+          get :show, id: my_private_folder.id, format: :endnote
+          expect(response).to be_successful
+          expect(response.body).to eq "one\ntwo\n\n"
+        end
       end
     end
 
