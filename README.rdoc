@@ -20,7 +20,7 @@
 
         Blacklight::Folders::Folder::MENU_LIMIT = 5
 
-* If you wish to change the name of each user's default folder, override the entry for ```default_folder_name``` in the localization files, using the ```config/locales/blacklight_folders.en.yml``` file as an example.
+* If you wish to change the name of each user's default folder, override the entry for <code>default_folder_name</code> in the localization files, using the <code>config/locales/blacklight_folders.en.yml</code> file as an example.
 
 ==== Migrate Existing Data
 
