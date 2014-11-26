@@ -19,8 +19,8 @@ module Blacklight::Folders
       
       if ['created_at', 'updated_at'].include?(params[:order_by])
         @folders = @folders.order(params[:order_by] + ' DESC') 
-      else
-        @folders = @folders.order(params[:order_by]) if params[:order_by]
+      elsif ['name', 'number_of_members'].include?(params[:order_by])
+        @folders = @folders.order(params[:order_by])
       end
       
     end
