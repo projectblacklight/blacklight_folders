@@ -91,6 +91,6 @@ module Blacklight::Folders
       def default_folder_name
         I18n.translate(:'blacklight.folders.default_folder_name')
       end
-    end
+    end # class << self
   end
 end

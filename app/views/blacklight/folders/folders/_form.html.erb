@@ -59,7 +59,7 @@
           <%= link_to_document document, document_show_link_field(document) %>
         </div>
         <div class="col-sm-2 title">
-          <% destinations = Blacklight::Folders::Folder.without_doc_for_user(document, current_or_guest_user) %>
+          <% destinations = folders_selection_for_doc(document, current_or_guest_user) %>
           <% unless destinations.empty? %>
             <%= i.select(:folder_id, options_from_collection_for_select(destinations, :id, :name), {include_blank: "Move to..." } ) %>
           <% end %>
