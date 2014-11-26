@@ -343,14 +343,25 @@ describe Blacklight::Folders::FoldersController do
 
       context "with sorting" do
         let!(:aaa_folder)  { create(:public_folder, user: user, name: 'AAA') }
+        let!(:bbb_folder)  { create(:public_folder, user: user, name: 'BBB') }
 
         it 'displays the folders in order' do
           get :index, order_by: 'name'
 
-          expect(assigns(:folders)).to eq [aaa_folder, my_default_folder,  my_private_folder, my_public_folder]
+          expect(assigns(:folders)).to eq [aaa_folder, bbb_folder, my_default_folder,  my_private_folder, my_public_folder]
           expect(response).to render_template(:index)
           expect(response).to be_successful
         end
+        
+        it 'displays the folders in descending date order' do
+          get :index, order_by: 'created_at'
+
+          expect(assigns(:folders)[0]).to eq bbb_folder 
+          expect(assigns(:folders)[1]).to eq aaa_folder 
+          expect(response).to render_template(:index)
+          expect(response).to be_successful
+        end
+        
       end
     end
 
