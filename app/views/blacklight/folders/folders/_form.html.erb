@@ -1,4 +1,4 @@
-<%= form_for @folder, html: { role: 'form', class: 'form-horizontal' } do |f| %>
+<%= form_for @folder, html: { role: 'form', class: 'form-horizontal folder-actions' } do |f| %>
   <div class="row">
     <div class="col-sm-6">
       <% if @folder.errors.any? %>
@@ -61,7 +61,7 @@
         <div class="col-sm-2 title">
           <% destinations = folders_selection_for_doc(document, current_or_guest_user) %>
           <% unless destinations.empty? %>
-            <%= i.select(:folder_id, options_from_collection_for_select(destinations, :id, :name), {include_blank: "Move to..." } ) %>
+            <%= i.select(:folder_id, options_from_collection_for_select(destinations, :id, :name), {include_blank: "Move to..." }, class: "form-control" ) %>
           <% end %>
         </div>
         <div class="col-sm-2 checkbox">
