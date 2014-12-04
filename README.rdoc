@@ -1,14 +1,24 @@
 {<img src="https://travis-ci.org/curationexperts/blacklight_folders.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/curationexperts/blacklight_folders]
 
-== How to add blacklight_folders to your blacklight application
+== To create a blacklight application with blacklight_folders
 
 * Create a new rails application
 
-* Add the <code>blacklight</code> gem and the <code>blacklight_folders</code> gem to your Gemfile, and run <code>bundle install</code>
+* Add the <code>blacklight</code> gem and the <code>blacklight_folders</code> gem to your Gemfile
 
-* Run the blacklight generator with the <code>--devise</code> switch, following the {instructions on the blacklight wiki}[https://github.com/projectblacklight/blacklight/wiki/Quickstart#creating-a-new-application-the-hard-way] to set up your blacklight app.  _NOTE:_ depending on your use, you may also want to include the <code>--marc</code> and <code>--jettywrapper</code> switches.
+* Run <code>bundle install</code>
 
-    $ rails g blacklight:install --devise
+* Run the blacklight generator with the <code>--devise</code> switch, following the {instructions on the blacklight wiki}[https://github.com/projectblacklight/blacklight/wiki/Quickstart#creating-a-new-application-the-hard-way] to set up your blacklight app. _NOTE:_ If you're using blacklight_folders for a library catalog, you probably want the <code>--marc</code> switch as well; if you're running it locally (for testing, etc.), you probably want the <code>--jettywrapper</code> switch too. 
+
+    $ rails g blacklight:install --devise --marc
+
+* Run the blacklight_folders generator
+
+    $ rails g blacklight_folders:install
+
+== To add blacklight_folders to an existing blacklight application
+
+* Add the <code>blacklight_folders</code> gem to your Gemfile, and run <code>bundle install</code>
 
 * Run the blacklight_folders generator
 
