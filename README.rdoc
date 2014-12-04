@@ -1,32 +1,42 @@
 {<img src="https://travis-ci.org/curationexperts/blacklight_folders.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/curationexperts/blacklight_folders]
 
-== How to add blacklight_folders to your blacklight application
+== To create a new blacklight application with blacklight_folders
 
 * Create a new rails application
 
-* Add the <code>blacklight</code> gem and the <code>blacklight_folders</code> gem to your Gemfile, and run <code>bundle install</code>
+* Add the <code>blacklight</code> gem and the <code>blacklight_folders</code> gem to your Gemfile
 
-* Run the blacklight generator with the <code>--devise</code> switch, following the {instructions on the blacklight wiki}[https://github.com/projectblacklight/blacklight/wiki/Quickstart#creating-a-new-application-the-hard-way] to set up your blacklight app.  _NOTE:_ depending on your use, you may also want to include the <code>--marc</code> and <code>--jettywrapper</code> switches.
+* Run <code>bundle install</code>
 
-    $ rails g blacklight:install --devise
+* Run the blacklight generator with the <code>--devise</code> switch, following the {instructions on the blacklight wiki}[https://github.com/projectblacklight/blacklight/wiki/Quickstart#creating-a-new-application-the-hard-way] to set up your blacklight app. _NOTE:_ If you're using blacklight_folders for a library catalog, you probably want the <code>--marc</code> switch as well; if you're running it locally (for testing, etc.), you probably want the <code>--jettywrapper</code> switch too. 
+
+    $ rails g blacklight:install --devise --marc --jettywrapper
 
 * Run the blacklight_folders generator
 
     $ rails g blacklight_folders:install
 
-==== Configuration
+== To add blacklight_folders to an existing blacklight application
 
-* By default, the user's 5 most recently updated folders will appear in the drop-down menu in the navigation bar.  If you want to change the number of folders that appear in the list, you can set the MENU_LIMIT constant in an initializer (config/initializers/blacklight_folders.rb).
+* Add the <code>blacklight_folders</code> gem to your Gemfile, and run <code>bundle install</code>
 
-        Blacklight::Folders::Folder::MENU_LIMIT = 5
+* Run the blacklight_folders generator
 
-* If you wish to change the name of each user's default folder, override the entry for <code>default_folder_name</code> in the localization files, using the <code>config/locales/blacklight_folders.en.yml</code> file as an example.
+    $ rails g blacklight_folders:install
 
 ==== Migrate Existing Data
 
 * If your blacklight app has existing users that already have bookmarks saved, run the migration task to add each user's existing bookmarks to their default folder.
 
     $ rake blacklight_folders:db:migrate_data
+
+== Configuration
+
+* By default, the user's 5 most recently updated folders will appear in the drop-down menu in the navigation bar.  If you want to change the number of folders that appear in the list, you can set the MENU_LIMIT constant in an initializer (config/initializers/blacklight_folders.rb).
+
+        Blacklight::Folders::Folder::MENU_LIMIT = 5
+
+* If you wish to change the name of each user's default folder, override the entry for <code>default_folder_name</code> in the localization files, using the <code>config/locales/blacklight_folders.en.yml</code> file as an example.
 
 ---
 
