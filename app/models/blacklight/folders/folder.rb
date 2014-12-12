@@ -28,36 +28,27 @@ module Blacklight::Folders
     end
 
     def documents
-      doc_ids = bookmarks.pluck(:document_id)
-      return [] if doc_ids.empty?
-
-      rows = doc_ids.count
-      query_ids = doc_ids.map{|id| RSolr.escape(id) }
-      query_ids = query_ids.join(' OR ')
-
-      response = Blacklight.solr.select(params: { q: "id:(#{query_ids})", qt: 'document', rows: rows})['response']['docs']
-
-      # Put them into the right order (same order as doc_ids),
-      # and cast them to the right model.
-      model_names = bookmarks.pluck(:document_type)
-      docs = doc_ids.map.with_index {|id, i|
-        doc_hash = response.find{|doc| doc['id'] == id }
-        solr_document_model = model_names[i].safe_constantize
-        raise "Couldn't find Solr document for id: `#{id}'" unless doc_hash
-        solr_document_model.new(doc_hash)
-      }
+      response.documents
     end
 
-    def default_visibility
-      PRIVATE
+    def response
+      @response ||= begin
+        doc_ids = bookmarks.pluck(:document_id)
+        # return [] if doc_ids.empty?
+
+        rows = doc_ids.count
+        query_ids = doc_ids.map{|id| RSolr.escape(id) }
+        query_ids = query_ids.join(' OR ')
+
+        query = query_ids.blank? ? '' : "id:(#{query_ids})"
+        solr_repository.search(q: query, qt: 'document', rows: rows).tap do |response|
+          response.order = doc_ids
+        end
+      end
     end
 
     def apply_visibility
       self.visibility ||= default_visibility
-    end
-
-    def blacklight_config
-      ::CatalogController.blacklight_config
     end
 
     def add_bookmarks(doc_ids=[])
@@ -68,9 +59,26 @@ module Blacklight::Folders
       end
     end
 
-    def remove_bookmarks(items=[])
-      self.items.delete(items)
+    def remove_bookmarks(target=[])
+      items.delete(target)
     end
+
+    protected
+      def default_visibility
+        PRIVATE
+      end
+
+      def solr_repository
+        @solr_repo ||= Blacklight::SolrRepository.new(blacklight_config)
+      end
+
+      def blacklight_config
+         @blacklight_config ||= begin
+           ::CatalogController.blacklight_config.deep_copy.tap do |config|
+             config.solr_response_model = Blacklight::Folders::SolrResponse
+           end
+         end
+      end
 
     class << self
       # Find the folders that belong to this user and don't contain this document

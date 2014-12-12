@@ -16,16 +16,20 @@ module Blacklight::Folders
       else
         Blacklight::Folders::Folder.accessible_by(current_ability)
       end
-      
+
       if ['created_at', 'updated_at'].include?(params[:order_by])
-        @folders = @folders.order(params[:order_by] + ' DESC') 
+        @folders = @folders.order(params[:order_by] + ' DESC')
       elsif ['name', 'number_of_members'].include?(params[:order_by])
         @folders = @folders.order(params[:order_by])
       end
-      
     end
 
     def show
+      @response = @folder.response
+      respond_to do |format|
+        format.html { }
+        document_export_formats(format, @response)
+      end
     end
 
     def new
@@ -84,6 +88,32 @@ module Blacklight::Folders
       redirect_to :back
     end
 
+    protected
+
+      # These methods are extracted from Blacklight::Catalog and maybe can be extracted to a reusable model.
+      def document_export_formats(format, response)
+        format.any do
+          format_name = params.fetch(:format, '').to_sym
+
+          if response.export_formats.include? format_name
+            render_document_export_format format_name, response
+          else
+            raise ActionController::UnknownFormat.new
+          end
+        end
+      end
+
+      ##
+      # Render the document export formats for a response
+      # First, try to render an appropriate template (e.g. index.endnote.erb)
+      # If that fails, just concatenate the document export responses with a newline.
+      def render_document_export_format format_name, response
+        begin
+          render
+        rescue ActionView::MissingTemplate
+          render text: response.documents.map { |x| x.export_as(format_name) if x.exports_as? format_name }.compact.join("\n"), layout: false
+        end
+      end
 
     private
 

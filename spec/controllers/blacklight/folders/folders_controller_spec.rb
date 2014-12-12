@@ -137,21 +137,40 @@ describe Blacklight::Folders::FoldersController do
         end
       end
 
-      context "as endnote" do
+      context "exporting formats from blacklight-marc" do
         render_views
         let(:document1) { SolrDocument.new(id: 'doc1', marc_display: ['First title']) }
         let(:document2) { SolrDocument.new(id: 'doc2', marc_display: ['Second title']) }
-
+        let(:mock_response) { Blacklight::Folders::SolrResponse.new(nil, nil) }
         before do
-          allow_any_instance_of(Blacklight::Folders::Folder).to receive(:documents).and_return([document1, document2])
-          allow(document1).to receive(:export_as_endnote).and_return('one')
-          allow(document2).to receive(:export_as_endnote).and_return('two')
+          allow(mock_response).to receive(:documents).and_return([document1, document2])
+          allow_any_instance_of(Blacklight::Folders::Folder).to receive(:response).and_return(mock_response)
         end
 
-        it 'displays the folder' do
-          get :show, id: my_private_folder.id, format: :endnote
-          expect(response).to be_successful
-          expect(response.body).to eq "one\ntwo\n\n"
+        context "as endnote" do
+          before do
+            allow(document1).to receive(:export_as_endnote).and_return('one')
+            allow(document2).to receive(:export_as_endnote).and_return('two')
+          end
+
+          it 'displays the folder' do
+            get :show, id: my_private_folder.id, format: :endnote
+            expect(response).to be_successful
+            expect(response.body).to eq "one\ntwo\n\n"
+          end
+        end
+
+        context "as refworks" do
+          before do
+            allow(document1).to receive(:export_as_refworks_marc_txt).and_return('one')
+            allow(document2).to receive(:export_as_refworks_marc_txt).and_return('two')
+          end
+
+          it 'displays the folder' do
+            get :show, id: my_private_folder.id, format: :refworks_marc_txt
+            expect(response).to be_successful
+            expect(response.body).to eq "one\ntwo"
+          end
         end
       end
     end
