@@ -1,4 +1,4 @@
-{<img src="https://travis-ci.org/curationexperts/blacklight_folders.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/curationexperts/blacklight_folders]
+{<img src="https://travis-ci.org/projectblacklight/blacklight_folders.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/projectblacklight/blacklight_folders]
 = Blacklight Folders
 
 https://cloud.githubusercontent.com/assets/92044/5416800/a434b49e-81f8-11e4-85a0-d302aa5c7e24.png
