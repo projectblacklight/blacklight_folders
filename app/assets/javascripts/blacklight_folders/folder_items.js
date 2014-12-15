@@ -23,11 +23,11 @@ Blacklight.onLoad(function(){
       url: '/blacklight/folders/' + folderId + '.json',
       data: { folder: {items_attributes: items}},
       success: function(data, status){
-      }   
+      }
     });
 
     // Update the position text in the form
-    var textElements = $('.dd input:text');
+    var textElements = $('.dd .position-input');
     for(var i in textElements) {
       textElements[i].value = parseInt(i) + 1;
     }
