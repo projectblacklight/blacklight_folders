@@ -1,10 +1,10 @@
-<% in_folders, _ = @document.folders_for_user(current_or_guest_user) %>
+<% in_folders = Blacklight::Folders::Folder.for_user(current_or_guest_user).with_document(@document) %>
 
 <% unless in_folders.empty? %>
   <div class="panel panel-default folders">
     <div class="panel-heading">Folders</div>
     <div class="panel-body">
-      This item is contained in:
+      <%= t('.contained_in') %>
       <ul>
         <% in_folders.each do |folder| %>
           <li> <%= link_to folder.name, blacklight_folders.folder_path(folder) %> </li>

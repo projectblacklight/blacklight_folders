@@ -13,4 +13,8 @@ module Blacklight::Folders::User
   def default_folder
     folders.where(name: Blacklight::Folders::Folder.default_folder_name).first
   end
+
+  def ability
+    @ability ||= ::Ability.new(self)
+  end
 end

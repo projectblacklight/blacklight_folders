@@ -81,15 +81,24 @@ module Blacklight::Folders
       end
 
     class << self
-      # Find the folders that belong to this user and don't contain this document
-      def without_doc_for_user(document, user)
+
+      # Find the folders that belong to this user
+      def for_user(user)
         if user.new_record?
           user.folders
         else
-          subquery = Blacklight::Folders::FolderItem.select(:folder_id).joins(:bookmark).where('bookmarks.document_id' => document.id).to_sql
-
-          where(user: user).where("id not in (#{subquery})")
+          accessible_by(user.ability, :update).order(:name)
         end
+      end
+
+      # Find the folders that contain this document
+      def with_document(document)
+        where("id in (#{membership_query(document)})")
+      end
+
+      # Find the folders that don't contain this document
+      def without_document(document)
+        where("id not in (#{membership_query(document)})")
       end
 
       def most_recent
@@ -99,6 +108,13 @@ module Blacklight::Folders
       def default_folder_name
         I18n.translate(:'blacklight.folders.default_folder_name')
       end
+
+      private
+
+        def membership_query(document)
+          Blacklight::Folders::FolderItem.select(:folder_id).joins(:bookmark).where('bookmarks.document_id' => document.id).to_sql
+        end
+
     end # class << self
   end
 end

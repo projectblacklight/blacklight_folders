@@ -2,12 +2,7 @@ require 'rails_helper'
 
 describe Blacklight::Folders::Folder do
 
-  let(:subject) { FactoryGirl.build(:folder) }
-
-  it 'a factory-created folder is valid' do
-    folder = FactoryGirl.build(:folder)
-    expect(folder.valid?).to eq true
-  end
+  let(:subject) { build(:folder) }
 
   it 'requires a user' do
     expect(subject.valid?).to eq true
@@ -82,33 +77,36 @@ describe Blacklight::Folders::Folder do
     end
   end
 
-  describe '.without_doc_for_user' do
+  context "with a folder that has a document and an empty folder" do
+    let(:me) { create(:user) }
+    let!(:my_folder) { me.folders.first }
+
+    let(:doc) { SolrDocument.new(id: '12345') }
+    let!(:my_item) { create(:item, folder: my_folder) }
+
+    let(:folder_with_doc) { create(:folder, user: me) }
+
+    before { folder_with_doc.bookmarks.create(document: doc, user: me) }
+
+    describe '.without_document' do
+      subject { Blacklight::Folders::Folder.without_document(doc) }
+      it { is_expected.not_to include folder_with_doc }
+    end
+
+    describe '.with_document' do
+      subject { Blacklight::Folders::Folder.with_document(doc) }
+      it { is_expected.to eq [folder_with_doc] }
+    end
+  end
+
+  describe '.for_user' do
     let(:me) { create(:user) }
     let!(:my_folder) { me.folders.first }
     let(:you) { create(:user) }
     let!(:your_folder) { you.folders.first }
 
-    let(:doc) { SolrDocument.new(id: '12345') }
-    let!(:my_item) { create(:item, folder: my_folder) }
-    let!(:your_item) { create(:item, folder: your_folder) }
-
-    it 'finds only my folders' do
-      mine = Blacklight::Folders::Folder.without_doc_for_user(doc, me)
-      yours = Blacklight::Folders::Folder.without_doc_for_user(doc, you)
-      expect(mine).to eq [my_folder]
-      expect(yours).to eq [your_folder]
-    end
-
-    it "finds only the folders that don't contain the doc" do
-      my_folder_with_doc = create(:folder, user: me)
-      my_bookmark_with_doc = my_folder_with_doc.bookmarks.create(document: doc, user: me)
-
-      my_folders = Blacklight::Folders::Folder.where(user_id: me.id)
-      expect(my_folders.map(&:id).sort).to eq [my_folder.id, my_folder_with_doc.id].sort
-
-      result = Blacklight::Folders::Folder.without_doc_for_user(doc, me)
-      expect(result).to eq [my_folder]
-    end
+    subject { Blacklight::Folders::Folder.for_user(me) }
+    it { is_expected.to eq [my_folder] }
   end
 
   describe '#documents' do

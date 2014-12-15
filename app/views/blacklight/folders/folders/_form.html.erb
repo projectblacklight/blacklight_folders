@@ -59,9 +59,9 @@
           <%= link_to_document document, document_show_link_field(document) %>
         </div>
         <div class="col-sm-2 title">
-          <% destinations = folders_selection_for_doc(document, current_or_guest_user) %>
-          <% unless destinations.empty? %>
-            <%= i.select(:folder_id, options_from_collection_for_select(destinations, :id, :name), {include_blank: "Move to..." }, class: "form-control" ) %>
+          <% options_for_select = options_for_folder_select(without: document) %>
+          <% unless options_for_select.empty? %>
+            <%= i.select :folder_id, options_for_select, { include_blank: "Move to..." }, class: "form-control"  %>
           <% end %>
         </div>
         <div class="col-sm-2 checkbox">

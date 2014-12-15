@@ -45,6 +45,12 @@ en:
       add_to_folder:
         select:
           prompt: "Add to folder"
+      show:
+        add_to_folder:
+          select:
+            prompt: "Select a Folder"
+        folder_controls:
+          contained_in: 'This item is contained in:'
       folders:
         edit:
           header: "Manage Folder"

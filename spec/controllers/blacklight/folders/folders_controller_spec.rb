@@ -371,7 +371,7 @@ describe Blacklight::Folders::FoldersController do
           expect(response).to render_template(:index)
           expect(response).to be_successful
         end
-        
+
         it 'displays the folders in descending date order' do
           get :index, order_by: 'created_at'
 
@@ -379,7 +379,6 @@ describe Blacklight::Folders::FoldersController do
           expect(response).to render_template(:index)
           expect(response).to be_successful
         end
-        
       end
     end
 
