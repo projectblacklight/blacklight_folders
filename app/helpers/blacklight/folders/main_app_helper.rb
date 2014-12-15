@@ -12,7 +12,11 @@ module Blacklight::Folders::MainAppHelper
       sort_folders_with_default_first(folders, current_or_guest_user.default_folder)
     end
 
-    options_from_collection_for_select(collection, :id, :name)
+    truncated_options_for_select(collection, :name, :id, length: 25, separator: ' ')
+  end
+
+  def truncated_options_for_select(collection, value, key, opts = {})
+    options_for_select(collection.map { |c| [truncate(c[value], opts), c[key]] } )
   end
 
   def sort_folders_with_default_first(folders, default)

@@ -29,4 +29,12 @@ describe Blacklight::Folders::MainAppHelper do
       end
     end
   end
+
+  describe "#truncated_options_for_select" do
+    let(:alpha) { build(:folder, name: 'Alpha is good', id: 1) }
+    let(:beta) { build(:folder, name: 'Beta is so long', id: 2) }
+    subject { helper.truncated_options_for_select([alpha, beta], :name, :id, length: 9, separator: ' ') }
+    it { is_expected.to eq "<option value=\"1\">Alpha...</option>\n" +
+                             "<option value=\"2\">Beta...</option>" }
+  end
 end
