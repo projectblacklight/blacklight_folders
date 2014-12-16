@@ -5,6 +5,6 @@
   <% end %>
   <% if @folder.documents.any? {|d| d.exports_as? :refworks_marc_txt } %>
     <li class="refworks">
-    <%= link_to t('blacklight.tools.refworks'), refworks_export_url(url: url_for(format: :refworks_marc_txt, only_path: false)), class: "btn btn-default", id: "refworksLink" %>
+    <%= link_to t('blacklight.tools.refworks'), refworks_export_url(url: folder_export_url(@folder, :refworks_marc_txt)), class: "btn btn-default", id: "refworksLink" %>
     </li>
   <% end %>

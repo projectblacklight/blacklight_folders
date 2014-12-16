@@ -114,6 +114,27 @@ describe Blacklight::Folders::FoldersController do
     end
   end  # not logged in
 
+  describe "when the user is identified by a token" do
+    context "exporting refworks" do
+      render_views
+      let(:document1) { SolrDocument.new(id: 'doc1', marc_display: ['First title']) }
+      let(:document2) { SolrDocument.new(id: 'doc2', marc_display: ['Second title']) }
+      let(:mock_response) { Blacklight::Folders::SolrResponse.new(nil, nil) }
+      before do
+        allow(mock_response).to receive(:documents).and_return([document1, document2])
+        allow_any_instance_of(Blacklight::Folders::Folder).to receive(:response).and_return(mock_response)
+        allow(document1).to receive(:export_as_refworks_marc_txt).and_return('one')
+        allow(document2).to receive(:export_as_refworks_marc_txt).and_return('two')
+        expect(controller).to receive(:decrypt_user_id).with('ABCD').and_return(user.id)
+      end
+
+      it 'displays the folder' do
+        get :show, id: my_private_folder.id, format: :refworks_marc_txt, encrypted_user_id: 'ABCD'
+        expect(response).to be_successful
+        expect(response.body).to eq "one\ntwo"
+      end
+    end
+  end
 
   describe 'when the user is logged in' do
     before { sign_in user }

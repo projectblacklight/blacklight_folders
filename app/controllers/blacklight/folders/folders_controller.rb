@@ -89,6 +89,14 @@ module Blacklight::Folders
 
     protected
 
+      def current_ability
+        if token_user
+          ::Ability.new(token_user)
+        else
+          super
+        end
+      end
+
       # These methods are extracted from Blacklight::Catalog and maybe can be extracted to a reusable model.
       def document_export_formats(format, response)
         format.any do
