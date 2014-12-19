@@ -1,5 +1,6 @@
 {<img src="https://travis-ci.org/projectblacklight/blacklight_folders.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/projectblacklight/blacklight_folders]
 = Blacklight Folders
+{<img src="https://cloud.githubusercontent.com/assets/92044/5508060/91ba9240-876e-11e4-8a15-2cf1ee60d312c.png" alt="screenshot" />}[https://cloud.githubusercontent.com/assets/92044/5508060/91ba9240-876e-11e4-8a15-2cf1ee60d312.png]
 
 {<img src="https://cloud.githubusercontent.com/assets/92044/5416800/a434b49e-81f8-11e4-85a0-d302aa5c7e24.png" alt="screenshot" />}[https://cloud.githubusercontent.com/assets/92044/5416800/a434b49e-81f8-11e4-85a0-d302aa5c7e24.png]
 
