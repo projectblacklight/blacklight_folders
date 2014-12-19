@@ -47,35 +47,4 @@
 
 ---
 
-== Developer Notes
-
-For development on the blacklight_folders gem itself.
-
-==== Grab dependencies
-  $ export RAILS_VERSION=4.1.7
-  $ bundle install
-
-==== Install Jetty
-
-  $ rake jetty:unzip
-  $ rake jetty:add_test_core
-  $ rake jetty:start
-
-==== Generate a test app and run the specs
-
-  $ rake jetty:start
-  $ rake engine_cart:clean
-  $ rake engine_cart:generate
-  $ rake spec
-
-==== Run the rails server for the generated app
-
-  $ rake engine_cart:generate
-  $ cd spec/internal
-  $ rails s
-
-==== Create test data for your generated app
-
-  $ cd spec/internal
-  $ rake blacklight:solr:seed
-
+{Developers Guide}[https://github.com/projectblacklight/blacklight_folders/wiki/Developer-Guide]
