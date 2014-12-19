@@ -2,9 +2,10 @@
 = Blacklight Folders
 {<img src="https://cloud.githubusercontent.com/assets/92044/5508092/f2ad37b0-876e-11e4-8f73-f08afe23c17b.png" alt="screenshot" />}[https://cloud.githubusercontent.com/assets/92044/5508092/f2ad37b0-876e-11e4-8f73-f08afe23c17b.png]
 ---
+{<img src="https://cloud.githubusercontent.com/assets/92044/5416801/a437a8c0-81f8-11e4-9285-01d230caf80c.png" alt="screenshot" />}[https://cloud.githubusercontent.com/assets/92044/5416801/a437a8c0-81f8-11e4-9285-01d230caf80c.png]
+---
 {<img src="https://cloud.githubusercontent.com/assets/92044/5416800/a434b49e-81f8-11e4-85a0-d302aa5c7e24.png" alt="screenshot" />}[https://cloud.githubusercontent.com/assets/92044/5416800/a434b49e-81f8-11e4-85a0-d302aa5c7e24.png]
 ---
-{<img src="https://cloud.githubusercontent.com/assets/92044/5416801/a437a8c0-81f8-11e4-9285-01d230caf80c.png" alt="screenshot" />}[https://cloud.githubusercontent.com/assets/92044/5416801/a437a8c0-81f8-11e4-9285-01d230caf80c.png]
 
 == To create a new blacklight application with blacklight_folders
 
