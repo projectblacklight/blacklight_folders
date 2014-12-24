@@ -27,6 +27,7 @@ en:
         visibility: "Visibility"
         created: "Created"
         updated: "Updated"
+        description: "Description"
   activerecord:
     models:
       blacklight/folders/folder_item: Item

@@ -17,6 +17,12 @@ module BlacklightFolders
       rake "db:migrate"
     end
 
+    def add_configurations
+      insert_into_file 'config/application.rb', after: "< Rails::Application\n" do
+        "    config.action_view.sanitized_allowed_tags = ['b', 'ol', 'li', 'br', 'p', 'strong', 'h1', 'h2', 'img', 'a']\n"
+      end
+    end
+
     def add_model_mixins
       inject_into_class 'app/models/user.rb', User, '  include Blacklight::Folders::User'
       inject_into_class 'app/models/solr_document.rb', SolrDocument, '  include Blacklight::Folders::SolrDocument'
