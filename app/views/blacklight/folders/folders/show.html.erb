@@ -9,6 +9,13 @@
      </div>
   <% end %>
   <h1><%= @folder.name %></h1>
+
+  <div>
+    <% if @folder.description %>
+      <span class="description-label"><%= t("blacklight/folders/folder.description", scope: "helpers.label") %>:</span> <span class="description"><%= sanitize @folder.description %></span>
+    <% end %>
+  </div>
+
   <div>
     <span class="owner-label"><%= t("blacklight/folders/folder.user", scope: "helpers.label") %>:</span> <span class="owner"><%= @folder.user.guest? ? 'Guest' : @folder.user %></span>
   </div>
