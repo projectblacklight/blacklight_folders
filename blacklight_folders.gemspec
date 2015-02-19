@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.description = "Organized bookmarks for Blacklight"
   s.license     = "See LICENSE file"
 
-  s.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.rdoc"]
+  s.files = Dir["{app,config,db,lib,vendor}/**/*", "LICENSE", "Rakefile", "README.rdoc"]
 
   s.add_dependency "rails", ">= 4.0.1", "< 5"
   s.add_dependency "acts_as_list", ">= 0.4.0"
