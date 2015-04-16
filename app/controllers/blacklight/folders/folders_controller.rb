@@ -8,7 +8,12 @@ module Blacklight::Folders
     load_and_authorize_resource class: Blacklight::Folders::Folder, except: [:add_bookmarks, :remove_bookmarks]
     before_filter :load_and_authorize_folder, only: [:add_bookmarks, :remove_bookmarks]
     before_filter :clear_session_search_params, only: [:show]
-
+    rescue_from ActiveRecord::RecordNotFound do |exception|
+      params.delete :id
+      flash[:error] = "The folder you are trying to access doesn't exist."
+      redirect_to main_app.root_url
+    end
+    
     def index
       @folders = if current_or_guest_user.new_record?
         # Just show the temporary folder
