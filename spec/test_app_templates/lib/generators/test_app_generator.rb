@@ -24,10 +24,10 @@ class TestAppGenerator < Rails::Generators::Base
     generate 'blacklight_folders:install'
   end
 
-  def config_solr
+  def config_blacklight
     src_dir = File.expand_path('../../../../../spec/test_app_templates', __FILE__)
-    remove_file 'config/solr.yml'
-    copy_file File.join(src_dir, 'solr.yml'), 'config/solr.yml'
+    remove_file 'config/blacklight.yml'
+    copy_file File.join(src_dir, 'blacklight.yml'), 'config/blacklight.yml'
   end
 
 end
