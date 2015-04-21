@@ -51,6 +51,7 @@ en:
             prompt: "Select a Folder"
         folder_controls:
           contained_in: 'This item is contained in:'
+        invalid_folder_id: "The folder you are trying to access doesn't exist."
       folders:
         edit:
           header: "Manage Folder"
