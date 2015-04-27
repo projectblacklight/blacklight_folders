@@ -87,7 +87,7 @@ module Blacklight::Folders
         if @folder.save
           message = doc_ids.size == 1 ? t(:'helpers.submit.folder.added_one', folder_name: @folder.name) : t(:'helpers.submit.folder.added_many', folder_name: @folder.name)
           if num_ids > doc_ids.size
-            message += " One or more items you've selected were previously added to that folder."
+            message += ". One or more items you've selected were previously added to that folder."
           end
           redirect_to :back, notice: message
         else
