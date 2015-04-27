@@ -75,13 +75,19 @@ module Blacklight::Folders
 
     def add_bookmarks
       doc_ids = Array(params['document_ids'].split(',').map(&:strip))
-      @folder.add_bookmarks(doc_ids)
-
-      if @folder.save
-        message = doc_ids.size == 1 ? t(:'helpers.submit.folder.added_one', folder_name: @folder.name) : t(:'helpers.submit.folder.added_many', folder_name: @folder.name)
-        redirect_to :back, notice: message
+      doc_ids.delete_if { |id|
+        @folder.documents.find{ |doc| doc.id == id }
+      }
+      if doc_ids.empty?
+        redirect_to :back
       else
-        redirect_to :back, alert: 'Unable to save bookmarks.'
+        @folder.add_bookmarks(doc_ids)
+        if @folder.save
+          message = doc_ids.size == 1 ? t(:'helpers.submit.folder.added_one', folder_name: @folder.name) : t(:'helpers.submit.folder.added_many', folder_name: @folder.name)
+          redirect_to :back, notice: message
+        else
+          redirect_to :back, alert: 'Unable to save bookmarks.'
+        end
       end
     end
 
