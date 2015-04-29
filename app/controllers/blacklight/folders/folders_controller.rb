@@ -41,6 +41,10 @@ module Blacklight::Folders
     end
 
     def edit
+      # Sometimes folder items positions are wrong. Correct them here.
+      @folder.items.each_with_index do |item, index|
+        item.position = index + 1
+      end
     end
 
     def create
