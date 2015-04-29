@@ -21,6 +21,9 @@ en:
         updated: "The folder was successfully updated."
         added_one: "Added document to %{folder_name}"
         added_many: "Added documents to %{folder_name}"
+        duplicate_one: "That item was previously added to the folder."
+        duplicate_many: "Those items were previously added to the folder."
+        duplicate_some: "One or more items you've selected were previously added to that folder"
     label:
       blacklight/folders/folder:
         user: "Owner"

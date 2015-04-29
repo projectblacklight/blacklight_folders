@@ -80,16 +80,18 @@ module Blacklight::Folders
         @folder.documents.find{ |doc| doc.id == id }
       }
       if doc_ids.empty?
-        message = num_ids == 1 ? 'That item was previously added to the folder.' : 'Those items were previously added to the folder.'
-        redirect_to :back, notice: message
+        alert = num_ids == 1 ? t(:'helpers.submit.folder.duplicate_one'): t(:'helpers.submit.folder.duplicate_many')
+        redirect_to :back, alert: alert
       else
         @folder.add_bookmarks(doc_ids)
         if @folder.save
           message = doc_ids.size == 1 ? t(:'helpers.submit.folder.added_one', folder_name: @folder.name) : t(:'helpers.submit.folder.added_many', folder_name: @folder.name)
-          if num_ids > doc_ids.size
-            message += ". One or more items you've selected were previously added to that folder."
+          if num_ids == doc_ids.size
+            redirect_to :back, notice: message
+          else
+            alert = t(:'helpers.submit.folder.duplicate_some')
+            redirect_to :back, notice: message, alert: alert
           end
-          redirect_to :back, notice: message
         else
           redirect_to :back, alert: 'Unable to save bookmarks.'
         end
