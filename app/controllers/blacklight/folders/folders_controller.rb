@@ -74,7 +74,7 @@ module Blacklight::Folders
 
     def destroy
       @folder.destroy
-      redirect_to main_app.root_path, notice: "Folder \"#{@folder.name}\" was successfully deleted."
+      redirect_to blacklight_folders.folders_path, notice: "Folder \"#{@folder.name}\" was successfully deleted."
     end
 
     def add_bookmarks
