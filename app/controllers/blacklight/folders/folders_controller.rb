@@ -59,12 +59,16 @@ module Blacklight::Folders
     def update
       form = folder_form_class.new(create_params)
       if form.update(@folder)
-        respond_to do |format|
-          format.html do
-            redirect_to @folder, notice: t(:'helpers.submit.folder.updated')
-          end
-          format.json do
-            render json: @folder
+        if delete_or_move form.instance_variable_get('@params')['items_attributes']
+          redirect_to :back, notice: t(:'helpers.submit.folder.updated')
+        else
+          respond_to do |format|
+            format.html do
+              redirect_to @folder, notice: t(:'helpers.submit.folder.updated')
+            end
+            format.json do
+              render json: @folder
+            end
           end
         end
       else
@@ -179,6 +183,15 @@ module Blacklight::Folders
           @folder = Folder.find(id)
         end
         authorize! :update_bookmarks, @folder
+      end
+      
+      def delete_or_move(items)
+        items.each do |item|
+          if (item[1]['_destroy'] and item[1]['_destroy'] == '1') or item[1]['folder_id']
+            true
+          end
+        end
+        false
       end
   end
 end
