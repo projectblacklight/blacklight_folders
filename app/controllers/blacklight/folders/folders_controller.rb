@@ -184,14 +184,14 @@ module Blacklight::Folders
         end
         authorize! :update_bookmarks, @folder
       end
-      
+
       def delete_or_move(items)
         items.each do |item|
           if (item[1]['_destroy'] and item[1]['_destroy'] == '1') or item[1]['folder_id']
-            true
+            return true
           end
         end
-        false
+        return false
       end
   end
 end
