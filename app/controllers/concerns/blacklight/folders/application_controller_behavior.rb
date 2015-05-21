@@ -20,7 +20,7 @@ module Blacklight::Folders
     # flash error if the user is signed in, othewise tells the user to sign in.
     def unauthorized_access(exception)
       if current_user
-        redirect_to main_app.root_url, alert: exception.message
+        redirect_to main_app.root_url, alert: 'The folder you are attempting to view is private and cannot be displayed.'
       else
         redirect_to main_app.new_user_session_path, alert: 'Please sign in to continue.'
       end
