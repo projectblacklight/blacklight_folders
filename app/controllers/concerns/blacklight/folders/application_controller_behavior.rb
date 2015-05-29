@@ -22,6 +22,7 @@ module Blacklight::Folders
       if current_user
         redirect_to main_app.root_url, alert: 'The folder you are attempting to view is private and cannot be displayed.'
       else
+        session[:folder_id] = params[:id]
         redirect_to main_app.new_user_session_path, alert: 'That folder is private; if you are the owner of the folder, sign in to continue.'
       end
     end
