@@ -47,7 +47,7 @@ en:
     folders:
       add_to_folder:
         select:
-          prompt: "Add to folder"
+          prompt: "Add all to folder"
       show:
         add_to_folder:
           select:
