@@ -175,6 +175,7 @@ describe Blacklight::Folders::FoldersController do
           end
 
           it 'displays the folder' do
+            mock_response.order = ['doc1', 'doc2']
             get :show, id: my_private_folder.id, format: :endnote
             expect(response).to be_successful
             expect(response.body).to eq "one\ntwo\n\n"

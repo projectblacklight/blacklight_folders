@@ -28,7 +28,7 @@ module Blacklight::Folders
     end
 
     def documents
-      response.documents
+      response.docs
     end
 
     def response
