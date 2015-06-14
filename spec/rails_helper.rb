@@ -31,10 +31,6 @@ FactoryGirl.find_definitions
 
 require "support/features/sign_in"
 
-# Checks for pending migrations before tests are run.
-# If you are not using ActiveRecord, you can remove this line.
-ActiveRecord::Migration.maintain_test_schema!
-
 require 'capybara/poltergeist'
 Capybara.javascript_driver = :poltergeist
 
