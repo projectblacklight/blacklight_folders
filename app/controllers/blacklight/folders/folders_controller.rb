@@ -15,6 +15,10 @@ module Blacklight::Folders
     end
 
     def index
+      if current_user and params[:default] == '1'
+        redirect_to '/myfolders/folders/' + current_user.default_folder.id.to_s
+      end
+
       @folders = if current_or_guest_user.new_record?
         # Just show the temporary folder
         current_or_guest_user.folders
