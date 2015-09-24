@@ -54,7 +54,7 @@ module Blacklight::Folders
     def create
       @folder.user = current_user
       if @folder.save
-        redirect_to @folder
+        redirect_to  "/#{session[:campus]}" + blacklight_folders.folders_path + "/" + @folder.id.to_s
       else
         render :new
       end
@@ -82,7 +82,7 @@ module Blacklight::Folders
 
     def destroy
       @folder.destroy
-      redirect_to blacklight_folders.folders_path, notice: "Folder \"#{@folder.name}\" was successfully deleted."
+      redirect_to "/#{session[:campus]}" + blacklight_folders.folders_path, notice: "Folder \"#{@folder.name}\" was successfully deleted."
     end
 
     def add_bookmarks
