@@ -63,8 +63,10 @@ module Blacklight::Folders
     def update
       form = folder_form_class.new(create_params)
       if form.update(@folder)
-        if delete_or_move form.instance_variable_get('@params')['items_attributes']
-          redirect_to :back, notice: t(:'helpers.submit.folder.updated')
+        if params.has_key?(:items_attributes)
+          if delete_or_move form.instance_variable_get('@params')['items_attributes']
+            redirect_to :back, notice: t(:'helpers.submit.folder.updated')
+          end
         else
           respond_to do |format|
             format.html do
