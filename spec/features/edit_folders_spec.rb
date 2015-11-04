@@ -13,7 +13,7 @@ describe 'Editing a folder' do
   let!(:folder_item2) { create(:folder_item, bookmark: bookmark2, folder: folder) }
 
   before do
-    Blacklight.solr.tap do |solr|
+    Blacklight.default_index.connection.tap do |solr|
       solr.delete_by_query("*:*", params: { commit: true })
       solr.add [document1.to_h, document2.to_h]
       solr.commit

@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", ">= 4.0.1", "< 5"
   s.add_dependency "acts_as_list", ">= 0.4.0"
-  s.add_dependency "blacklight", ">= 5.8.0", "< 6"
+  s.add_dependency "blacklight", ">= 5.15.0", "< 6"
   s.add_dependency "cancancan", "~> 1.9"
   s.add_dependency 'select2-rails', '~> 3.5.9.1'
 

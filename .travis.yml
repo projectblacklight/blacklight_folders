@@ -1,11 +1,10 @@
 language: ruby
-cache: bundler
 sudo: false
 notifications:
   email: false
 
 rvm:
-  - 2.2
+  - 2.2.3
 
 env:
   global:

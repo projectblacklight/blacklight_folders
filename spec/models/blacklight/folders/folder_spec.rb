@@ -124,18 +124,22 @@ describe Blacklight::Folders::Folder do
         subject.save!
 
 
-        Blacklight.solr.delete_by_query("*:*", params: { commit: true })
-        Blacklight.solr.add(doc_ddh.to_h)
-        Blacklight.solr.add(doc_123.to_h)
-        Blacklight.solr.add(id: not_my_doc.id)
-        Blacklight.solr.commit
+        Blacklight.default_index.connection.tap do |conn|
+          conn.delete_by_query("*:*", params: { commit: true })
+          conn.add(doc_ddh.to_h)
+          conn.add(doc_123.to_h)
+          conn.add(id: not_my_doc.id)
+          conn.commit
+        end
       end
 
       after do
-        Blacklight.solr.delete_by_id(doc_ddh.id)
-        Blacklight.solr.delete_by_id(doc_123.id)
-        Blacklight.solr.delete_by_id(not_my_doc.id)
-        Blacklight.solr.commit
+        Blacklight.default_index.connection.tap do |conn|
+          conn.delete_by_id(doc_ddh.id)
+          conn.delete_by_id(doc_123.id)
+          conn.delete_by_id(not_my_doc.id)
+          conn.commit
+        end
       end
 
       it 'returns the documents for this folder in order' do
