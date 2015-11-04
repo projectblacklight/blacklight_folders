@@ -32,10 +32,12 @@ if File.exists?(file)
   puts "Loading #{file} ..." if $DEBUG # `ruby -d` or `bundle -v`
   instance_eval File.read(file)
 else
-  if ENV['RAILS_VERSION']
-    gem 'rails', ENV['RAILS_VERSION']
+  gem 'rails', ENV['RAILS_VERSION'] if ENV['RAILS_VERSION']
+
+  if ENV['RAILS_VERSION'] and ENV['RAILS_VERSION'] !~ /^4.2/
+    gem 'sass-rails', ">= 5.0"
   else
-    # explicitly include sass-rails to get compatible sprocket dependencies
-    gem 'sass-rails'
+    gem "bootstrap-sass", "3.3.4.1"
+    gem 'sass-rails', "< 5.0"
   end
 end
