@@ -31,16 +31,19 @@ module Blacklight::Folders
       response.docs
     end
 
+    class EmptySet
+      def docs
+        []
+      end
+    end
+
     def response
       @response ||= begin
         doc_ids = bookmarks.pluck(:document_id)
-        # return [] if doc_ids.empty?
+        return EmptySet.new if doc_ids.empty?
 
         rows = doc_ids.count
-        query_ids = doc_ids.map{|id| RSolr.escape(id) }
-        query_ids = query_ids.join(' OR ')
-
-        query = query_ids.blank? ? '' : "id:(#{query_ids})"
+        query = "{!terms f=id}#{doc_ids.join(',')}"
         solr_repository.search(q: query, qt: 'document', rows: rows).tap do |response|
           response.order = doc_ids
         end
@@ -55,7 +58,7 @@ module Blacklight::Folders
       doc_ids = Array(doc_ids)
       doc_ids.each do |doc_id|
         b = bookmarks.build(document_id: doc_id, user_id: user_id)
-        b.document_type = blacklight_config.solr_document_model.to_s
+        b.document_type = blacklight_config.document_model.to_s
       end
     end
 
@@ -75,7 +78,7 @@ module Blacklight::Folders
       def blacklight_config
          @blacklight_config ||= begin
            ::CatalogController.blacklight_config.deep_copy.tap do |config|
-             config.solr_response_model = Blacklight::Folders::SolrResponse
+             config.response_model = Blacklight::Folders::SolrResponse
            end
          end
       end

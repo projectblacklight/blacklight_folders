@@ -8,7 +8,7 @@ module Blacklight::Folders
     end
 
     def folder_export_url(folder, format)
-      polymorphic_path([blacklight_folders, folder], format: format, only_path: false, encrypted_user_id: encrypt_user_id(current_or_guest_user.id))
+      polymorphic_url([blacklight_folders, folder], format: format, encrypted_user_id: encrypt_user_id(current_or_guest_user.id))
     end
   end
 end

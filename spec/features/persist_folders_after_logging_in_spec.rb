@@ -8,7 +8,7 @@ feature "Persist folders after logging in", :js do
   let(:user) { create(:user) }
 
   before do
-    Blacklight.solr.tap do |solr|
+    Blacklight.default_index.connection.tap do |solr|
       solr.delete_by_query("*:*", params: { commit: true })
       solr.add [document1.to_h, document2.to_h, document3.to_h]
       solr.commit

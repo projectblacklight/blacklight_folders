@@ -8,7 +8,7 @@ describe 'Add an item to a folder' do
   let!(:folder2) { create(:folder, user: user, name: 'Folder 2') }
 
   before do
-    Blacklight.solr.tap do |solr|
+    Blacklight.default_index.connection.tap do |solr|
       solr.delete_by_query("*:*", params: { commit: true })
       solr.add [document1.to_h]
       solr.commit

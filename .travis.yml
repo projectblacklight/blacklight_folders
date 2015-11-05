@@ -1,8 +1,10 @@
+language: ruby
+sudo: false
 notifications:
   email: false
 
 rvm:
-  - 2.1
+  - 2.2.3
 
 env:
   global:
