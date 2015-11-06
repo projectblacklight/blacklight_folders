@@ -42,10 +42,13 @@ module Blacklight::Folders
         doc_ids = bookmarks.pluck(:document_id)
         return EmptySet.new if doc_ids.empty?
 
-        rows = doc_ids.count
-        query = "{!terms f=id}#{doc_ids.join(',')}"
-        solr_repository.search(q: query, qt: 'document', rows: rows).tap do |response|
+        search_builder = blacklight_config.search_builder_class.new([], self)
+        query = search_builder.
+                where(blacklight_config.document_model.unique_key => doc_ids).
+                merge(fl: '*')
+        solr_response = solr_repository.search(query).tap do |response|
           response.order = doc_ids
+          response.document_model = blacklight_config.document_model
         end
       end
     end

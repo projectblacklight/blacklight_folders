@@ -170,6 +170,52 @@ describe Blacklight::Folders::Folder do
         expect(subject.reload.visibility).to eq Blacklight::Folders::Folder::PRIVATE
       end
     end
+
+    describe 'with custom document models' do
+      class MockDocument
+        include Blacklight::Solr::Document
+      end
+
+      let(:doc_mock1) { MockDocument.new(id: '1', title_t: ['A title'], my_unique_key_s: '123') }
+      let(:doc_mock2) { MockDocument.new(id: '2', title_t: ['Another title'], my_unique_key_s: '234') }
+
+      before do
+        subject.send(:blacklight_config).document_model = MockDocument
+        MockDocument.unique_key = "my_unique_key_s"
+        b1 = FactoryGirl.create(:bookmark, document_id: doc_mock1.id, user_id: subject.user_id, document_type: 'MockDocument')
+        b2 = FactoryGirl.create(:bookmark, document_id: doc_mock2.id, user_id: subject.user_id, document_type: 'MockDocument')
+        subject.items.build([{ bookmark: b1, position: 2 }, { bookmark: b2, position: 1 }])
+        subject.save!
+
+
+        Blacklight.default_index.connection.tap do |conn|
+          conn.delete_by_query("*:*", params: { commit: true })
+          conn.add(doc_mock1.to_h)
+          conn.add(doc_mock2.to_h)
+          conn.commit
+        end
+      end
+
+      after do
+        subject.send(:blacklight_config).document_model = SolrDocument
+        Blacklight.default_index.connection.tap do |conn|
+          conn.delete_by_id(doc_mock1.id)
+          conn.delete_by_id(doc_mock2.id)
+          conn.commit
+        end
+      end
+
+      it 'returns the documents for this folder in order' do
+        expect(subject.items.count).to eq 2
+        expect(subject.documents.map{|doc| doc['my_unique_key_s']}).to eq [doc_mock2.id, doc_mock1.id]
+        expect(subject.documents.map{|doc| doc['title_t']}).to eq [doc_mock2['title_t'], doc_mock1['title_t']]
+      end
+
+      it 'returns MockDocuments' do
+        expect(subject.documents.first.class).to eq ::MockDocument
+      end
+
+    end
   end
 
   describe '#add_bookmarks' do
