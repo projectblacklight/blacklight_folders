@@ -42,7 +42,7 @@ module Blacklight::Folders
         doc_ids = bookmarks.pluck(:document_id)
         return EmptySet.new if doc_ids.empty?
 
-        search_builder = blacklight_config.search_builder_class.new([], self)
+        search_builder = blacklight_config.search_builder_class.new(true, self)
         query = search_builder.
                 where(blacklight_config.document_model.unique_key => doc_ids).
                 merge(fl: '*')
@@ -69,6 +69,14 @@ module Blacklight::Folders
       items.delete(target)
     end
 
+    def blacklight_config
+       @blacklight_config ||= begin
+         ::CatalogController.blacklight_config.deep_copy.tap do |config|
+           config.response_model = Blacklight::Folders::SolrResponse
+         end
+       end
+    end
+
     protected
       def default_visibility
         PRIVATE
@@ -76,14 +84,6 @@ module Blacklight::Folders
 
       def solr_repository
         @solr_repo ||= Blacklight::SolrRepository.new(blacklight_config)
-      end
-
-      def blacklight_config
-         @blacklight_config ||= begin
-           ::CatalogController.blacklight_config.deep_copy.tap do |config|
-             config.response_model = Blacklight::Folders::SolrResponse
-           end
-         end
       end
 
     class << self
