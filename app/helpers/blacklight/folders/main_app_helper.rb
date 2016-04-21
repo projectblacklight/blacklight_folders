@@ -27,4 +27,8 @@ module Blacklight::Folders::MainAppHelper
     end
   end
 
+  def render_folders_control?
+    current_ability.can?(:index, Blacklight::Folders::Folder)
+  end
+
 end
