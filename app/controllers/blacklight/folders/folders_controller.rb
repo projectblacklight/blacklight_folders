@@ -8,8 +8,17 @@ module Blacklight::Folders
     load_and_authorize_resource class: Blacklight::Folders::Folder, except: [:add_bookmarks, :remove_bookmarks]
     before_filter :load_and_authorize_folder, only: [:add_bookmarks, :remove_bookmarks]
     before_filter :clear_session_search_params, only: [:show]
+    rescue_from ActiveRecord::RecordNotFound do |exception|
+      params.delete :id
+      flash[:error] = t(:'blacklight.folders.show.invalid_folder_id')
+      redirect_to main_app.root_url
+    end
 
     def index
+      if current_user and params[:default] == '1'
+        redirect_to '/myfolders/folders/' + current_user.default_folder.id.to_s
+      end
+
       @folders = if current_or_guest_user.new_record?
         # Just show the temporary folder
         current_or_guest_user.folders
@@ -36,12 +45,16 @@ module Blacklight::Folders
     end
 
     def edit
+      # Sometimes folder items positions are wrong. Correct them here.
+      @folder.items.each_with_index do |item, index|
+        item.position = index + 1
+      end
     end
 
     def create
       @folder.user = current_user
       if @folder.save
-        redirect_to @folder
+        redirect_to  "/#{session[:campus]}" + blacklight_folders.folders_path + "/" + @folder.id.to_s
       else
         render :new
       end
@@ -50,12 +63,18 @@ module Blacklight::Folders
     def update
       form = folder_form_class.new(create_params)
       if form.update(@folder)
-        respond_to do |format|
-          format.html do
-            redirect_to @folder, notice: t(:'helpers.submit.folder.updated')
+        if params.has_key?(:items_attributes)
+          if delete_or_move form.instance_variable_get('@params')['items_attributes']
+            redirect_to :back, notice: t(:'helpers.submit.folder.updated')
           end
-          format.json do
-            render json: @folder
+        else
+          respond_to do |format|
+            format.html do
+              redirect_to @folder, notice: t(:'helpers.submit.folder.updated')
+            end
+            format.json do
+              render json: @folder
+            end
           end
         end
       else
@@ -65,18 +84,31 @@ module Blacklight::Folders
 
     def destroy
       @folder.destroy
-      redirect_to main_app.root_path, notice: "Folder \"#{@folder.name}\" was successfully deleted."
+      redirect_to "/#{session[:campus]}" + blacklight_folders.folders_path, notice: "Folder \"#{@folder.name}\" was successfully deleted."
     end
 
     def add_bookmarks
       doc_ids = Array(params['document_ids'].split(',').map(&:strip))
-      @folder.add_bookmarks(doc_ids)
-
-      if @folder.save
-        message = doc_ids.size == 1 ? t(:'helpers.submit.folder.added_one', folder_name: @folder.name) : t(:'helpers.submit.folder.added_many', folder_name: @folder.name)
-        redirect_to :back, notice: message
+      num_ids = doc_ids.size
+      doc_ids.delete_if { |id|
+        @folder.documents.find{ |doc| doc.id == id }
+      }
+      if doc_ids.empty?
+        alert = num_ids == 1 ? t(:'helpers.submit.folder.duplicate_one'): t(:'helpers.submit.folder.duplicate_many')
+        redirect_to :back, alert: alert
       else
-        redirect_to :back, alert: 'Unable to save bookmarks.'
+        @folder.add_bookmarks(doc_ids)
+        if @folder.save
+          message = doc_ids.size == 1 ? t(:'helpers.submit.folder.added_one', folder_name: @folder.name) : t(:'helpers.submit.folder.added_many', folder_name: @folder.name)
+          if num_ids == doc_ids.size
+            redirect_to :back, notice: message
+          else
+            alert = t(:'helpers.submit.folder.duplicate_some')
+            redirect_to :back, notice: message, alert: alert
+          end
+        else
+          redirect_to :back, alert: 'Unable to save bookmarks.'
+        end
       end
     end
 
@@ -157,6 +189,15 @@ module Blacklight::Folders
           @folder = Folder.find(id)
         end
         authorize! :update_bookmarks, @folder
+      end
+
+      def delete_or_move(items)
+        items.each do |item|
+          if (item[1]['_destroy'] and item[1]['_destroy'] == '1') or item[1]['folder_id']
+            return true
+          end
+        end
+        return false
       end
   end
 end

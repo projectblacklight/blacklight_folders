@@ -28,6 +28,11 @@ describe Blacklight::Folders::FoldersController do
         get :show, id: my_private_folder.id
         expect(response).to redirect_to(main_app.user_session_path)
       end
+
+      it 'redirects to home page for invalid folder id' do
+        get :show, id: 100000000000
+        expect(response).to redirect_to(main_app.root_url)
+      end
     end
 
     describe '#edit' do
